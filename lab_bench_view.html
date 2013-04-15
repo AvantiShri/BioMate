@@ -50,7 +50,7 @@
 	      <div class="span2">
 		    <label class="lab-bench-labels" for="inputScript">Select Script</label>
 		  </div>
-		  <div class="span6">
+		  <div class="span9">
 	        <select id="inputScript" class="input-block-level">
 			  <option>Select a script...</option>
 			  <option>Monte Carlo</option>
@@ -65,6 +65,9 @@
 			<div class="span3">
 			  <button class="btn btn-block">Instructions</button>
 			</div>
+			<div class="span3">
+		      <button class="btn btn-block">Load Parameters</button>
+		    </div>
 		  </div>
 		</div>
 		<!-- 
@@ -92,7 +95,7 @@
 	      	  <div class="span2">
 		      	<label for="inputfile">Input File</label>
 		      </div>
-		      <div class="span10">
+		      <div class="span9">
 		      	<input id="inputfile" class="input-block-level" type="text" placeholder="Enter input file name"></input>
 		      </div>
 		      <span class="span10 offset2 text-warning">File path must be absolute</span>
@@ -106,8 +109,8 @@
 	      	  <div class="span2">
 		      	<label for="iterations">Number of Iterations</label>
 		      </div>
-		      <div class="span10">
-		      	<input id="iterations" type="text" placeholder="100"></input>
+		      <div class="span3">
+		      	<input id="iterations" class="input-block-level" type="text" placeholder="100"></input>
 		      </div>
 		      <span class="span10 offset2 text-warning">Must be less than 10,000</span>
 		    </div>
@@ -119,6 +122,14 @@
 		      	<input id="detailed" type="checkbox"></input>
 		      </div>
 		    </div>
+		  </div>
+		</div>
+		<div class="row">
+	      <div class="span3">
+		    <button class="btn btn-block btn-primary">Generate Command</button>
+		  </div>
+		  <div class="span3">
+		    <button class="btn btn-block">Save Parameters</button>
 		  </div>
 		</div>
 	  </div>
