@@ -55,4 +55,10 @@ $(document).ready(function(){
 	$(".notes").on('click', function(){ 
 		console.log('Notes');
 	});
+	
+	// show monte-carlo notes
+	$("#noteTable #monte-carlo").click( function () {
+		$("#monte-carlo-notes").modal();
+		$("#noteTable").modal("hide");
+	});
 });

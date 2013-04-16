@@ -117,6 +117,23 @@
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
 		</div>  
 	  </div>  
+	  <div class="modal hide fade" id="monte-carlo-notes">
+		<div class="modal-header">
+		  <a class="close" data-dismiss="modal">×</a>
+		  <h3>My Notes on Monte Carlo</h3>
+		</div>
+		<div class="modal-body">
+		  <textarea rows="5" class="input-block-level">On 3/15/13 ran script on abc.txt in home directory
+
+perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
+-- Takes too long
+		  </textarea>
+		</div>
+		<div class="modal-footer">
+		  <a href="#" class="btn" data-dismiss="modal">Close</a>
+		  <a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a>
+		</div>
+	  </div>
 	  <div id="noteTable" class="modal hide fade in" style="display: none; ">  
 		<div class="modal-header">  
 			<a class="close" data-dismiss="modal">×</a>  
@@ -130,7 +147,7 @@
 				<td><b>Version</b></td>
 				<td><b>Last Modified</b></td>
 			</tr>
-			<tr class="warning">
+			<tr class="warning" id="monte-carlo-notes">
 				<td><a href="#">Note on Monte Carlo</a></td>
 				<td>Monte Carlo</td>
 				<td>1.0.1</td>
