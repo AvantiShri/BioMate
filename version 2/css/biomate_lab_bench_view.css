@@ -1,0 +1,19 @@
+.truncate {
+	/*width: 250px;*/
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#lab-bench-layout .row {
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+body {
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+.lab-bench-labels {
+	font-weight: bold;
+}
