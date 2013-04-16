@@ -17,3 +17,12 @@ body {
 .lab-bench-labels {
 	font-weight: bold;
 }
+
+.table-hover tbody tr.highlight > td { 
+	background-color: #a9dba9;
+  	/* border-color: #46a546; */
+}
+
+#loadParamsTable a { 
+	text-decoration: none; 
+}
