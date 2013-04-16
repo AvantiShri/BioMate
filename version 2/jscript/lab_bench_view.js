@@ -13,4 +13,10 @@ $(function() {
 			$(".scriptSpecific").show();
 		}
 	});
+	
+	var inputScript = document.getElementById("inputScript");
+	console.log(inputScript);
+	if( inputScript.selectedIndex != 0 ) {
+		$(".scriptSpecific").show();
+	}
 });
