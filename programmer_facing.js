@@ -39,7 +39,7 @@ $(function() {
 
 	var loadScript = function(e) {
 		$("#scriptSelection").remove();
-		$("#pageHeaderContents").html(scriptName);
+		$("#pageHeaderContents").html("<input id='theScriptName' class='input-block-level' type='text' value='"+scriptName+"'</input>");
 		
 		$("#mainContainer").append(
 	"<div id='programmer-layout'>"+
@@ -58,7 +58,7 @@ $(function() {
 						"<a href='#' class='btn btn-primary staticTextBtn' id='popupAddStaticTextBtn' data-dismiss='modal'>Add Static Text</a>"+
 					"</div>"+
 				"</div>"+
-				"<a class='btn btn-block btn-success staticTextBtn mainAddStaticTextBtn' data-toggle='modal' href='#staticTextWindow' id='addStaticText'>Add Static Text</a>"+
+				"<a class='btn btn-block btn-success staticTextBtn mainAddStaticTextBtn popupLabel' data-toggle='modal' href='#staticTextWindow' id='addStaticText'>Add Static Text</a>"+
 			"</div>"+
 			"<div class='span4'>"+
 				"<div class='modal hide fade' id='addParamWindow'>"+
@@ -184,10 +184,13 @@ $(function() {
 			"<a class='btn btn-block btn-primary' data-toggle='modal' href='#saveNshare' id='saveNshareBtn'>Save & Share</a>"+
 		"</div>"+
 	"</div>"
+		);
 	
-	
-	);
-	
+		$("#theScriptName").keypress(function (e) {
+			if (e.which == 13) {
+				$("#theScriptName").blur();
+			}
+		});
 	
 		$("#popupAddParameterBtn").click(function (e) {
 			parameterNumber += 1;
@@ -290,6 +293,8 @@ $(function() {
 			}
 		}
 	});
+	
+
 
 	$('#enterTitle').click(function(e){ $('#enterTitle').autocomplete("search","") });
 

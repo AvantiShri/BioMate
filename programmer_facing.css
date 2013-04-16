@@ -119,6 +119,11 @@ body {
 }
 
 
+#theScriptName {
+	font-weight: bold;
+	font-size: 30;
+	height: 40px;
+}
 
 .aFormInput {
 	height: 40px;
