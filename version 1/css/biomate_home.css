@@ -1,0 +1,48 @@
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+}
+
+#mainContainer{ 
+	width: 100%; 
+	text-align:center;
+}
+		
+#divCircle {
+	margin-left:auto; 
+	margin-right:auto; 
+	width: 450px;
+	height: 450px;	
+	position: relative;
+}
+
+#divCircle img{
+	position: absolute;
+	width: 31%;
+	height: 31%;
+}
+
+#middleBubble {
+  text-align:center;
+  vertical-align:middle;
+  background: url(../images/grassb.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #252525; /*#6d6e71*/
+  font-size: 1em;
+  height:35%;		
+  width: 35%;	
+  margin: auto;
+  position: absolute;
+  text-align:center;
+}
+
+#middleBubble b{
+	font-size: 1.2em;
+}
+
+#middleBubble p{
+	margin: 2em;
+}
