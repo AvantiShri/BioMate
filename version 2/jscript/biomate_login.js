@@ -9,14 +9,19 @@ $(document).ready(function(){
 			$(".errorMessage").show();
 		}
 		else {
-			if ((userName !="alpha") ||(userPassword !="beta")) {
+			if (userName =="alpha" && userPassword =="beta"){
+				//here i want to load my selectOption.html file ?
+				window.location = "biomate_home_lab.html"
+				console.log('Correct Lab!!!');
+			}
+			else if (userName =="gamma" && userPassword =="delta"){
+				//here i want to load my selectOption.html file ?
+				window.location = "biomate_home_comp.html"
+				console.log('Correct Lab!!!');
+			}
+			else{
 				$(".errorMessage").show();
 			}
-			else {
-				//here i want to load my selectOption.html file ?
-				window.location = "biomate_home.html"
-				console.log('Correct!!!');
-			}              
 		}
 		return false;
 	});

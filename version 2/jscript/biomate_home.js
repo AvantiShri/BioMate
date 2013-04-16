@@ -1,4 +1,6 @@
+
 $(document).ready(function(){
+	console.log("her in load");
 	//Center the "info" bubble in the  "circle" div
 	var divTop = ($("#divCircle").height() - $("#middleBubble").height())/2;
 	var divLeft = ($("#divCircle").width() - $("#middleBubble").width())/2;
@@ -45,8 +47,9 @@ $(document).ready(function(){
 	});
 	
 	$(".history").on('click', function(){ 
-		console.log('History');
-		
+		//var m = $("#historyTable");
+		//$("#historyTable").modal('toggle');
+		//console.log(m);
 	});
 	
 	$(".notes").on('click', function(){ 
