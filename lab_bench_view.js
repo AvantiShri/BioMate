@@ -5,4 +5,12 @@ $(function() {
 		$(this).addClass('highlight').siblings().removeClass('highlight');
 	});
 	
+	$('.info').tooltip();
+	$('#selectScriptLbl').tooltip();
+	
+	$("#inputScript").change( function () {
+		if( this.selectedIndex != 0 ) {
+			$(".scriptSpecific").show();
+		}
+	});
 });

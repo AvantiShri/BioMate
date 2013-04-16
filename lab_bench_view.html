@@ -48,17 +48,17 @@
 	  <div id="lab-bench-layout">
 	    <div class="row">
 	      <div class="span2">
-		    <label class="lab-bench-labels" for="inputScript">Select Script</label>
+		    <label id="selectScriptLbl" class="lab-bench-labels" data-toggle="tooltip" title="Browse a script from the scripts that have been shared with you. Select a script to bring up the screen to specify your desired parameter values." for="inputScript">Select Script</label>
 		  </div>
 		  <div class="span9">
 	        <select id="inputScript" class="input-block-level">
 			  <option>Select a script...</option>
-			  <option>Monte Carlo</option>
-			  <option>Bowtie</option>
-			  <option>Cufflinks</option>
+			  <option id="item">Monte Carlo</option>
+			  <option id="item">Bowtie</option>
+			  <option id="item">Cufflinks</option>
 			</select>
 		  </div>
-		  <div>
+		  <div class="scriptSpecific">
 		    <div class="span3 offset2">
 			  <div class="modal hide fade" id="notes">
 			    <div class="modal-header">
@@ -121,17 +121,7 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
 		    </div>
 		  </div>
 		</div>
-		<!-- 
-<div class="row">
-	      <div class="span3 offset2">
-	        <button class="btn btn-block">My Notes on Monte Carlo</button>
-	      </div>
-	      <div class="span3">
-	        <button class="btn btn-block">Instructions</button>
-		  </div>
-		</div>
- -->
-		<div class="row">
+		<div class="row scriptSpecific">
 	      <div class="span2">
 		    <label class="lab-bench-labels" for="caveats">Caveats</label>
 		  </div>
@@ -139,43 +129,52 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
 	        <span id="caveats" class="truncate text-warning">The output of Monte Carlo is displayed in the terminal</span>
 		  </div>
 		</div>
-		<div class="row">
+		<div class="row scriptSpecific">
 		  <label for="required" class="span12 lab-bench-labels">Required Fields</label>
 	      <div id="required" class="well well-small span12">
 	      	<div class="row">
-	      	  <div class="span2">
-		      	<label for="inputfile">Input File</label>
+	      	  <div class="span3 truncate">
+		      	<label for="inputfile">
+		      	  <a href="#" data-toggle="tooltip" title="Choose the input file to run montecarlo.pl on" class="btn btn-link info">
+		      	    <i class="icon-question-sign"></i>
+		      	  </a>Input File</label>
 		      </div>
 		      <div class="span9">
 		      	<input id="inputfile" class="input-block-level" type="text" placeholder="Enter input file name"></input>
 		      </div>
-		      <span class="span10 offset2 text-warning">File path must be absolute</span>
+		      <span class="span10 offset3 text-warning">File path must be absolute</span>
 		    </div>
 		  </div>
 		</div>
-		<div class="row">
+		<div class="row scriptSpecific">
 		  <label for="optional" class="span12 lab-bench-labels">Optional Fields</label>
 	      <div id="optional" class="well well-small span12">
 	      	<div class="row">
-	      	  <div class="span2">
-		      	<label for="iterations">Number of Iterations</label>
+	      	  <div class="span3 truncate">
+		      	<label for="iterations">
+		      	  <a href="#" data-toggle="tooltip" title="Enter the number of iterations you would like to run the monte carlo simulation for" class="btn btn-link info">
+		      	    <i class="icon-question-sign"></i>
+		      	  </a>Number of Iterations</label>
 		      </div>
 		      <div class="span3">
 		      	<input id="iterations" class="input-block-level" type="text" placeholder="100"></input>
 		      </div>
-		      <span class="span10 offset2 text-warning">Must be less than 10,000</span>
+		      <span class="span10 offset3 text-warning">Must be less than 10,000</span>
 		    </div>
 		    <div class="row">
-	      	  <div class="span2">
-		      	<label for="detailed">Detailed Output</label>
+	      	  <div class="span3 truncate">
+		      	<label for="detailed">
+		      	  <a href="#" data-toggle="tooltip" title="Check this box to get detailed output when the program runs" class="btn btn-link info">
+		      	    <i class="icon-question-sign"></i>
+		      	  </a>Detailed Output</label>
 		      </div>
-		      <div class="span10">
+		      <div class="span9">
 		      	<input id="detailed" type="checkbox"></input>
 		      </div>
 		    </div>
 		  </div>
 		</div>
-		<div class="row">
+		<div class="row scriptSpecific">
 	      <div class="span3">
 		    <div class="modal hide fade" id="genCommand">
 			    <div class="modal-header">
@@ -221,20 +220,6 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
     <script src="./jquery/js/jquery-1.9.0.min.js"></script>
     <script src="lab_bench_view.js"></script>
     <script src="./bootstrap/js/bootstrap.min.js"></script>
-<!-- 
-    <script src="./bootstrap/js/bootstrap-transition.js"></script>
-    <script src="./bootstrap/js/bootstrap-alert.js"></script>
-    <script src="./bootstrap/js/bootstrap-modal.js"></script>
-    <script src="./bootstrap/js/bootstrap-dropdown.js"></script>
-    <script src="./bootstrap/js/bootstrap-scrollspy.js"></script>
-    <script src="./bootstrap/js/bootstrap-tab.js"></script>
-    <script src="./bootstrap/js/bootstrap-tooltip.js"></script>
-    <script src="./bootstrap/js/bootstrap-popover.js"></script>
-    <script src="./bootstrap/js/bootstrap-button.js"></script>
-    <script src="./bootstrap/js/bootstrap-collapse.js"></script>
-    <script src="./bootstrap/js/bootstrap-carousel.js"></script>
-    <script src="./bootstrap/js/bootstrap-typeahead.js"></script>
- -->
 
   </body>
 </html>

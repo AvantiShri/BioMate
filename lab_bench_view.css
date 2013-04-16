@@ -26,3 +26,11 @@ body {
 #loadParamsTable a { 
 	text-decoration: none; 
 }
+
+.tooltip-inner {
+    white-space:pre-wrap;
+}
+
+.scriptSpecific {
+	display: none;
+}
