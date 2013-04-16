@@ -60,7 +60,24 @@
 		  </div>
 		  <div>
 		    <div class="span3 offset2">
-			  <button class="btn btn-block">My Notes on Monte Carlo</button>
+			  <div class="modal hide fade" id="notes">
+			    <div class="modal-header">
+			      <a class="close" data-dismiss="modal">×</a>
+				  <h3>My Notes on Monte Carlo</h3>
+				</div>
+				<div class="modal-body">
+				  <textarea rows="5" class="input-block-level">On 3/15/13 ran script on abc.txt in home directory
+
+perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
+-- Takes too long
+				  </textarea>
+				</div>
+				<div class="modal-footer">
+				  <a href="#" class="btn" data-dismiss="modal">Close</a>
+				  <a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a>
+				</div>
+			  </div>
+			  <a id="notesBtn" class="btn btn-block" data-toggle="modal" href="#notes" >My Notes on Monte Carlo</a>
 			</div>
 			<div class="span3">
 			  <button class="btn btn-block">Instructions</button>
@@ -135,12 +152,15 @@
 	  </div>
   
     </div> <!-- /container -->
-
+ 
+	
     <!-- javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./jquery/js/jquery-1.9.0.min.js"></script>
     <script src="lab_bench_view.js"></script>
-    <script src="./jquery/js/jquery.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+<!-- 
     <script src="./bootstrap/js/bootstrap-transition.js"></script>
     <script src="./bootstrap/js/bootstrap-alert.js"></script>
     <script src="./bootstrap/js/bootstrap-modal.js"></script>
@@ -153,6 +173,7 @@
     <script src="./bootstrap/js/bootstrap-collapse.js"></script>
     <script src="./bootstrap/js/bootstrap-carousel.js"></script>
     <script src="./bootstrap/js/bootstrap-typeahead.js"></script>
+ -->
 
   </body>
 </html>
