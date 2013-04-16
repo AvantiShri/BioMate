@@ -300,6 +300,7 @@ $(function() {
 
 	/* the create script button is initially inactive */
 	$("#createLoadScriptBtn").attr("disabled", "disabled");
+	console.log("hello");
 	$("#createLoadScriptBtn").click( function(e) {
 		loadScript();
 	})
