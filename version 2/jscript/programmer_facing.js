@@ -58,7 +58,7 @@ $(function() {
 						"<a href='#' class='btn btn-primary staticTextBtn' id='popupAddStaticTextBtn' data-dismiss='modal'>Add Static Text</a>"+
 					"</div>"+
 				"</div>"+
-				"<a class='btn btn-block btn-success staticTextBtn mainAddStaticTextBtn popupLabel' data-toggle='modal' href='#staticTextWindow' id='addStaticText'>Add Static Text</a>"+
+				"<a class='btn btn-block btn-success staticTextBtn mainAddStaticTextBtn' data-toggle='modal' href='#staticTextWindow' id='addStaticText'>Add Static Text</a>"+
 			"</div>"+
 			"<div class='span4'>"+
 				"<div class='modal hide fade' id='addParamWindow'>"+
