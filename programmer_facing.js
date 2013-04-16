@@ -16,6 +16,12 @@ $(function() {
 	var scriptName = "";
 	
 	var parameterNumber = 0;
+	
+	var getTheDate = function() {
+		var today = new Date();
+		var theDate = today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()+" on 2013/"+today.getMonth()+"/"+today.getDate();
+		return theDate;
+	}
 
 
 	var addStaticText = function(contents) {
@@ -139,6 +145,44 @@ $(function() {
 			"</thead>"+
 			"<tbody></tbody>"+
 		"</table>"+
+		"<div class='row scriptSpecific'>"+
+		"<label for='required' class='span12 programmerLabel'>Caveats</label>"+
+		"<div class='span12'>"+
+			"<textarea class='input-xlarge input-block-level' id='Caveats' class='input-block-level' type='text' placeholder='Eg: Output of this command appears in terminal'></textarea>"+
+		"</div>"+
+		"<label for='required' class='span12 programmerLabel'>General instructions</label>"+
+		"<div class='span12'>"+
+			"<textarea class='input-xlarge input-block-level' id='generalInstructions' type='text' placeholder='Eg: If you have more questions, email xyz@gmail.com'></textarea>"+
+		"</div>"+
+		"<div class = 'span12'>"+
+			"<label> Last saved at: <span id='lastSavedAt'>Never</span></label>"+
+		"</div>"+
+
+		"<div class='span3'>"+
+			"<button class='btn btn-block'>Cancel</button>"+
+		"</div>"+
+		"<div class='span3'>"+
+			"<button class='btn btn-block' id='saveAsBtn'>Save As</button>"+
+		"</div>"+
+		"<div class='span3'>"+
+			"<button class='btn btn-block' id='saveBtn'>Save</button>"+
+		"</div>"+
+		"<div class='span3'>"+
+			"<div class='modal hide fade' id='saveNshare'>"+
+				"<div class='modal-header'>"+
+					"<a class='close' data-dismiss='modal'>×</a>"+
+					"<h3>Enter email addresses</h3>"+
+				"</div>"+
+				"<div class='modal-body'>"+
+					"<textarea id='emails' class='input-xlarge input-block-level' type='text' placeholder='Eg: abc@mit.edu, xyz@gmail.com'></textarea>"+
+				"</div>"+
+				"<div class='modal-footer'>"+
+					"<a href='#' class='btn' data-dismiss='modal'>Cancel</a>"+
+					"<a href='#' class='btn btn-primary staticTextBtn' id='share' data-dismiss='modal'>Share</a>"+
+				"</div>"+
+			"</div>"+
+			"<a class='btn btn-block btn-primary' data-toggle='modal' href='#saveNshare' id='saveNshareBtn'>Save & Share</a>"+
+		"</div>"+
 	"</div>"
 	
 	
@@ -192,6 +236,9 @@ $(function() {
 		$( "#chunksContainer" ).sortable();
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
+		
+		$("#saveNshareBtn").click(function (e) {var today = new Date(); $("#lastSavedAt").html(getTheDate())});
+		$("#saveBtn").click(function (e) {var today = new Date();  $("#lastSavedAt").html(getTheDate())});
 	
 		$('body').on('click', function (e) {
 			$('.chunk').each(function () {

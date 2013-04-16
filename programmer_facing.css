@@ -75,7 +75,10 @@ body {
 
 #paramsTable {
 	margin-top: 20px;
+}
 
+.lab-bench-labels {
+	font-weight: bold;
 }
 
 .tdBtn {
@@ -109,6 +112,13 @@ body {
 	color: rgb(14,14,126);
 	font-weight: bold;
 }
+
+.programmerLabel {
+	color: rgb(14,14,126);
+	font-weight: bold;
+}
+
+
 
 .aFormInput {
 	height: 40px;
