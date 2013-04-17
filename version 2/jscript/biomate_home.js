@@ -45,6 +45,19 @@ $(document).ready(function(){
 		$("#middleBubble").html("<p><b></br>" + $(this).data("bubble1") + "</b></p>");
 		currentGridSelector = $(this).attr("id");
 	});
+
+	$("#divCircle img").mouseleave(function(){
+		//if the selected option has changed, deactivate the current selection
+		if(currentGridSelector != $(this).attr("id"))
+		{
+			$("#" + currentGridSelector).attr("src", "../images/"+ currentGridSelector + "-off.png");
+		}
+		//turn off the new selection
+		$(this).attr("src", "../images/"+ $(this).attr("id") + "-off.png");
+		//set the content of the center bubble
+		$("#middleBubble").html("<p><b></br>" + "" + "</b></p>");
+		currentGridSelector = null;
+	});
 	
 	$(".history").on('click', function(){ 
 		//var m = $("#historyTable");
