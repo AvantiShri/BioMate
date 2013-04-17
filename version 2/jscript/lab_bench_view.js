@@ -3,6 +3,7 @@
 $(function() { 
 	$("#loadParamsTable tr").click( function () {
 		$(this).addClass('highlight').siblings().removeClass('highlight');
+		$("#btnLoad").removeClass("disabled");
 	});
 	
 	$('.info').tooltip();
