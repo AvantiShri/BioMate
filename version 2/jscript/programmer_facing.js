@@ -200,7 +200,7 @@ $(function() {
 				"</div>"+
 				"<div class='modal-footer'>"+
 					"<a href='#' class='btn' data-dismiss='modal'>Cancel</a>"+
-					"<a href='#' class='btn btn-primary' id='saveAsBtnPopup' data-dismiss='modal'>Save As</a>"+
+					"<a href='#' class='btn btn-primary' id='saveAsBtnPopup' data-dismiss='modal'>Save</a>"+
 				"</div>"+
 			"</div>"+
 			"<a class='btn btn-block' data-toggle='modal' href='#saveAs' id='saveAsBtn'>Save As</a>"+
@@ -237,6 +237,11 @@ $(function() {
 			if (e.which == 13) {
 				$("#theScriptName").blur();
 			}
+		});
+		
+		$("#saveAsBtnPopup").click(function(e) {
+			$("#theScriptName").val($("#saveAsName").val());
+			$("#lastSavedAt").html(getTheDate());
 		});
 	
 		$("#popupAddParameterBtn").click(function (e) {
@@ -289,7 +294,9 @@ $(function() {
 		
 		$("#saveNshareBtn").click(function (e) {var today = new Date(); $("#lastSavedAt").html(getTheDate())});
 		$("#saveBtn").click(function (e) {var today = new Date();  $("#lastSavedAt").html(getTheDate())});
-	
+		
+		
+		
 		$('body').on('click', function (e) {
 			$('.chunk').each(function () {
 				//the 'is' for buttons that triggers popups
