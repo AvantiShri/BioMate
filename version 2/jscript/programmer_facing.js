@@ -149,6 +149,7 @@ $(function() {
 						"</ul>"+
 						"<p> The result looks as follows: </p>"+
 						"<center><img class='framedImg' src='../images/chunks.png'></img></center>"+
+						"<p> Once added, the order of the chunks can be changed by dragging and dropping the chunks. </p>"+
 					"</div>"+
 					"<div class='modal-footer'>"+
 						"<a href='#' class='btn' data-dismiss='modal'>Close</a>"+

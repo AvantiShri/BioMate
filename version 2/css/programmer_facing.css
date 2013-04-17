@@ -29,6 +29,10 @@ body {
 	width: 400px;
 }
 
+#chunksLabel {
+	font-size: 12;
+}
+
 #programmer-layout .row {
 	padding-top: 1em;
 	padding-bottom: 1em;
