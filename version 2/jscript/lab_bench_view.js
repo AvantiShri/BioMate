@@ -19,4 +19,11 @@ $(function() {
 	if( inputScript.selectedIndex != 0 ) {
 		$(".scriptSpecific").show();
 	}
+	
+	var input = document.getElementById("inputfile");
+	var iter = document.getElementById("iterations");
+	$("#btnLoad").click(function(){
+        	$(input).val("home/X/input.txt");
+		$(iterations).val("1000");
+	});
 });
