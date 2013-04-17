@@ -160,7 +160,7 @@ $(function() {
 		"</div>"+
 		"<div class='container' id='chunksContainer'> </div>"+
 		
-		"<table class='table' id='paramsTable' style='display: none; table-layout: fixed'>"+
+		"<table class='table' id='paramsTable' style='display: none;'>"+
 			"<thead>"+
 			"<tr>"+
 				"<th>Alias</th>"+
@@ -242,12 +242,12 @@ $(function() {
 		$("#popupAddParameterBtn").click(function (e) {
 			parameterNumber += 1;
 			addParameter($("#prefixFlagInput").val(),$("#inputAlias").val());
-			$("#paramsTable").css("display","block");
+			$("#paramsTable").show();
 			var requiredCheckboxLine = "";
 			if ($("#requiredInput").prop("checked") == 1) {
-				requiredCheckboxLine = "<td> <input type='checkbox' class='tdInput' checked='true'></input></td>";
+				requiredCheckboxLine = "<td> <center> <input type='checkbox' checked='true'> </center> </input></td>";
 			} else {
-				requiredCheckboxLine = "<td> <input type='checkbox' class='tdInput'></input></td>";
+				requiredCheckboxLine = "<td> <center> <input type='checkbox'> </center> </input></td>";
 			}
 			var selectedTyp = $("#typeInput :selected").val();
 			console.log("selected: "+selectedTyp);
@@ -257,7 +257,7 @@ $(function() {
 						"<td> <input type='text' class='tableDataInput' value='"+$("#ufNameInput").val()+"'></input></td>"+
 						"<td>"+
 							"<select  class='input-block-level tableDataSelect' id=sel"+parameterNumber+">"+
-								"<option>Select input type...</option>"+
+								"<option>Select...</option>"+
 								"<option value='Flag'>Flag</option>"+
 								"<option value='String'>String</option>"+
 								"<option value='Integer'>Integer</option>"+
