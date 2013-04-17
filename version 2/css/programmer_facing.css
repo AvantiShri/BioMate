@@ -88,6 +88,7 @@ body {
 
 #paramsTable {
 	margin-top: 20px;
+	width: 100%;
 }
 
 .lab-bench-labels {
@@ -95,7 +96,6 @@ body {
 }
 
 .tdBtn {
-	width: 150px;
 }
 
 .staticTextBtn {
@@ -160,7 +160,6 @@ body {
 
 input[type="text"].tableDataInput {
 	height: 20px;
-	width: 150px;
 }
 
 .tableDataSelect {
