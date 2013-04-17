@@ -4,6 +4,7 @@ $(document).ready(function(){
 	//Center the "info" bubble in the  "circle" div
 	var divTop = ($("#divCircle").height() - $("#middleBubble").height())/2;
 	var divLeft = ($("#divCircle").width() - $("#middleBubble").width())/2;
+	$("#divCircle").disableSelection();
 	$("#middleBubble").css("top",divTop + "px");
 	$("#middleBubble").css("left",divLeft + "px");
 
