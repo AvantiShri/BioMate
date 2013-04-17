@@ -19,7 +19,7 @@ $(function() {
 	
 	var getTheDate = function() {
 		var today = new Date();
-		var theDate = today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()+" on 2013/"+today.getMonth()+"/"+today.getDate();
+		var theDate = today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()+" on 2013/"+(today.getMonth()+1)+"/"+today.getDate();
 		return theDate;
 	}
 
@@ -58,7 +58,7 @@ $(function() {
 						"<a href='#' class='btn btn-primary staticTextBtn' id='popupAddStaticTextBtn' data-dismiss='modal'>Add Static Text</a>"+
 					"</div>"+
 				"</div>"+
-				"<a class='btn btn-block btn-success staticTextBtn mainAddStaticTextBtn' data-toggle='modal' href='#staticTextWindow' id='addStaticText'>Add Static Text</a>"+
+				"<a class='btn btn-block btn-success staticTextBtn mainAddStaticTextBtn' data-toggle='modal' href='#staticTextWindow' id='addStaticText' title='Used to build invariant parts of the command not associated with parameters or flags'>Add Static Text</a>"+
 			"</div>"+
 			"<div class='span4'>"+
 				"<div class='modal hide fade' id='addParamWindow'>"+
@@ -123,10 +123,38 @@ $(function() {
 						"<a href='#' class='btn btn-primary paramBtn' data-dismiss='modal' id='popupAddParameterBtn'>Add Parameter/Flag</a>"+
 					"</div>"+
 				"</div>"+
-				"<a class='btn btn-block btn-primary paramBtn' data-toggle='modal' href='#addParamWindow'>Add Parameter/Flag</a>"+
+				"<a class='btn btn-block btn-primary paramBtn' title='Use this to add parameters or flags, eg: inputFile, --verbosity, etc.' id='addParamMainBtn' data-toggle='modal' href='#addParamWindow'>Add Parameter/Flag</a>"+
 			"</div>"+
 			"<div class='span4'>"+
-				"<button class='btn btn-block'>More Information</button>"+
+					"<div class='modal hide fade' id='moreInfoWindow'>"+
+					"<div class='modal-header'>"+
+						"<a class='close' data-dismiss='modal'>×</a>"+
+						"<h3> Usage instructions </h3>"+
+					"</div>"+
+					"<div class='modal-body'>"+
+						"<p> Commands are constructed as chunks of 'static text' and parameters/flags.</p>"+
+						"<p>'Static text' refers to parts of the command that are not associated with parameters or flags and which are the same accross all uses of the command. Parameters/flags depend on user input.</p>"+
+						"<p>For example, in the command: </p>"+
+						"<p> <span class='cmd'>perl /home/X/montecarlo.pl [-v] [-n numIterations] <inputFile> | less </span></p>"+
+						"<p>The chunks of static text are:</p>"+
+						"<ul>"+
+						"<li> perl /home/X/montecarlo.pl </li>"+
+						"<li> | less </li>"+
+						"</ul>"+
+						"<p> And the chunks of parameters/flags are:</p>"+
+						"<ul>"+
+						"<li> -v (verbosity flag)</li>"+
+						"<li> -n numIterations (integer parameter, alias numIterations, with prefix -n) </li>"+
+						"<li> inputFile (string parameter, no prefix)</li>"+
+						"</ul>"+
+						"<p> The result looks as follows: </p>"+
+						"<center><img class='framedImg' src='../images/chunks.png'></img></center>"+
+					"</div>"+
+					"<div class='modal-footer'>"+
+						"<a href='#' class='btn' data-dismiss='modal'>Close</a>"+
+					"</div>"+
+				"</div>"+
+				"<a class='btn btn-block' data-toggle='modal' href='#moreInfoWindow'>More Information</a>"+
 			"</div>"+
 		"</div>"+
 		"<div class='container' id='chunksContainer'> </div>"+
@@ -157,12 +185,24 @@ $(function() {
 		"<div class = 'span12'>"+
 			"<label> Last saved at: <span id='lastSavedAt'>Never</span></label>"+
 		"</div>"+
-
 		"<div class='span3'>"+
-			"<button class='btn btn-block'>Cancel</button>"+
+			"<a href='./programmer_facing.html' class='btn btn-block'>Cancel</a>"+
 		"</div>"+
 		"<div class='span3'>"+
-			"<button class='btn btn-block' id='saveAsBtn'>Save As</button>"+
+			"<div class='modal hide fade' id='saveAs'>"+
+				"<div class='modal-header'>"+
+					"<a class='close' data-dismiss='modal'>×</a>"+
+					"<h3>Save As</h3>"+
+				"</div>"+
+				"<div class='modal-body'>"+
+					"<input id='saveAsName' class='input-block-level' type='text' placeholder='Enter new file name'></input>"+
+				"</div>"+
+				"<div class='modal-footer'>"+
+					"<a href='#' class='btn' data-dismiss='modal'>Cancel</a>"+
+					"<a href='#' class='btn btn-primary' id='saveAsBtnPopup' data-dismiss='modal'>Save As</a>"+
+				"</div>"+
+			"</div>"+
+			"<a class='btn btn-block' data-toggle='modal' href='#saveAs' id='saveAsBtn'>Save As</a>"+
 		"</div>"+
 		"<div class='span3'>"+
 			"<button class='btn btn-block' id='saveBtn'>Save</button>"+
@@ -171,7 +211,7 @@ $(function() {
 			"<div class='modal hide fade' id='saveNshare'>"+
 				"<div class='modal-header'>"+
 					"<a class='close' data-dismiss='modal'>×</a>"+
-					"<h3>Enter email addresses</h3>"+
+					"<h3>Enter comma-separated email addresses</h3>"+
 				"</div>"+
 				"<div class='modal-body'>"+
 					"<textarea id='emails' class='input-xlarge input-block-level' type='text' placeholder='Eg: abc@mit.edu, xyz@gmail.com'></textarea>"+
@@ -185,7 +225,13 @@ $(function() {
 		"</div>"+
 	"</div>"
 		);
-	
+		
+		$("#addStaticText").tooltip();
+		$("#addParamMainBtn").tooltip();
+		
+		$("#addStaticText").hover(function(e) {$("#addStaticText").tooltip();});
+		$("#addParamMainBtn").hover(function(e) {$("#addParamMainBtn").tooltip();});
+		
 		$("#theScriptName").keypress(function (e) {
 			if (e.which == 13) {
 				$("#theScriptName").blur();
@@ -252,6 +298,8 @@ $(function() {
 				}
 			});
 		});
+		
+		
 	
 	}
 
@@ -294,7 +342,6 @@ $(function() {
 		}
 	});
 	
-
 
 	$('#enterTitle').click(function(e){ $('#enterTitle').autocomplete("search","") });
 

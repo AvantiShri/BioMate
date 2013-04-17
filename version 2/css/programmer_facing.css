@@ -18,7 +18,16 @@ body {
 	font-weight: bold;
 }
 
+.cmd {
+	font-weight: bold;
+	color: rgb(14,14,126);
+}
 
+.framedImg {
+	border:1px solid gray;
+	padding: 2px;
+	width: 400px;
+}
 
 #programmer-layout .row {
 	padding-top: 1em;
