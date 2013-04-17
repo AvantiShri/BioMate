@@ -86,6 +86,11 @@ body {
 	user-select: none;
 }
 
+#saveBeforeExit {
+	width: 400px;
+	margin-left: -200px;
+}
+
 #paramsTable {
 	margin-top: 20px;
 }
@@ -133,6 +138,10 @@ body {
 }
 
 .aFormInput {
+	height: 40px;
+}
+
+.aFormCheckbox {
 	height: 40px;
 }
 

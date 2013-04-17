@@ -22,7 +22,46 @@ $(function() {
 		var theDate = today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()+" on 2013/"+(today.getMonth()+1)+"/"+today.getDate();
 		return theDate;
 	}
-
+	
+	var addParameterFromPopup = function() {
+		parameterNumber += 1;
+		var selectedTyp = $("#typeInput :selected").val();
+		console.log(selectedTyp);
+		if (selectedTyp != "Flag") {
+			addParameter($("#prefixFlagInput").val(),$("#inputAlias").val());
+		} else {
+			addFlag($("#prefixFlagInput").val());
+		}
+		$("#paramsTable").show();
+		var requiredCheckboxLine = "";
+		if ($("#requiredInput").prop("checked") == 1) {
+			requiredCheckboxLine = "<td> <center> <input type='checkbox' checked='true'> </center> </input></td>";
+		} else {
+			requiredCheckboxLine = "<td> <center> <input type='checkbox'> </center> </input></td>";
+		}
+		
+		console.log("selected: "+selectedTyp);
+		$("#paramsTable").append("<tr>"+
+					"<td> <input class='tableDataInput' type='text' value='"+$("#inputAlias").val()+"'></input></td>"+
+					"<td> <input class='tableDataInput' type='text' value='"+$("#prefixFlagInput").val()+"'></input></td>"+
+					"<td> <input type='text' class='tableDataInput' value='"+$("#ufNameInput").val()+"'></input></td>"+
+					"<td>"+
+						"<select  class='input-block-level tableDataSelect' id=sel"+parameterNumber+">"+
+							"<option value='Select...'>Select...</option>"+
+							"<option value='Flag'>Flag</option>"+
+							"<option value='String'>String</option>"+
+							"<option value='Integer'>Integer</option>"+
+							"<option value='Float'>Float</option>"+
+						"</select>"+
+					"</td>"+
+					requiredCheckboxLine+
+					"<td> <button class='btn tdBtn'>View/Edit</button></td>"+
+					"<td> <button class='btn tdBtn'>View/Edit</button></td>"+
+					"</tr>");
+		console.log("#sel"+parameterNumber+" option[value='"+selectedTyp+"']");
+		$("#sel"+parameterNumber+" option[value='"+selectedTyp+"']")[0].selected=true;
+		console.log("hi");
+	}
 
 	var addStaticText = function(contents) {
 		$("#chunksContainer").append(
@@ -98,7 +137,7 @@ $(function() {
 							"</div>"+
 							"<div class='span3'>"+
 								"<select id='typeInput' class='input-block-level'>"+
-									"<option>Select input type...</option>"+
+									"<option value='Select...'>Select...</option>"+
 									"<option value='Flag'>Flag</option>"+
 									"<option value='String'>String</option>"+
 									"<option value='Integer'>Integer</option>"+
@@ -108,8 +147,8 @@ $(function() {
 							"<div class='span2'>"+
 								"<label id='requiredLabel' class='popupLabel' data-toggle='tooltip' title='Check if the parameter is required' for='requiredInput'>Required?</label>"+
 							"</div>"+
-							"<div class='span3 aFormInput'>"+
-								"<input id='requiredInput' type='checkbox'></input>"+
+							"<div class='span3 aFormCheckbox'>"+
+								"<center><input id='requiredInput' type='checkbox'></input></center>"+
 							"</div>"+
 							"<div class='span2'>"+
 								"<label id='warningsLabel' class='popupLabel' data-toggle='tooltip' title='Warnings displayed to the user up-front' for='warningsInput'>Warnings</label>"+
@@ -200,10 +239,8 @@ $(function() {
 					"<h3>Save before exiting?</h3>"+
 				"</div>"+
 				"<div class='modal-footer'>"+
-					"<center>"+
 					"<a href='./programmer_facing.html' class='btn' >No</a>"+
 					"<a href='./programmer_facing.html' class='btn btn-primary' id='share' >Yes</a>"+
-					"</center>"+
 				"</div>"+
 			"</div>"+
 			"<a href='#saveBeforeExit' data-toggle='modal' id='mainCancelBtn' class='btn btn-block'>Cancel</a>"+
@@ -263,46 +300,15 @@ $(function() {
 			$("#lastSavedAt").html(getTheDate());
 		});
 		
-		
+		$(".aFormInput").keypress(function (e) {
+			if (e.which == 13) {
+				$("#popupAddParameterBtn").click();
+				$("#addParamWindow").modal("hide");
+			}
+		});
 	
 		$("#popupAddParameterBtn").click(function (e) {
-			parameterNumber += 1;
-			var selectedTyp = $("#typeInput :selected").val();
-			console.log(selectedTyp);
-			if (selectedTyp != "Flag") {
-				addParameter($("#prefixFlagInput").val(),$("#inputAlias").val());
-			} else {
-				addFlag($("#prefixFlagInput").val());
-			}
-			$("#paramsTable").show();
-			var requiredCheckboxLine = "";
-			if ($("#requiredInput").prop("checked") == 1) {
-				requiredCheckboxLine = "<td> <center> <input type='checkbox' checked='true'> </center> </input></td>";
-			} else {
-				requiredCheckboxLine = "<td> <center> <input type='checkbox'> </center> </input></td>";
-			}
-			
-			console.log("selected: "+selectedTyp);
-			$("#paramsTable").append("<tr>"+
-						"<td> <input class='tableDataInput' type='text' value='"+$("#inputAlias").val()+"'></input></td>"+
-						"<td> <input class='tableDataInput' type='text' value='"+$("#prefixFlagInput").val()+"'></input></td>"+
-						"<td> <input type='text' class='tableDataInput' value='"+$("#ufNameInput").val()+"'></input></td>"+
-						"<td>"+
-							"<select  class='input-block-level tableDataSelect' id=sel"+parameterNumber+">"+
-								"<option>Select...</option>"+
-								"<option value='Flag'>Flag</option>"+
-								"<option value='String'>String</option>"+
-								"<option value='Integer'>Integer</option>"+
-								"<option value='Float'>Float</option>"+
-							"</select>"+
-						"</td>"+
-						requiredCheckboxLine+
-						"<td> <button class='btn tdBtn'>View/Edit</button></td>"+
-						"<td> <button class='btn tdBtn'>View/Edit</button></td>"+
-						"</tr>");
-			console.log("#sel"+parameterNumber+" option[value='"+selectedTyp+"']");
-			$("#sel"+parameterNumber+" option[value='"+selectedTyp+"']")[0].selected=true;
-			console.log("hi");	
+			addParameterFromPopup();
 		});
 		$("#popupAddStaticTextBtn").click(function (e) {addStaticText($("#staticTextName").val())});
 		$("#staticTextName").keypress(function(e) {
