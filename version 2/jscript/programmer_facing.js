@@ -36,6 +36,13 @@ $(function() {
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
 	}
+	var addFlag = function(prefix) {
+		$("#chunksContainer").append(
+		"<a href='#' class='chunk btn paramBtn' rel='popover' data-content=\"<span class='btn popoverButton'>Edit</span> <div class='btn'>Delete</div>\">"+prefix+"</a>");
+		$( ".chunk" ).disableSelection();
+		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
+	}
+
 
 	var loadScript = function(e) {
 		$("#scriptSelection").remove();
@@ -187,7 +194,19 @@ $(function() {
 			"<label> Last saved at: <span id='lastSavedAt'>Never</span></label>"+
 		"</div>"+
 		"<div class='span3'>"+
-			"<a href='./programmer_facing.html' class='btn btn-block'>Cancel</a>"+
+			"<div class='modal hide fade' id='saveBeforeExit'>"+
+				"<div class='modal-header'>"+
+					"<a class='close' data-dismiss='modal'>×</a>"+
+					"<h3>Save before exiting?</h3>"+
+				"</div>"+
+				"<div class='modal-footer'>"+
+					"<center>"+
+					"<a href='./programmer_facing.html' class='btn' >No</a>"+
+					"<a href='./programmer_facing.html' class='btn btn-primary' id='share' >Yes</a>"+
+					"</center>"+
+				"</div>"+
+			"</div>"+
+			"<a href='#saveBeforeExit' data-toggle='modal' id='mainCancelBtn' class='btn btn-block'>Cancel</a>"+
 		"</div>"+
 		"<div class='span3'>"+
 			"<div class='modal hide fade' id='saveAs'>"+
@@ -200,7 +219,7 @@ $(function() {
 				"</div>"+
 				"<div class='modal-footer'>"+
 					"<a href='#' class='btn' data-dismiss='modal'>Cancel</a>"+
-					"<a href='#' class='btn btn-primary' id='saveAsBtnPopup' data-dismiss='modal'>Save As</a>"+
+					"<a href='#' class='btn btn-primary' id='saveAsBtnPopup' data-dismiss='modal'>Save</a>"+
 				"</div>"+
 			"</div>"+
 			"<a class='btn btn-block' data-toggle='modal' href='#saveAs' id='saveAsBtn'>Save As</a>"+
@@ -238,10 +257,23 @@ $(function() {
 				$("#theScriptName").blur();
 			}
 		});
+		
+		$("#saveAsBtnPopup").click(function(e) {
+			$("#theScriptName").val($("#saveAsName").val());
+			$("#lastSavedAt").html(getTheDate());
+		});
+		
+		
 	
 		$("#popupAddParameterBtn").click(function (e) {
 			parameterNumber += 1;
-			addParameter($("#prefixFlagInput").val(),$("#inputAlias").val());
+			var selectedTyp = $("#typeInput :selected").val();
+			console.log(selectedTyp);
+			if (selectedTyp != "Flag") {
+				addParameter($("#prefixFlagInput").val(),$("#inputAlias").val());
+			} else {
+				addFlag($("#prefixFlagInput").val());
+			}
 			$("#paramsTable").show();
 			var requiredCheckboxLine = "";
 			if ($("#requiredInput").prop("checked") == 1) {
@@ -249,7 +281,7 @@ $(function() {
 			} else {
 				requiredCheckboxLine = "<td> <center> <input type='checkbox'> </center> </input></td>";
 			}
-			var selectedTyp = $("#typeInput :selected").val();
+			
 			console.log("selected: "+selectedTyp);
 			$("#paramsTable").append("<tr>"+
 						"<td> <input class='tableDataInput' type='text' value='"+$("#inputAlias").val()+"'></input></td>"+
@@ -289,7 +321,9 @@ $(function() {
 		
 		$("#saveNshareBtn").click(function (e) {var today = new Date(); $("#lastSavedAt").html(getTheDate())});
 		$("#saveBtn").click(function (e) {var today = new Date();  $("#lastSavedAt").html(getTheDate())});
-	
+		
+		
+		
 		$('body').on('click', function (e) {
 			$('.chunk').each(function () {
 				//the 'is' for buttons that triggers popups

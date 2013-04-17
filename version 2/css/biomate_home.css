@@ -26,6 +26,7 @@ body {
 
 #middleBubble {
   text-align:center;
+  cursor: default;
   vertical-align:middle;
   background: url(../images/grassb.png);
   background-repeat: no-repeat;

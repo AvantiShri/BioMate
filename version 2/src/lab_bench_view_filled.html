@@ -116,7 +116,7 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
 				</div>
 				<div class="modal-footer">
 				  <a href="#" class="btn" data-dismiss="modal">Close</a>
-				  <a href="#" class="btn btn-primary" data-dismiss="modal">Load</a>
+				  <a href="#" class="btn btn-primary disabled" data-dismiss="modal">Load</a>
 				</div>
 			  </div>
 			  <a id="notesBtn" class="btn btn-block" data-toggle="modal" href="#loadParams" >Load Parameters</a>
@@ -192,7 +192,7 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
 				  <a href="#" class="btn btn-primary">Copy to Clipboard</a>
 				</div>
 			  </div>
-			  <a id="notesBtn" class="btn btn-block btn-primary" data-toggle="modal" href="#genCommand" >Generate Command</a>
+			  <a class="btn btn-block btn-primary" data-toggle="modal" href="#genCommand" >Generate Command</a>
 		  </div>
 		  <div class="span3">
 		    <div class="modal hide fade" id="saveParams">
@@ -205,10 +205,13 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
 				</div>
 				<div class="modal-footer">
 				  <a href="#" class="btn" data-dismiss="modal">Close</a>
-				  <a href="#" class="btn btn-primary" data-dismiss="modal">Save</a>
+				  <a href="#" class="btn btn-primary" data-dismiss="modal" id="saveParamsBtn">Save</a>
 				</div>
 			  </div>
-			  <a id="notesBtn" class="btn btn-block" data-toggle="modal" href="#saveParams" >Save Parameters</a>
+			  <a class="btn btn-block" data-toggle="modal" href="#saveParams" >Save Parameters</a>
+		  </div>
+		  <div class="span6">
+		    <p class="text-success" id="savedMsg">Saved Parameters</p>
 		  </div>
 		</div>
 	  </div>
