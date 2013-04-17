@@ -256,7 +256,7 @@ $(function() {
 						"<td> <input class='tableDataInput' type='text' value='"+$("#prefixFlagInput").val()+"'></input></td>"+
 						"<td> <input type='text' class='tableDataInput' value='"+$("#ufNameInput").val()+"'></input></td>"+
 						"<td>"+
-							"<select  class='input-block-level' id=sel"+parameterNumber+">"+
+							"<select  class='input-block-level tableDataSelect' id=sel"+parameterNumber+">"+
 								"<option>Select input type...</option>"+
 								"<option value='Flag'>Flag</option>"+
 								"<option value='String'>String</option>"+

@@ -163,3 +163,9 @@ input[type="text"].tableDataInput {
 	width: 150px;
 }
 
+input[type="text"].tableDataSelect {
+	min-width: 70px;
+}
+
+
+
