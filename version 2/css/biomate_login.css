@@ -3,6 +3,12 @@ body {
 	padding-bottom: 40px;
 	background-color: #f5f5f5;
 }
+body .modal {
+    /* new custom width */
+    width: 400px;
+    /* must be half of the width, minus scrollbar on the left (30px) */
+    margin-left: -200px;
+}
 
 .form-signin {
 	max-width: 300px;
