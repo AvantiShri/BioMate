@@ -34,3 +34,7 @@ body {
 .scriptSpecific {
 	display: none;
 }
+
+#savedMsg {
+	display: none;
+}
