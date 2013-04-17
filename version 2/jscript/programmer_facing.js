@@ -252,9 +252,9 @@ $(function() {
 			var selectedTyp = $("#typeInput :selected").val();
 			console.log("selected: "+selectedTyp);
 			$("#paramsTable").append("<tr>"+
-						"<td> <input type='text' class='tdInput' value='"+$("#inputAlias").val()+"'></input></td>"+
-						"<td> <input type='text' class='tdInput' value='"+$("#prefixFlagInput").val()+"'></input></td>"+
-						"<td> <input type='text' class='tdInput' value='"+$("#ufNameInput").val()+"'></input></td>"+
+						"<td> <input class='tableDataInput' type='text' value='"+$("#inputAlias").val()+"'></input></td>"+
+						"<td> <input class='tableDataInput' type='text' value='"+$("#prefixFlagInput").val()+"'></input></td>"+
+						"<td> <input type='text' class='tableDataInput' value='"+$("#ufNameInput").val()+"'></input></td>"+
 						"<td>"+
 							"<select  class='input-block-level' id=sel"+parameterNumber+">"+
 								"<option>Select input type...</option>"+
