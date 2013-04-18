@@ -300,10 +300,31 @@ $(function() {
 			$("#lastSavedAt").html(getTheDate());
 		});
 		
+		
+		$("#inputAlias").keypress(function(e) {
+			if (e.which == 13) {
+				$("#prefixFlagInput").focus();
+			}
+		});
+		
+		$("#prefixFlagInput").keypress(function(e) {
+			if (e.which == 13) {
+				$("#ufNameInput").focus();
+			}
+		});
+		
+		$("#ufNameInput").keypress(function(e) {
+			if (e.which == 13) {
+				$("#typeInput").focus();
+			}
+		});
+		
 		$(".aFormInput").keypress(function (e) {
 			if (e.which == 13) {
-				$("#popupAddParameterBtn").click();
-				$("#addParamWindow").modal("hide");
+				if (e.target.id == "warningsInput" || e.target.id == "tooltipInput") {
+					$("#popupAddParameterBtn").click();
+					$("#addParamWindow").modal("hide");
+				}
 			}
 		});
 	
@@ -321,7 +342,15 @@ $(function() {
 		$("#staticTextWindow").on('shown', function() {$("#staticTextName").focus();});
 		$("#addParamWindow").on('shown', function() {$("#inputAlias").focus();});
 	
-		$( "#chunksContainer" ).sortable();
+		$( "#chunksContainer" ).sortable({
+			start: function(event, ui) {
+			ui.item.bind("click.prevent",
+				function(event) { event.preventDefault(); });
+			},
+			stop: function(event, ui) {
+				setTimeout(function(){ui.item.unbind("click.prevent");}, 300);
+			}
+		});
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
 		
