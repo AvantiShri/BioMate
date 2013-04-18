@@ -68,6 +68,7 @@ $(function() {
 		"<a href='#' class='chunk btn staticTextBtn' rel='popover' data-content=\"<span class='btn popoverButton'>Edit</span> <div class='btn'>Delete</div>\">"+contents+"</a>");
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
+		$("#staticTextName").val("")
 	}
 	var addParameter = function(prefix,alias) {
 		$("#chunksContainer").append(
