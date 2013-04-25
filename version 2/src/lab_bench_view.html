@@ -54,9 +54,6 @@
 		  <div class="span9">
 	        <select id="inputScript" class="input-block-level">
 			  <option>Select a script...</option>
-			  <option id="item">Monte Carlo</option>
-			  <option id="item">Bowtie</option>
-			  <option id="item">Cufflinks</option>
 			</select>
 		  </div>
 		  <div class="scriptSpecific">
@@ -64,13 +61,10 @@
 			  <div class="modal hide fade" id="notes">
 			    <div class="modal-header">
 			      <a class="close" data-dismiss="modal">×</a>
-				  <h3>My Notes on Monte Carlo</h3>
+				  <h3>My Notes on <span class="scriptName">Default Script Name</span></h3>
 				</div>
 				<div class="modal-body">
-				  <textarea rows="5" class="input-block-level">On 3/15/13 ran script on abc.txt in home directory
-
-perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
--- Takes too long
+				  <textarea rows="5" class="input-block-level" id="noteContents">Default Note Contents
 				  </textarea>
 				</div>
 				<div class="modal-footer">
@@ -78,7 +72,7 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
 				  <a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a>
 				</div>
 			  </div>
-			  <a id="notesBtn" class="btn btn-block" data-toggle="modal" href="#notes" >My Notes on Monte Carlo</a>
+			  <a id="notesBtn" class="btn btn-block" data-toggle="modal" href="#notes" >My Notes on <span class="scriptName">Default Script Name</span></a>
 			</div>
 			<div class="span3">
 			  <div class="modal hide fade" id="instructions">
@@ -87,7 +81,7 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
 				  <h3>Instructions</h3>
 				</div>
 				<div class="modal-body">
-				  <p>Runs a Monte Carlo simulation. If you have trouble, talk to X in the lab.</p>
+				  <p id="instructionsContents">Runs a Monte Carlo simulation. If you have trouble, talk to X in the lab.</p>
 				</div>
 				<div class="modal-footer">
 				  <a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -99,17 +93,11 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
 		      <div class="modal hide fade" id="loadParams">
 			    <div class="modal-header">
 			      <a class="close" data-dismiss="modal">×</a>
-				  <h3>Load Saved Paramater Settings for Monte Carlo</h3>
+				  <h3>Load Saved Parameter Settings for <span class="scriptName">Default Script Name</span></h3>
 				</div>
 				<div class="modal-body">
 				  <table id="loadParamsTable" class="table table-bordered table-hover">
-				    <tbody>
-				      <tr>
-				        <td><a href="#">Monte Carlo params 03_05_2013</a></td>
-				      </tr>
-				      <tr>
-				        <td><a href="#">Monte Carlo params 04_03_2013</a></td>
-				      </tr>
+				    <tbody id="loadParamsTableBody">
 				    </tbody>
 				  </table>
 				</div>
@@ -127,103 +115,68 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
 		    <label class="lab-bench-labels" for="caveats">Caveats</label>
 		  </div>
 		  <div class="span6">
-	        <span id="caveats" class="truncate text-warning">The output of Monte Carlo is displayed in the terminal</span>
+	        <span id="caveats" class="truncate text-warning">Default caveats contents</span>
 		  </div>
 		</div>
 		<div class="row scriptSpecific">
-		  <label for="required" class="span12 lab-bench-labels">Required Fields</label>
-	      <div id="required" class="well well-small span12">
-	      	<div class="row">
-	      	  <div class="span3 truncate">
-		      	<label for="inputfile">
-		      	  <a href="#" data-toggle="tooltip" title="Choose the input file to run montecarlo.pl on" class="btn btn-link info">
-		      	    <i class="icon-question-sign"></i>
-		      	  </a>Input File</label>
-		      </div>
-		      <div class="span9">
-		      	<input id="inputfile" class="input-block-level" type="text" placeholder="Enter input file name"></input>
-		      </div>
-		      <span class="span10 offset3 text-warning">File path must be absolute</span>
-		    </div>
-		  </div>
+			<label for="required" class="span12 lab-bench-labels">Required Fields</label>
+			<div id="required" class="well well-small span12">
+			</div>
 		</div>
 		<div class="row scriptSpecific">
-		  <label for="optional" class="span12 lab-bench-labels">Optional Fields</label>
-	      <div id="optional" class="well well-small span12">
-	      	<div class="row">
-	      	  <div class="span3 truncate">
-		      	<label for="iterations">
-		      	  <a href="#" data-toggle="tooltip" title="Enter the number of iterations you would like to run the monte carlo simulation for" class="btn btn-link info">
-		      	    <i class="icon-question-sign"></i>
-		      	  </a>Number of Iterations</label>
-		      </div>
-		      <div class="span3">
-		      	<input id="iterations" class="input-block-level" type="text" placeholder="100"></input>
-		      </div>
-		      <span class="span10 offset3 text-warning">Must be less than 10,000</span>
-		    </div>
-		    <div class="row">
-	      	  <div class="span3 truncate">
-		      	<label for="detailed">
-		      	  <a href="#" data-toggle="tooltip" title="Check this box to get detailed output when the program runs" class="btn btn-link info">
-		      	    <i class="icon-question-sign"></i>
-		      	  </a>Detailed Output</label>
-		      </div>
-		      <div class="span9">
-		      	<input id="detailed" type="checkbox"></input>
-		      </div>
-		    </div>
-		  </div>
+			<label for="optional" class="span12 lab-bench-labels">Optional Fields</label>
+			<div id="optional" class="well well-small span12">
+			</div>
 		</div>
 		<div class="row scriptSpecific">
-	      <div class="span3">
-		    <div class="modal hide fade" id="genCommand">
-			    <div class="modal-header">
-			      <a class="close" data-dismiss="modal">×</a>
-				  <h3>Cut and Paste into your Command Line</h3>
+			<div class="span3">
+				<div class="modal hide fade" id="genCommand">
+					<div class="modal-header">
+						<a class="close" data-dismiss="modal">×</a>
+						<h3>Cut and Paste into your Command Line</h3>
+					</div>
+					<div class="modal-body">
+						<p>perl /home/X/montecarlo.pl -n ~/input.txt | less</p>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn" data-dismiss="modal">Close</a>
+						<a href="#" class="btn">Save to Notes</a>
+						<a href="#" class="btn btn-primary">Copy to Clipboard</a>
+					</div>
 				</div>
-				<div class="modal-body">
-				  <p>perl /home/X/montecarlo.pl -n ~/input.txt | less</p>
+				<a class="btn btn-block btn-primary" data-toggle="modal" href="#genCommand" >Generate Command</a>
+			</div>
+			<div class="span3">
+				<div class="modal hide fade" id="saveParams">
+					<div class="modal-header">
+						<a class="close" data-dismiss="modal">×</a>
+						<h3>Enter Name of Parameter Settings for Monte Carlo</h3>
+					</div>
+					<div class="modal-body">
+						<input id="paramsName" class="input-block-level" type="text" placeholder="Enter Name of Parameter Settings"></input>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn" data-dismiss="modal">Close</a>
+						<a href="#" class="btn btn-primary" data-dismiss="modal" id="saveParamsBtn">Save</a>
+					</div>
 				</div>
-				<div class="modal-footer">
-				  <a href="#" class="btn" data-dismiss="modal">Close</a>
-				  <a href="#" class="btn">Save to Notes</a>
-				  <a href="#" class="btn btn-primary">Copy to Clipboard</a>
-				</div>
-			  </div>
-			  <a class="btn btn-block btn-primary" data-toggle="modal" href="#genCommand" >Generate Command</a>
-		  </div>
-		  <div class="span3">
-		    <div class="modal hide fade" id="saveParams">
-			    <div class="modal-header">
-			      <a class="close" data-dismiss="modal">×</a>
-				  <h3>Enter Name of Parameter Settings for Monte Carlo</h3>
-				</div>
-				<div class="modal-body">
-				  <input id="paramsName" class="input-block-level" type="text" placeholder="Enter Name of Parameter Settings"></input>
-				</div>
-				<div class="modal-footer">
-				  <a href="#" class="btn" data-dismiss="modal">Close</a>
-				  <a href="#" class="btn btn-primary" data-dismiss="modal" id="saveParamsBtn">Save</a>
-				</div>
-			  </div>
-			  <a class="btn btn-block" data-toggle="modal" href="#saveParams" >Save Parameters</a>
-		  </div>
-		  <div class="span6">
-		    <p class="text-success" id="savedMsg">Saved Parameters</p>
-		  </div>
+				<a class="btn btn-block" data-toggle="modal" href="#saveParams" >Save Parameters</a>
+			</div>
+			<div class="span6">
+				<p class="text-success" id="savedMsg">Saved Parameters</p>
+			</div>
 		</div>
-	  </div>
-  
-    </div> <!-- /container -->
- 
-	
-    <!-- javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script type="text/javascript" src="../external/jquery/js/jquery-1.9.0.min.js"></script>
-    <script type="text/javascript" src="../external/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="../jscript/lab_bench_view.js"></script>
-    
-  </body>
+	</div>
+</div> <!-- /container -->
+
+
+<!-- javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="../external/jquery/js/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="../external/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../jscript/lab_bench_view_dynamic.js"></script>
+<script type="text/javascript" src="../jscript/lab_bench_view_dynamic_loadScript.js"></script>
+<script type="text/javascript" src="../jscript/lab_bench_view.js"></script>
+</body>
 </html>
