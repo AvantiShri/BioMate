@@ -18,6 +18,9 @@ $(function() {
 		if( this.selectedIndex != 0 ) {
 			$(".scriptSpecific").show();
 		}
+		
+		var selectedScript = $("#inputScript :selected").val();
+		loadScript(selectedScript);
 	});
 	
 	var inputScript = document.getElementById("inputScript");
