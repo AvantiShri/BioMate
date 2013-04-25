@@ -1,6 +1,18 @@
+Parse.$ = jQuery;
 
+// Initialize Parse with your Parse application javascript keys
+Parse.initialize("0Oq3tTp9JMvd72LOrGN25PiEq9XgVHCxo57MQbpT",
+			   "vUFy2o7nFx3eeKVlZneYMPI2MBoxT5LhWNoIWPja");
+
+
+var currentUser = Parse.User.current();
+if (currentUser == null) {
+	window.location = "biomate_login.html";
+}
+
+else{
 $(document).ready(function(){
-	console.log("her in load");
+	
 	//Center the "info" bubble in the  "circle" div
 	var divTop = ($("#divCircle").height() - $("#middleBubble").height())/2;
 	var divLeft = ($("#divCircle").width() - $("#middleBubble").width())/2;
@@ -60,6 +72,11 @@ $(document).ready(function(){
 		currentGridSelector = null;
 	});
 	
+	$("#btnSignOut").click(function(e){
+		Parse.User.logOut();
+		window.location = "biomate_login.html";
+	});
+	
 	$(".history").on('click', function(){ 
 		//var m = $("#historyTable");
 		//$("#historyTable").modal('toggle');
@@ -76,3 +93,4 @@ $(document).ready(function(){
 		$("#noteTable").modal("hide");
 	});
 });
+}

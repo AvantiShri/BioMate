@@ -2,14 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Sign in &middot; BioMate</title>
+    <title>Create an Account &middot; BioMate</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Sumaiya Nazeen">
 
     <!-- Styles -->
     <link href="../external/bootstrap/css/bootstrap.css" rel="stylesheet">
-	<link href="../css/biomate_login.css" rel="stylesheet">
+	<link href="../css/biomate_signup.css" rel="stylesheet">
     <link href="../external/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../external/jquery/js/jquery-1.9.0.min.js"></script>
 	<script type="text/javascript" src="../external/jquery/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../external/jquery/js/parse-1.2.7.min.js"></script>
-	<script type="text/javascript" src="../jscript/biomate_login.js"></script>
+	<script type="text/javascript" src="../jscript/biomate_signup.js"></script>
     <script type="text/javascript" src="../external/bootstrap/js/bootstrap.js"></script>
   </head>
 
@@ -45,55 +45,61 @@
           <a class="brand" href="#">BioMate</a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
-				<li><p class="navbar-text">&nbspNew to BioMate?&nbsp&nbsp&nbsp</p></li>
-				
- 			    <li><button class="btn btn-primary" type="submit" id="btnSignUp">
-					Create an Account
-				</button></li>
+				<li></li>
+				<li></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
     <div class="container">
-	    <div class="row-fluid">
-			<div class="span4">
+	    <div class="row">
+			<div class="span2">
 			</div>
-			<div class="span4">
-			<form class="form-signin">
-				<h2 class="form-signin-heading">Please sign in</h2>
+			<div class="span8">
+			<form class="form-signup">
+				<legend>Sign Up</legend>
 				<div class="errorMessage" id="err"></div>
-				<input type="text" id="userName" class="input-block-level" placeholder="Email address" autofocus="autofocus">
-				<input type="password" id="userPassword" class="input-block-level" placeholder="Password">
-				<label class="checkbox">
-				  <input type="checkbox" value="remember-me"> Remember me
-				</label>
-				<button class="btn btn-large btn-primary" type="submit" id="btnSignIn">
-					<i class="icon-user icon-white"></i>
-					Sign in
-				</button>&nbsp&nbsp&nbsp&nbsp
-				<a data-toggle="modal" href="#trouble">can't access account?</a>
-			</form>
+				<div class="control-group">
+					<label class="control-label">Email</label>
+					<div class="controls">
+						<div class="input-prepend">
+							<input type="text" class="input-xlarge" id="email" name="email" placeholder="Email" autofocus="autofocus">
+						</div>
+					</div>	
+				</div>
+				<div class="control-group">
+					<label class="control-label">Password</label>
+					<div class="controls">
+						<div class="input-prepend">
+							<input type="Password" id="passwd" class="input-xlarge" name="passwd" placeholder="Password">
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+				<label class="control-label" for="input01"></label>
+				  <div class="controls">
+				   <button type="submit" class="btn btn-large btn-primary" id="btnSignUp">Create My Account</button>
+				  </div>
+				</div>
 			</div>
-			<div class="modal hide fade" id="trouble">
+			</form>
+			<div class="modal hide fade" id="success">
 				<div class="modal-header">
-				  <a class="close" data-dismiss="modal">×</a>
-				  <h3>Can't access account</h3>
+				  <a href="#" class="close" id="close1" data-dismiss="modal">×</a>
+				  <h3>Success!</h3>
 				</div>
 				<div class="modal-body">
-				  <div class="errorMessage" id="sendErr"></div>
-				  <p>Enter your email address so that we can send you a link to reset the password of your account.</p>
-				  <input type="text" id="userEmail" class="input-block-level" placeholder="Email address" autofocus="autofocus">
+				  <p>Your account has been created successfully.</p>
 				</div>
 				<div class="modal-footer">
-				  <a href="#" class="btn" data-dismiss="modal">Close</a>
-				  <a href="#" class="btn btn-primary" id="send">Send</a>
+				  <a href="#" class="btn" id="close2" data-dismiss="modal">Close</a>
 				</div>
 			</div>
 		</div>
 		
     </div> <!-- /container -->
-
+	
     
   </body>
 </html>
