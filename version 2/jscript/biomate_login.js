@@ -1,9 +1,7 @@
-$(document).ready(function(){
-	Parse.$ = jQuery;
+Parse.$ = jQuery;
+Parse.initialize("tFiHdHJHbyxrNdkAmCPjisX3ezUdfURfqPDUH85C", "Z7yWpLNyF0enW6oyX7VaN4iBArhgM9ZASwZMl4va");
 
-  // Initialize Parse with your Parse application javascript keys
-	Parse.initialize("0Oq3tTp9JMvd72LOrGN25PiEq9XgVHCxo57MQbpT",
-                   "vUFy2o7nFx3eeKVlZneYMPI2MBoxT5LhWNoIWPja");
+$(document).ready(function(){
 				   
 	$("#btnSignUp").click(function() {
 		window.location="biomate_signup.html";
