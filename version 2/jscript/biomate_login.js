@@ -13,7 +13,7 @@ $(document).ready(function(){
 		Parse.User.logIn(userName, userPassword, {
 		  success: function(user) {
 			// Do stuff after successful login.
-			window.location = "biomate_home_lab.html";
+			window.location = "biomate_home.html";
 		  },
 		  error: function(user, error) {
 			// The login failed. Check error to see why.
