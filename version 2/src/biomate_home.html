@@ -31,8 +31,9 @@
     <script type="text/javascript" src="../external/jquery/js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="../external/jquery/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../external/jquery/js/parse-1.2.7.min.js"></script>
-	<script type="text/javascript" src="../jscript/biomate_home.js"></script>
-    <script type="text/javascript" src="../external/bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="../external/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="../jscript/parse_objects.js"></script>
+    <script type="text/javascript" src="../jscript/biomate_home.js"></script> 
   </head>
 
   <body>
@@ -78,42 +79,16 @@
 		</div>  
 		<div class="modal-body">  
 			<table width="500px" class="table table-hover table-striped">
-				<tr>
-					<td><b>Script Name</b></td>
-					<td><b>Version</b></td>
-					<td><b>Author</b></td>
-					<td><b>Last Accessed</b></td>
-					<td><b>Action<b></td>
-				</tr>
-				<tr>
-					<td>Monte Carlo</td>
-					<td>1.0.1</td>
-					<td>Sam</td>
-					<td>2 hours ago</td>
-					<td><a href="lab_bench_view.html">Use Script</a></td>
-				</tr>
-				<tr>
-					<td>Monte Carlo</td>
-					<td>1.0.1</td>
-					<td>Sam</td>
-					<td>23 hours ago</td>
-					<td><a href="lab_bench_view.html">Use Script</a></td>
-				</tr>
-				<tr>
-					<td>Monte Carlo</td>
-					<td>1.0.0</td>
-					<td>Sam</td>
-					<td>April 4, 2013</td>
-					<td><a href="lab_bench_view.html">Use Script</a></td>
-				</tr>
-				<tr>
-					<td>Cufflink</td>
-					<td>1.0.1</td>
-					<td>Vini</td>
-					<td>March 12, 2013</td>
-					<td><a href="#">Use Script</a></td>
-				</tr>
-				
+				<thead>
+                    <tr>
+                        <th>Script Name</th>
+                        <th>Author</th>
+                        <th>Last Accessed</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                </tbody>
 			</table>             
 		</div>  
 		<div class="modal-footer">  

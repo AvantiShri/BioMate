@@ -11,6 +11,18 @@ if (currentUser == null) {
 else{
 $(document).ready(function(){
 	
+    // create some fake data
+//    ScriptData.createScriptData([], "caveats3", "instructions3", scriptDataCreated);
+//    function scriptDataCreated(scriptData) {
+//        Script.createScript(currentUser, "script3", scriptData, scriptCreated);
+//    }
+//    function scriptCreated(script) {
+//        History.createHistory(currentUser, script, historyCreated);
+//    }
+//    function historyCreated(history) {
+//        console.log(history);
+//    }
+    
 	//Center the "info" bubble in the  "circle" div
 	var divTop = ($("#divCircle").height() - $("#middleBubble").height())/2;
 	var divLeft = ($("#divCircle").width() - $("#middleBubble").width())/2;
@@ -75,11 +87,31 @@ $(document).ready(function(){
 		window.location = "biomate_login.html";
 	});
 	
+    // load history listing
 	$(".history").on('click', function(){ 
 		//var m = $("#historyTable");
 		//$("#historyTable").modal('toggle');
 		//console.log(m);
+        
+        History.getUserHistory(Parse.User.current(), 10, loadHistory);
 	});
+    
+    // callback to load user history
+    function loadHistory(history) {
+        var len = history.length;
+        for(var i = 0; i < len; ++i) {
+            var hist = history[i];
+            var script = hist.get("script");
+            var owner = script.get("owner");
+            $("#historyTableBody").append(
+                "<tr><td>" + script.get("name") +
+                "</td><td>" + owner.get("name") +
+                "</td><td>" + hist.createdAt +
+                "</td><td>" + (owner.id === currentUser.id ? "<a href='programmer_facing.html'>Edit</a> &nbsp " : "") + 
+                "<a href='lab_bench_view.html'>Use Script</a>" + 
+                "</td></tr>");
+        }
+    }
 	
 	$(".notes").on('click', function(){ 
 		console.log('Notes');

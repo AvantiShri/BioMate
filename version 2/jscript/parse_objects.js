@@ -252,6 +252,8 @@ var History = Parse.Object.extend("History", {
         var query = new Parse.Query(History);
         query.equalTo("user", user);
         query.descending("createdAt");
+        query.include("script");
+        query.include("script.owner");
         if(limit > 0) query.limit(limit);
         query.find({
             success: function(history) {

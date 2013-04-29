@@ -6,13 +6,15 @@ $(function(){
 		
 		var email = $("#email").val();
 		var password = $("#passwd").val();
+        var name = $("#name").val();
 		
 		var user = new Parse.User();
 		user.set("username", email);
 		user.set("password", password);
 		user.set("email", email);
+        user.set("name", name);
 		  
-		Parse.User.signUp(email, password, { ACL: new Parse.ACL() },{
+		user.signUp(null,{
 		  success: function(user) {
 			$('#success').modal('show')
 			//window.location = "biomate_login.html";
