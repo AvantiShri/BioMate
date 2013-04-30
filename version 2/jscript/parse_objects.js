@@ -134,6 +134,11 @@ var Script = Parse.Object.extend("Script", {
     // results are returned via the callback function
     getScriptById: function(id, callback) {
         var query = new Parse.Query(Script);
+        query.include("owner");
+        query.include("privateScriptData.chunks.parameter");
+        query.include("publicScriptData.chunks.parameter");
+        query.include("privateScriptData.chunks.staticText");
+        query.include("publicScriptData.chunks.staticText");
         query.get(id, {
             success: function(script) {
                 callback(script);
@@ -195,6 +200,7 @@ var UserScript = Parse.Object.extend("UserScript", {
     getUserScripts: function(user, callback) {
         var query = new Parse.Query(UserScript);
         query.equalTo("user", user);
+        query.include("script");
         query.find({
             success: function(userScripts) {
                 callback(userScripts);
@@ -252,7 +258,6 @@ var History = Parse.Object.extend("History", {
         var query = new Parse.Query(History);
         query.equalTo("user", user);
         query.descending("createdAt");
-        query.include("script");
         query.include("script.owner");
         if(limit > 0) query.limit(limit);
         query.find({
@@ -338,7 +343,6 @@ var Note = Parse.Object.extend("Note", {
     getUserNotes: function(user, callback) {
         var query = new Parse.Query(Note);
         query.equalTo("user", user);
-        query.include("script");
         query.include("script.owner");
         query.find({
             success: function(notes) {
@@ -370,7 +374,6 @@ var Note = Parse.Object.extend("Note", {
     // results are returned via the callback function
     getNoteById: function(id, callback) {
         var query = new Parse.Query(Note);
-        query.include("script");
         query.include("script.owner");
         query.get(id, {
             success: function(note) {
@@ -460,7 +463,14 @@ var CommandChunk = Parse.Object.extend("CommandChunk", {
     // optionally pass in a callback function on successful save
     editCommandChunk: function(args) {
         if(args && args.commandChunkType) this.set("commandChunkType", args.commandChunkType);
-        if(args && args.chunkData) this.set("chunkData", args.chunkData);
+        if(args && args.chunkData) {
+            if(this.get("commandChunkType") === CommandChunkType.STATIC_TEXT) {
+                this.set("staticText", args.chunkData);
+            }
+            else {
+                this.set("parameter", args.chunkData);
+            }
+        }
         this.save({
             success: function(commandChunk) {
                 if(args && args.callback) args.callback(commandChunk);
@@ -494,7 +504,12 @@ var CommandChunk = Parse.Object.extend("CommandChunk", {
     createCommandChunk: function(commandChunkType, chunkData, callback) {
         var commandChunk = new CommandChunk();
         commandChunk.set("commandChunkType", commandChunkType);
-        commandChunk.set("chunkData", chunkData);
+        if(commandChunkType === CommandChunkType.STATIC_TEXT) {
+            commandChunk.set("staticText", chunkData);
+        }
+        else {
+            commandChunk.set("parameter", chunkData);
+        }
         commandChunk.save({
             success: function(commandChunk) {
                 callback(commandChunk);
@@ -595,6 +610,7 @@ var Parameter = Parse.Object.extend("Parameter", {
         if(args && args.alias) this.set("alias", args.alias);
         if(args && args.prefixFlag) this.set("prefixFlat", args.prefixFlag);
         if(args && args.userFriendlyName) this.set("userFriendlyName", args.userFriendlyName);
+        if(args && args.defaultVal) this.set("defaultVal", args.defaultVal);
         if(args && args.inputType) this.set("inputType", args.inputType);
         if(args && args.required) this.set("required", args.required);
         if(args && args.warnings) this.set("warnings", args.warnings);
@@ -629,19 +645,21 @@ var Parameter = Parse.Object.extend("Parameter", {
     // @param alias: an alias for the parameter, type string
     // @param prefixFlag: the parameter prefix or flag (e.g. -v), type string
     // @param userFriendlyName: name the user will see when entering data, type string
+    // @param defaultVal: default value, type corresponds to InputType
     // @param inputType: the parameter data type, type InputType
     // @param required: whether or not the parameter is required, type boolean
     // @param warnings: warnings for the user, type string
     // @param tooltip: tooltip for the parameter, type string
     // @param callback: a function to call upon successful creation
-    createParameter: function(alias, prefixFlag, userFriendyName, 
+    createParameter: function(alias, prefixFlag, userFriendyName, defaultVal,
                               inputType, required, warnings, tooltip, callback) {
         var parameter = new Parameter();
         parameter.set("alias", alias);
         parameter.set("prefixFlag", prefixFlag);
         parameter.set("userFriendlyName", userFriendyName);
+        parameter.set("defaultVal", defaultVal);
         parameter.set("inputType", inputType);
-        parameter.set("requried", required);
+        parameter.set("required", required);
         parameter.set("warnings", warnings);
         parameter.set("tooltip", tooltip);
         parameter.save({

@@ -1,5 +1,9 @@
-var setScriptToSelect = function(scriptName) {
-	$("#inputScript").append("<option id='inputScriptItem_'"+scriptName+">"+scriptName+"</option>");
+var setScriptToSelect = function(scriptName, scriptId) {
+	$("#inputScript").append("<option value='" + scriptId + "'>" + scriptName + "</option>");
+}
+
+var setSelectedScript = function(scriptId) {
+    $("#inputScript").val(scriptId);
 }
 
 var initializeLoadScript = function(scriptName) {
@@ -97,10 +101,3 @@ var addFlag = function(alias, userFriendlyName, defaultVal, tooltip, warning) {
 		$("#"+inputId).attr("checked",true);
 	}
 }
-
-var setScriptSelections = function() {
-	setScriptToSelect("Monte Carlo");
-	setScriptToSelect("Tophat-Cufflinks");
-}
-
-setScriptSelections();

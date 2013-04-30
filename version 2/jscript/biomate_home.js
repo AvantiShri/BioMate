@@ -12,27 +12,34 @@ else{
 $(document).ready(function(){
 	
     // create some fake data
-//    ScriptData.createScriptData([], "caveats1", "instructions1", scriptDataCreated);
+//    var chunks = [];
+//    Parameter.createParameter("alias4", "prefixFlag4", "userFriendyName4", "defaultVal4",
+//                              InputType.STRING, true, "warnings4", "tooltip4", parameterCreated);
+//    function parameterCreated(parameter) {
+//        CommandChunk.createCommandChunk(CommandChunkType.PARAMETER, parameter, chunkCreated);
+//        StaticText.createStaticText("static text4", staticTextCreated);
+//    }
+//    function staticTextCreated(staticText) {
+//        CommandChunk.createCommandChunk(CommandChunkType.STATIC_TEXT, staticText, chunkCreated);
+//    }
+//    function chunkCreated(chunk) {
+//        chunks.push(chunk);
+//        if(chunks.length == 2) {
+//            ScriptData.createScriptData(chunks, "caveats4", "instructions4", scriptDataCreated);
+//        }
+//    }
 //    function scriptDataCreated(scriptData) {
-//        Script.createScript(currentUser, "script1", scriptData, scriptCreated);
+//        Script.createScript(currentUser, "script4", scriptData, scriptCreated);
 //    }
 //    function scriptCreated(script) {
-//        History.createHistory(currentUser, script, historyCreated);
+//        History.createHistory(currentUser, script, done);
+//        Note.createNote(currentUser, script, "script4 awesome note", done);
+//        script.shareScript();
+//        UserScript.createUserScript(currentUser, script, done);
 //    }
-//    function historyCreated(history) {
-//        console.log(history);
-//    }
+//    function done(data) {
+//    } 
     
-//    ScriptData.createScriptData([], "caveats3", "instructions3", scriptDataCreated);
-//    function scriptDataCreated(scriptData) {
-//        Script.createScript(currentUser, "script3", scriptData, scriptCreated);
-//    }
-//    function scriptCreated(script) {
-//        Note.createNote(currentUser, script, "script 3 awesome note", noteCreated);
-//    }
-//    function noteCreated(note) {
-//    }
-//    
 	//Center the "info" bubble in the  "circle" div
 	var divTop = ($("#divCircle").height() - $("#middleBubble").height())/2;
 	var divLeft = ($("#divCircle").width() - $("#middleBubble").width())/2;
@@ -113,9 +120,9 @@ $(document).ready(function(){
             $("#historyTableBody").append(
                 "<tr scriptId='" + script.id + "'><td>" + script.get("name") +
                 "</td><td>" + owner.get("name") +
-                "</td><td>" + hist.createdAt +
-                "</td><td>" + (owner.id === currentUser.id ? "<a href='programmer_facing.html'>Edit</a> &nbsp " : "") + 
-                "<a href='lab_bench_view.html'>Use Script</a>" + 
+                "</td><td>" + dateToString(hist.createdAt) +
+                "</td><td>" + (owner.id === currentUser.id ? "<a href='programmer_facing.html?scriptId=" + script.id + "'>Edit</a> &nbsp " : "") + 
+                "<a href='lab_bench_view.html?scriptId=" + script.id + "'>Use Script</a>" + 
                 "</td></tr>");
         }
     }
@@ -136,7 +143,7 @@ $(document).ready(function(){
             $("#notesTableBody").append(
                 "<tr noteId='" + note.id + "'><td>Note on " + script.get("name") +
                 "</td><td>" + owner.get("name") +
-                "</td><td>" + note.updatedAt +
+                "</td><td>" + dateToString(note.updatedAt) +
                 "</td></tr>");
         }
     }
