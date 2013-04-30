@@ -338,6 +338,8 @@ var Note = Parse.Object.extend("Note", {
     getUserNotes: function(user, callback) {
         var query = new Parse.Query(Note);
         query.equalTo("user", user);
+        query.include("script");
+        query.include("script.owner");
         query.find({
             success: function(notes) {
                 callback(notes);
@@ -368,6 +370,8 @@ var Note = Parse.Object.extend("Note", {
     // results are returned via the callback function
     getNoteById: function(id, callback) {
         var query = new Parse.Query(Note);
+        query.include("script");
+        query.include("script.owner");
         query.get(id, {
             success: function(note) {
                 callback(note);

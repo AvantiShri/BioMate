@@ -95,17 +95,13 @@
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
 		</div>  
 	  </div>
-	  <div class="modal hide fade" id="monte-carlo-notes">
+	  <div class="modal hide fade" id="noteTextPopup">
 		<div class="modal-header">
 		  <a class="close" data-dismiss="modal">×</a>
-		  <h3>My Notes on Monte Carlo</h3>
+		  <h3 id="noteHeader"></h3>
 		</div>
 		<div class="modal-body">
-		  <textarea rows="5" class="input-block-level">On 3/15/13 ran script on abc.txt in home directory
-
-perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
--- Takes too long
-		  </textarea>
+		  <textarea rows="5" class="input-block-level" id="noteText"></textarea>
 		</div>
 		<div class="modal-footer">
 		  <a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -119,31 +115,16 @@ perl /home/X/montecarlo.pl -n 2000 -v abc.txt | less
 			<h3>My Notes</h3>  
 		</div>  
 		<div class="modal-body">  
-			<table  class="table table-hover table-striped">
-			<tr>
-				<td><b>File Name</b></td>
-				<td><b>Script</b></td>
-				<td><b>Version</b></td>
-				<td><b>Last Modified</b></td>
-			</tr>
-			<tr id="monte-carlo">
-				<td><a href="#">Note on Monte Carlo</a></td>
-				<td>Monte Carlo</td>
-				<td>1.0.1</td>
-				<td>2 hours ago</td>
-			</tr>
-			<tr>
-				<td><a href="#">Note on Cufflink</a></td>
-				<td>Cufflink</td>
-				<td>1.0.1</td>
-				<td>April 12, 2013</td>
-			</tr>
-			<tr>
-				<td><a href="#">Note on Bowtie</a></td>
-				<td>Bowtie</td>
-				<td>1.0.1</td>
-				<td>March 12, 2013</td>
-			</tr>
+            <table  class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Script Owner</th>
+                        <th>Last Modified</th>
+                    </tr>
+                </thead>
+                <tbody id="notesTableBody">
+                </tbody>
 		  </table>             
 		</div>  
 		<div class="modal-footer">  

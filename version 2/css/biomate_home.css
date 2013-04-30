@@ -47,3 +47,7 @@ body {
 #middleBubble p{
 	margin: 2em;
 }
+
+#notesTableBody td:hover {
+    cursor: pointer;
+}

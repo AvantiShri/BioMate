@@ -12,9 +12,9 @@ else{
 $(document).ready(function(){
 	
     // create some fake data
-//    ScriptData.createScriptData([], "caveats3", "instructions3", scriptDataCreated);
+//    ScriptData.createScriptData([], "caveats1", "instructions1", scriptDataCreated);
 //    function scriptDataCreated(scriptData) {
-//        Script.createScript(currentUser, "script3", scriptData, scriptCreated);
+//        Script.createScript(currentUser, "script1", scriptData, scriptCreated);
 //    }
 //    function scriptCreated(script) {
 //        History.createHistory(currentUser, script, historyCreated);
@@ -23,6 +23,16 @@ $(document).ready(function(){
 //        console.log(history);
 //    }
     
+//    ScriptData.createScriptData([], "caveats3", "instructions3", scriptDataCreated);
+//    function scriptDataCreated(scriptData) {
+//        Script.createScript(currentUser, "script3", scriptData, scriptCreated);
+//    }
+//    function scriptCreated(script) {
+//        Note.createNote(currentUser, script, "script 3 awesome note", noteCreated);
+//    }
+//    function noteCreated(note) {
+//    }
+//    
 	//Center the "info" bubble in the  "circle" div
 	var divTop = ($("#divCircle").height() - $("#middleBubble").height())/2;
 	var divLeft = ($("#divCircle").width() - $("#middleBubble").width())/2;
@@ -89,11 +99,8 @@ $(document).ready(function(){
 	
     // load history listing
 	$(".history").on('click', function(){ 
-		//var m = $("#historyTable");
-		//$("#historyTable").modal('toggle');
-		//console.log(m);
-        
-        History.getUserHistory(Parse.User.current(), 10, loadHistory);
+		$("#historyTableBody").empty();
+        History.getUserHistory(currentUser, 10, loadHistory);
 	});
     
     // callback to load user history
@@ -104,7 +111,7 @@ $(document).ready(function(){
             var script = hist.get("script");
             var owner = script.get("owner");
             $("#historyTableBody").append(
-                "<tr><td>" + script.get("name") +
+                "<tr scriptId='" + script.id + "'><td>" + script.get("name") +
                 "</td><td>" + owner.get("name") +
                 "</td><td>" + hist.createdAt +
                 "</td><td>" + (owner.id === currentUser.id ? "<a href='programmer_facing.html'>Edit</a> &nbsp " : "") + 
@@ -113,14 +120,42 @@ $(document).ready(function(){
         }
     }
 	
-	$(".notes").on('click', function(){ 
-		console.log('Notes');
+    // load notes listing
+	$(".notes").on('click', function(){ 		
+        $("#notesTableBody").empty();
+        Note.getUserNotes(currentUser, loadNotes);
 	});
+    
+    // callback to load user notes
+    function loadNotes(notes) {
+        var len = notes.length;
+        for(var i = 0; i < len; ++i) {
+            var note = notes[i];
+            var script = note.get("script");
+            var owner = script.get("owner");
+            $("#notesTableBody").append(
+                "<tr noteId='" + note.id + "'><td>Note on " + script.get("name") +
+                "</td><td>" + owner.get("name") +
+                "</td><td>" + note.updatedAt +
+                "</td></tr>");
+        }
+    }
 	
-	// show monte-carlo notes
-	$("#noteTable #monte-carlo").click( function () {
-		$("#monte-carlo-notes").modal();
-		$("#noteTable").modal("hide");
+	// show the text for a specific note
+	$(document).on("click", "#notesTableBody tr", function () {
+        var noteId = $(this).attr("noteId");
+        Note.getNoteById(noteId, loadNote);
 	});
+    
+    // callback to show a specific note
+    function loadNote(note) {
+        var script = note.get("script");
+        var owner = script.get("owner");
+        var text = note.get("text");
+        $("#noteHeader").html("Note on " + script.get("name") + " (" + owner.get("name") + ")");
+        $("#noteText").html(text);
+		$("#noteTextPopup").modal();
+		$("#noteTable").modal("hide");
+    }
 });
 }
