@@ -216,7 +216,7 @@ var UserScript = Parse.Object.extend("UserScript", {
     getUserScriptByUserScript: function(user, script, callback) {
         var query = new Parse.Query(UserScript);
         query.equalTo("user", user);
-        query.equalTo("script", user);
+        query.equalTo("script", script);
         query.first({
             success: function(userScript) {
                 callback(userScript);
