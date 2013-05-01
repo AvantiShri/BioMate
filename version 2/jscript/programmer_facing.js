@@ -1,3 +1,26 @@
+var sendEmail = function(){
+	var ems = $("#emails").val();
+	ems = ems.replace(/\s/g, '');
+	//alert(ems);
+	var emList = ems.split(',');
+	//alert("shared with " + emList.length);
+	console.log("clicked share");
+	
+	for(var i=0;i<emList.length;i++){
+		var dataString = "\'{\"scriptId\":\""+"s1"+"\",\"toAddress\":\""+emList[i]+"\"}'";
+		var jsonObj = eval(dataString);
+		//alert(dataString);
+		$.ajax({
+			type: "POST",
+			url: "https://api.parse.com/1/functions/sendMail",
+			data: jsonObj,
+			dataType: "json",
+			headers: {"X-Parse-Application-Id": "C9TPknemAEmJzz1xcKFbBC855l64A4T4R2EFjxBH", "X-Parse-REST-API-Key": "PyzUr85ywV4vISJ5M74qUy2f9Dv4heBsaOZTgflo","Content-Type": "application/json"}
+		}).done(function() {
+			console.log("Email Sent!");
+		});
+	}
+}
 
 $(function() {
 	var availableScripts = [
@@ -278,7 +301,7 @@ $(function() {
 				"</div>"+
 				"<div class='modal-footer'>"+
 					"<a href='#' class='btn' data-dismiss='modal'>Cancel</a>"+
-					"<a href='#' class='btn btn-primary' id='share' data-dismiss='modal'>Share</a>"+
+					"<a href='#' class='btn btn-primary' id='share' onClick='sendEmail();' data-dismiss='modal'>Share</a>"+
 				"</div>"+
 			"</div>"+
 			"<a class='btn btn-block btn-primary' data-toggle='modal' href='#saveNshare' id='saveNshareBtn'>Save & Share</a>"+
