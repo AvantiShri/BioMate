@@ -1,4 +1,4 @@
-var sendEmail = function(){
+var sendEmail = function(scriptId){
 	var ems = $("#emails").val();
 	ems = ems.replace(/\s/g, '');
 	//alert(ems);
@@ -7,7 +7,7 @@ var sendEmail = function(){
 	console.log("clicked share");
 	
 	for(var i=0;i<emList.length;i++){
-		var dataString = "\'{\"scriptId\":\""+"s1"+"\",\"toAddress\":\""+emList[i]+"\"}'";
+		var dataString = "\'{\"scriptId\":\""+scriptId+"\",\"toAddress\":\""+emList[i]+"\"}'";
 		var jsonObj = eval(dataString);
 		//alert(dataString);
 		$.ajax({
@@ -35,7 +35,12 @@ $(function() {
 			"Script9",
 			"Script10"
 		];
-
+	
+	$("#share").click(function (e) {
+		/////
+		sendEmail(scriptId);
+	});
+	
 	var scriptName = "";
 	
 	var parameterNumber = 0;
@@ -266,7 +271,7 @@ $(function() {
 				"</div>"+
 				"<div class='modal-footer'>"+
 					"<a href='./programmer_facing.html' class='btn' >No</a>"+
-					"<a href='./programmer_facing.html' class='btn btn-primary' id='share' >Yes</a>"+
+					"<a href='./programmer_facing.html' class='btn btn-primary'>Yes</a>"+
 				"</div>"+
 			"</div>"+
 			"<a href='#saveBeforeExit' data-toggle='modal' id='mainCancelBtn' class='btn btn-block'>Cancel</a>"+
@@ -291,19 +296,7 @@ $(function() {
 			"<button class='btn btn-block' id='saveBtn'>Save</button>"+
 		"</div>"+
 		"<div class='span3'>"+
-			"<div class='modal hide fade' id='saveNshare'>"+
-				"<div class='modal-header'>"+
-					"<a class='close' data-dismiss='modal'>×</a>"+
-					"<h3>Enter comma-separated email addresses</h3>"+
-				"</div>"+
-				"<div class='modal-body'>"+
-					"<textarea id='emails' class='input-xlarge input-block-level' type='text' placeholder='Eg: abc@mit.edu, xyz@gmail.com'></textarea>"+
-				"</div>"+
-				"<div class='modal-footer'>"+
-					"<a href='#' class='btn' data-dismiss='modal'>Cancel</a>"+
-					"<a href='#' class='btn btn-primary' id='share' onClick='sendEmail();' data-dismiss='modal'>Share</a>"+
-				"</div>"+
-			"</div>"+
+
 			"<a class='btn btn-block btn-primary' data-toggle='modal' href='#saveNshare' id='saveNshareBtn'>Save & Share</a>"+
 		"</div>"+
 	"</div>"
