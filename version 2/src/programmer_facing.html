@@ -7,6 +7,8 @@
 	<script src="../external/jquery/js/jquery-1.9.0.min.js"></script>
 	<script src="../external/jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
 	<script src="../external/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../external/jquery/js/parse-1.2.7.min.js"></script>
+	<script type="text/javascript" src="../jscript/parse_objects.js"></script>
 	<script type="text/javascript" src="../jscript/programmer_facing.js"></script>
 	<link href="../external/bootstrap/css/bootstrap.css" rel="stylesheet">
 	<link href="../external/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
@@ -45,6 +47,21 @@
 		<input id="enterTitle" class="input-block-level" type="text" placeholder="Enter script title or select from list"> </input> <button type="createScript" class="btn" id="createLoadScriptBtn">Create/Edit Script</button>
 	</div>
 	
+	
+	
+	<div class='modal hide fade' id='editStaticTextWindow'>
+		<div class='modal-header'>
+			<a class='close' data-dismiss='modal'>×</a>
+			<h3>Edit segment of static text</h3>
+		</div>
+		<div class='modal-body'>
+			<input id='editStaticTextInput' class='warningTooltip input-block-level' data-toggle='tooltip' title='Required' type='text'></input>
+		</div>
+		<div class='modal-footer'>
+			<a href='#' class='btn' data-dismiss='modal'>Cancel</a>
+			<a href='#' class='btn btn-primary' id='editStaticTextBtn'>Edit Static Text</a>
+		</div>
+	</div>
 </div>
 
 

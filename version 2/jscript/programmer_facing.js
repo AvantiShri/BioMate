@@ -63,16 +63,18 @@ $(function() {
 		console.log("hi");
 	}
 
-	var addStaticText = function(contents) {
+	var addStaticText = function(staticTextInstance) {
+		var text = staticTextInstance.get("text");
+		var theId = staticTextInstance.id;
 		$("#chunksContainer").append(
-		"<a href='#' class='chunk btn staticTextBtn' rel='popover' data-content=\"<span class='btn popoverButton'>Edit</span> <div class='btn'>Delete</div>\">"+contents+"</a>");
+		"<a href='#' class='chunk btn' id='"+theId+"' rel='popover' data-content=\"<a class='btn popoverButton popoverEditButton' targetid='"+theId+"'>Edit</a> <div class='btn popoverButton popoverDeleteButton' targetid='"+theId+"'>Delete</div>\">"+text+"</a>");
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
 		$("#staticTextName").val("")
 	}
 	var addParameter = function(prefix,alias) {
 		$("#chunksContainer").append(
-		"<a href='#' class='chunk btn paramBtn' rel='popover' data-content=\"<span class='btn popoverButton'>Edit</span> <div class='btn'>Delete</div>\">"+prefix+" "+alias+"</a>");
+		"<a href='#' class='chunk btn btn-primary' rel='popover' data-content=\"<span class='btn popoverButton'>Edit</span> <div class='btn'>Delete</div>\">"+prefix+" "+alias+"</a>");
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
 	}
@@ -98,14 +100,14 @@ $(function() {
 						"<h3>Enter segment of static text</h3>"+
 					"</div>"+
 					"<div class='modal-body'>"+
-						"<input id='staticTextName' class='input-block-level' type='text' placeholder='Eg:   \"head\"   \"| less\"   \"python x.py\"   etc.'></input>"+
+						"<input id='staticTextName' class='input-block-level warningTooltip' data-toggle='tooltip' title='Required' type='text' placeholder='Eg:   \"head\"   \"| less\"   \"python x.py\"   etc.'></input>"+
 					"</div>"+
 					"<div class='modal-footer'>"+
 						"<a href='#' class='btn' data-dismiss='modal'>Cancel</a>"+
-						"<a href='#' class='btn btn-primary staticTextBtn' id='popupAddStaticTextBtn' data-dismiss='modal'>Add Static Text</a>"+
+						"<a href='#' class='btn btn-primary' id='popupAddStaticTextBtn'>Add Static Text</a>"+
 					"</div>"+
 				"</div>"+
-				"<a class='btn btn-block btn-success staticTextBtn mainAddStaticTextBtn' data-toggle='modal' href='#staticTextWindow' id='addStaticText' title='Used to build invariant parts of the command not associated with parameters or flags'>Add Static Text</a>"+
+				"<a class='btn btn-block btn-success mainAddStaticTextBtn' href='#staticTextWindow' id='addStaticText' title='Used to build invariant parts of the command not associated with parameters or flags'>Add Static Text</a>"+
 			"</div>"+
 			"<div class='span4'>"+
 				"<div class='modal hide fade' id='addParamWindow'>"+
@@ -119,7 +121,7 @@ $(function() {
 								"<label id='aliasLabel' class='popupLabel' data-toggle='tooltip' title='Programmer-defined name for referring to the parameter/flag' for='inputAlias'>Alias</label>"+
 							"</div>"+
 							"<div class='span3'>"+
-								"<input id='inputAlias' class='input-block-level aFormInput' type='text' placeholder='Eg: num_of_iterations'></input>"+
+								"<input id='inputAlias' class='input-block-level aFormInput warningTooltip' title='required' data-toggle='tooltip' ' type='text' placeholder='Eg: num_of_iterations'></input>"+
 							"</div>"+
 							"<div class='span2'>"+
 								"<label id='prefixFlagLabel' class='popupLabel' data-toggle='tooltip' title='The prefix/flag (if any) that comes before the parameter; can be blank' for='prefixFlagInput'>Prefix/Flag</label>"+
@@ -167,10 +169,10 @@ $(function() {
 					"</div>"+
 					"<div class='modal-footer'>"+
 						"<a href='#' class='btn' data-dismiss='modal'>Cancel</a>"+
-						"<a href='#' class='btn btn-primary paramBtn' data-dismiss='modal' id='popupAddParameterBtn'>Add Parameter/Flag</a>"+
+						"<a href='#' class='btn btn-primary paramBtn' id='popupAddParameterBtn'>Add Parameter/Flag</a>"+
 					"</div>"+
 				"</div>"+
-				"<a class='btn btn-block btn-primary paramBtn' title='Use this to add parameters or flags, eg: inputFile, --verbosity, etc.' id='addParamMainBtn' data-toggle='modal' href='#addParamWindow'>Add Parameter/Flag</a>"+
+				"<a class='btn btn-block btn-success' title='Use this to add parameters or flags, eg: inputFile, --verbosity, etc.' id='addParamMainBtn' href='#addParamWindow'>Add Parameter/Flag</a>"+
 			"</div>"+
 			"<div class='span4'>"+
 					"<div class='modal hide fade' id='moreInfoWindow'>"+
@@ -276,7 +278,7 @@ $(function() {
 				"</div>"+
 				"<div class='modal-footer'>"+
 					"<a href='#' class='btn' data-dismiss='modal'>Cancel</a>"+
-					"<a href='#' class='btn btn-primary staticTextBtn' id='share' data-dismiss='modal'>Share</a>"+
+					"<a href='#' class='btn btn-primary' id='share' data-dismiss='modal'>Share</a>"+
 				"</div>"+
 			"</div>"+
 			"<a class='btn btn-block btn-primary' data-toggle='modal' href='#saveNshare' id='saveNshareBtn'>Save & Share</a>"+
@@ -284,8 +286,22 @@ $(function() {
 	"</div>"
 		);
 		
+		$("#staticTextName").tooltip({trigger: 'manual'});
+		$("#editStaticTextInput").tooltip({trigger: 'manual'});
+		$("#aliasLabel").tooltip({placement: 'bottom'});
+		$("#inputAlias").tooltip({trigger: 'manual', placement: 'bottom'});
+		
+		
 		$("#addStaticText").tooltip();
 		$("#addParamMainBtn").tooltip();
+		$("#addParamMainBtn").click(function(e) {
+			$("#addParamMainBtn").tooltip("hide");
+			$("#addParamWindow").modal("show");
+		});
+		$("#addStaticText").click(function(e) {
+			$("#addStaticText").tooltip("hide");
+			$("#staticTextWindow").modal("show");
+		});
 		
 		$("#addStaticText").hover(function(e) {$("#addStaticText").tooltip();});
 		$("#addParamMainBtn").hover(function(e) {$("#addParamMainBtn").tooltip();});
@@ -330,18 +346,61 @@ $(function() {
 		});
 	
 		$("#popupAddParameterBtn").click(function (e) {
-			addParameterFromPopup();
-		});
-		$("#popupAddStaticTextBtn").click(function (e) {addStaticText($("#staticTextName").val())});
-		$("#staticTextName").keypress(function(e) {
-			if (e.which == 13) {
-				addStaticText($("#staticTextName").val());
-				$("#staticTextWindow").modal("hide");
+			if ($("#inputAlias").val() == "") {
+				$("#inputAlias").focus();
+				$("#inputAlias").tooltip("show");
+			} else {
+				$("#addParamWindow").modal("hide");
+				addParameterFromPopup();
 			}
 		});
 		
+		var processAddStaticText = function() {
+			if ($("#staticTextName").val() == "") {
+				$("#staticTextName").focus();
+				$("#staticTextName").tooltip("show");
+			} else {
+				$("#staticTextWindow").modal("hide");
+				StaticText.createStaticText($("#staticTextName").val(), addStaticText);
+			}
+		}
+		
+		var processEditStaticText = function() {
+			if ($("#editStaticTextInput").val() == "") {
+				$("#editStaticTextInput").focus();
+				$("#editStaticTextInput").tooltip("show");
+			} else {
+				var targetid = $("#editStaticTextBtn").attr("targetid");
+				console.log(targetid);
+				var chunk = $("#"+targetid);
+				chunk.html($("#editStaticTextInput").val());
+				$("#editStaticTextWindow").modal("hide");
+				$(".chunk").popover("hide");
+			}
+		}
+		
+		$("#popupAddStaticTextBtn").click(function (e) {
+			processAddStaticText();
+		});
+		$("#staticTextName").keypress(function(e) {
+			if (e.which == 13) {
+				processAddStaticText();
+			}
+		});
+		$('#editStaticTextBtn').click(function(e) {
+			processEditStaticText();
+		});
+		$('#editStaticTextInput').keypress(function(e) {
+			if (e.which == 13) {
+				processEditStaticText();
+			}
+		});
+		
+		
+		
 		$("#staticTextWindow").on('shown', function() {$("#staticTextName").focus();});
 		$("#addParamWindow").on('shown', function() {$("#inputAlias").focus();});
+		$("#editStaticTextWindow").on('shown', function() {$("#editStaticTextInput").focus();});
 	
 		$( "#chunksContainer" ).sortable({
 			start: function(event, ui) {
@@ -361,13 +420,36 @@ $(function() {
 		
 		
 		$('body').on('click', function (e) {
-			$('.chunk').each(function () {
-				//the 'is' for buttons that triggers popups
-				//http://jsfiddle.net/mattdlockyer/ZZXEj/
-				if (!$(this).is(e.target)) {
-					$(this).popover('hide');
+			if (e.target.id != "popupAddParameterBtn"
+			&& e.target.id != "popupAddStaticTextBtn"
+			&& e.target.id != "editStaticTextBtn") {
+				console.log(e.target.id);
+				$(".warningTooltip").tooltip("hide");
+			}
+			if (!$(e.target).hasClass("popoverButton")) {
+				$('.chunk').each(function () {
+					//the 'is' for buttons that triggers popups
+					//http://jsfiddle.net/mattdlockyer/ZZXEj/
+					if (!$(this).is(e.target)) {
+						$(this).popover('hide');
+					}
+				}); 
+			} else {
+				console.log("popover click");
+				var theButton = $(e.target);
+				if (theButton.hasClass("popoverEditButton")) {
+					var targetid = theButton.attr("targetid");
+					console.log(theButton.attr("targetid"));
+					$('#editStaticTextInput').val($("#"+targetid).html());
+					$('#editStaticTextBtn').attr("targetid",targetid);
+					$('#editStaticTextWindow').modal('show');
 				}
-			});
+				if (theButton.hasClass("popoverDeleteButton")) {
+					var targetId = theButton.attr("targetid");
+					$('#'+targetId).popover('hide')
+					$('#'+targetId).remove();
+				}
+			}
 		});
 		
 		
@@ -427,6 +509,7 @@ $(function() {
 		scriptName = $("#enterTitle").val();
 		enableOrDisableCreateScript();
 	});
+	
 
 
 });
