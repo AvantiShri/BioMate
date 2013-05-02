@@ -101,23 +101,50 @@ var addFlag = function(inputId, alias, userFriendlyName, defaultVal, tooltip, wa
 		"</div>"
 	);
 
-	if (defaultVal == true) {
+	if (defaultVal == "on") {
 		$("#"+inputId).attr("checked",true);
 	}
 }
 
 var getInputParameters = function() {
-    var optional = $("#optional").children();
+    var paramsMap = {};
+    
+    var optional = $("#optional :input");
     var lenOpt = optional.length;
     for(var i = 0; i < lenOpt; ++i) {
-        console.log(optional[i]);
-        console.log(optional[i].find("input").val());
+        var param = optional[i];
+        var value = "";
+        var id = $(param).attr("id");
+        if($(param).is(":checkbox")) {
+            value = $(param).is(":checked");
+        }
+        else {
+            value = $(param).val();
+        }
+        
+        if(value) {
+            paramsMap[id] = value;
+        }
     }
     
-    var required = $("#required").children();
+    var required = $("#required :input");
     var lenReq = required.length;
     for(var i = 0; i < lenReq; ++i) {
-        console.log(required[i]);
-        console.log(required[i].find("input").val());
+        var param = required[i];
+        var value = "";
+        var id = $(param).attr("id");
+        if($(param).is(":checkbox")) {
+            value = $(param).is(":checked");
+        }
+        else {
+            value = $(param).val();
+        }
+        
+        // @todo - for required parameters value should always exist
+        if(value) {
+            paramsMap[id] = value;
+        }
     }
+    
+    return paramsMap;
 }

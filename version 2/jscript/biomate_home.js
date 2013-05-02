@@ -21,27 +21,30 @@ $(document).ready(function(){
 	
 	// create some fake data
 //    var chunks = [];
-//    Parameter.createParameter("alias4", "prefixFlag4", "userFriendyName4", "defaultVal4",
-//                              InputType.STRING, true, "warnings4", "tooltip4", parameterCreated);
+//    Parameter.createParameter("alias5", "prefixFlag5", "userFriendyName5", "defaultVal5",
+//                              InputType.FLOAT, true, "warnings5", "tooltip5", parameterCreated);
+//    Parameter.createParameter("alias5flag", "prefixFlag5flag", "userFriendyName5flag", 
+//                              "defaultVal5flag", InputType.BOOLEAN, false, 
+//                              "warnings5flag", "tooltip5flag", parameterCreated);
 //    function parameterCreated(parameter) {
 //        CommandChunk.createCommandChunk(CommandChunkType.PARAMETER, parameter, chunkCreated);
-//        StaticText.createStaticText("static text4", staticTextCreated);
+//        StaticText.createStaticText("static text5", staticTextCreated);
 //    }
 //    function staticTextCreated(staticText) {
 //        CommandChunk.createCommandChunk(CommandChunkType.STATIC_TEXT, staticText, chunkCreated);
 //    }
 //    function chunkCreated(chunk) {
 //        chunks.push(chunk);
-//        if(chunks.length == 2) {
-//            ScriptData.createScriptData(chunks, "caveats4", "instructions4", scriptDataCreated);
+//        if(chunks.length == 4) {
+//            ScriptData.createScriptData(chunks, "caveats5", "instructions5", scriptDataCreated);
 //        }
 //    }
 //    function scriptDataCreated(scriptData) {
-//        Script.createScript(currentUser, "script4", scriptData, scriptCreated);
+//        Script.createScript(currentUser, "script5", scriptData, scriptCreated);
 //    }
 //    function scriptCreated(script) {
 //        History.createHistory(currentUser, script, done);
-//        Note.createNote(currentUser, script, "script4 awesome note", done);
+//        Note.createNote(currentUser, script, "script5 awesome note", done);
 //        script.shareScript();
 //        UserScript.createUserScript(currentUser, script, done);
 //    }
