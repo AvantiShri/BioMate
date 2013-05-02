@@ -5,13 +5,21 @@ Parse.initialize("C9TPknemAEmJzz1xcKFbBC855l64A4T4R2EFjxBH", "iJGffHXEvURl0BDlT0
 
 var currentUser = Parse.User.current();
 if (currentUser == null) {
-	window.location = "biomate_login.html";
+	var logInUrl = "biomate_login.html";
+	if ($.getUrlVar('scriptId')) {
+		//Show the notification
+		logInUrl = logInUrl + "?scriptId=" + $.getUrlVar('scriptId');
+		//alert(logInUrl);
+	} else {
+		//alert("nothing");
+	}
+	window.location = logInUrl;
 }
 
 else{
 $(document).ready(function(){
 	
-    // create some fake data
+	// create some fake data
 //    var chunks = [];
 //    Parameter.createParameter("alias4", "prefixFlag4", "userFriendyName4", "defaultVal4",
 //                              InputType.STRING, true, "warnings4", "tooltip4", parameterCreated);
@@ -98,6 +106,32 @@ $(document).ready(function(){
 		$("#middleBubble").html("<p><b></br>" + "" + "</b></p>");
 		currentGridSelector = null;
 	});
+	var curScName = "";
+	var collName = "";
+	var sName = document.getElementById("curScriptName");
+	var cName = document.getElementById("collabName");
+	if ($.getUrlVar('scriptId')) {
+		//Show the notification
+		var sid = $.getUrlVar('scriptId');
+		Script.getScriptById(sid, function(script){
+			curScName = script.get("name");
+			collName = script.get("owner").get("name");
+			console.log(curScName, collName);
+			cName.innerHTML = collName;
+			sName.innerHTML = curScName;
+			$("#notify").modal("show");
+			UserScript.getUserScriptByUserScript(currentUser, script, function(userScript){
+				if(!userScript)
+					UserScript.createUserScript(currentUser, script, function(){alert(sid + " created!!");});
+			});
+		});
+		
+	} else {
+		//alert("nothing");
+	}
+	
+	var userSpan = document.getElementById("userName");
+	userSpan.innerHTML = currentUser.get("name");
 	
 	$("#btnSignOut").click(function(e){
 		Parse.User.logOut();

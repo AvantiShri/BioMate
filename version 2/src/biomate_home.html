@@ -50,7 +50,7 @@
           <a class="brand" href="biomate_home.html">BioMate</a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
-				<li><p class="navbar-text">Sam Salamander</p></li>
+				<li><p class="navbar-text" id="userName"></p></li>
  			    <li><a href="biomate_home.html"><i class="icon-home icon-white"></i></a></li>
 				<button class="btn btn-primary" type="submit" id="btnSignOut">
 				<i class="icon-off icon-white"></i>
@@ -132,9 +132,18 @@
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
 		</div>  
 	  </div>
-      <footer>
-        <p>&copy; BioMate 2013</p>
-      </footer>
+      <div class="modal hide fade" id="notify">
+		<div class="modal-header">
+			<a href="#" class="close" id="closeNotification1" data-dismiss="modal">×</a>
+			<h3>Notification</h3>
+		</div>
+		<div class="modal-body">
+		<p><b><span id="collabName"></span></b> has shared <b><span id="curScriptName"></span></b> script with you. Click on <b>"Use a Script"</b> and select it from the dropdown list to start using it.</p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" id="closeNotification2" data-dismiss="modal">Close</a>
+		</div>
+	  </div>
 
     </div> <!-- /container -->
 

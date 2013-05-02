@@ -1,7 +1,15 @@
 Parse.$ = jQuery;
 Parse.initialize("C9TPknemAEmJzz1xcKFbBC855l64A4T4R2EFjxBH", "iJGffHXEvURl0BDlT0PeeL7ex2s0qT7uJA6BJvEV");
 
-$(function(){	
+$(function(){
+	var logInUrl = "biomate_login.html";
+	if ($.getUrlVar('scriptId')) {
+		//Show the notification
+		logInUrl = logInUrl + "?scriptId=" + $.getUrlVar('scriptId');
+		//alert(logInUrl);
+	} else {
+		//alert("nothing");
+	}
 	$("#btnSignUp").click(function(e){
 		
 		var email = $("#email").val();
@@ -28,9 +36,9 @@ $(function(){
 		return false;
 	});
 	$("#close1").click(function(e){
-		window.location = "biomate_login.html";
+		window.location = logInUrl;
 	});
 	$("#close2").click(function(e){
-		window.location = "biomate_login.html";
+		window.location = logInUrl;
 	});
 });
