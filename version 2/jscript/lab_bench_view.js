@@ -104,6 +104,10 @@ function loadScript(script) {
 
 	setInstructionsContents(scriptData.get("instructions"));
 	setCaveats(scriptData.get("caveats"));
+    Note.getNoteByUserScript(currentUser, script, loadNote);
+    SavedScriptParams.getSavedScriptParamsByUserScript(currentUser, 
+                                                       script, 
+                                                       loadSavedScriptParams);
     
     var len = chunks.length;
     for(var i = 0; i < len; ++i) {
@@ -131,5 +135,20 @@ function loadScript(script) {
             }
         }
     }
+}
+
+// callback to show the note for this script
+function loadNote(note) {
+    var text = note.get("text");
+    setNoteContents(text);
+}
+
+// callback to show the saved parameters for this script
+function loadSavedScriptParams(savedScriptParams) {
+    var len = savedScriptParams.length;
+    for(var i = 0; i < len; ++i) {
+        var name = savedScriptParams[i].get("name");
+    }
+    
 }
 
