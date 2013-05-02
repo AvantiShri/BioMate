@@ -15,13 +15,40 @@ $.extend({
     }
 });
 
+var dateToStringForHistory = function(date) {
+    var today = new Date();
+    var dateStr = "";
+    if(date.getFullYear() === today.getFullYear() &&
+       date.getMonth() === today.getMonth() &&
+       date.getDate() === today.getDate()) {
+	hrDiff = today.getHours() - date.getHours();
+	minDiff = today.getMinutes() - date.getMinutes();
+	if(hrDiff != 0){
+		dateStr = hrDiff + " hours ago";
+	}
+	else if(minDiff != 0){
+		dateStr = minDiff + " minutes ago";
+	}
+	else{
+		dateStr = "Just now";
+	}
+    }
+    else {
+        dateStr = (date.getMonth()+1) + "/" + 
+            date.getDate() + "/" + 
+            date.getFullYear();
+    }
+
+    return dateStr;
+}
+
 var dateToString = function(date) {
     var today = new Date();
     var dateStr = "";
     if(date.getFullYear() === today.getFullYear() &&
        date.getMonth() === today.getMonth() &&
        date.getDate() === today.getDate()) {
-        dateStr = date.getHours() + ":" + 
+	dateStr = date.getHours() + ":" + 
             date.getMinutes() + ":" + 
             date.getSeconds();
     }
