@@ -226,7 +226,7 @@ $(document).ready(function(){
             $("#historyTableBody").append(
                 "<tr scriptId='" + script.id + "'><td>" + script.get("name") +
                 "</td><td>" + owner.get("name") +
-                "</td><td>" + dateToString(hist.createdAt) +
+                "</td><td>" + dateToStringForHistory(hist.createdAt) +
                 "</td><td>" + (owner.id === currentUser.id ? "<a href='programmer_facing.html?scriptId=" + script.id + "'>Edit</a> &nbsp " : "") + 
                 "<a href='lab_bench_view.html?scriptId=" + script.id + "'>Use Script</a>" + 
                 "</td></tr>");
