@@ -28,6 +28,35 @@ $(function() {
 		$("#savedMsg").html("Saved Parameters at " + dateToString(new Date()));
 		$("#savedMsg").show();
 	});
+    
+    $("#generateBtn").click( function () {
+        var params = getInputParameters();
+        var commandStrings = [];
+        if(chunks) {
+            var len = chunks.length;
+            for(var i = 0; i < len; ++i) {
+                chunk = chunks[i];
+                if(chunk.get("commandChunkType") === CommandChunkType.PARAMETER) {
+                    var chunkData = chunk.get("parameter");
+                    if(chunkData.get("inputType") === InputType.BOOLEAN) {
+                        //val = 
+                    }
+                    else {
+                        addInputParameter(
+                            chunkData.id, 
+                            chunkData.get("alias"), 
+                            chunkData.get("userFriendlyName"), 
+                            chunkData.get("defaultVal"), 
+                            chunkData.get("tooltip"), 
+                            chunkData.get("warnings"),
+                            chunkData.get("required")
+                        );
+                    }
+                }
+            }
+        }
+        setGeneratedCommand(commandStrings.join(" "));
+    });
 	
 	$('.info').tooltip();
 	$('#selectScriptLbl').tooltip();
@@ -59,6 +88,10 @@ $(function() {
 	
 });
 }
+
+// store the chunks after loading the script so they can be used to
+// generate the command and save parameters
+var chunks = null;
 
 // load user's scripts in drop-down
 function setScriptSelections() {
@@ -98,7 +131,7 @@ function loadScript(script) {
     else {
         scriptData = script.get("publicScriptData");
     }
-    var chunks = scriptData.get("chunks");
+    chunks = scriptData.get("chunks");
     
     initializeLoadScript(scriptName);
 
@@ -116,6 +149,7 @@ function loadScript(script) {
             var chunkData = chunk.get("parameter");
             if(chunkData.get("inputType") === InputType.BOOLEAN) {
                 addFlag(
+                    chunkData.id, 
                     chunkData.get("alias"), 
                     chunkData.get("userFriendlyName"), 
                     chunkData.get("defaultVal"), 
@@ -125,6 +159,7 @@ function loadScript(script) {
             }
             else {
                 addInputParameter(
+                    chunkData.id, 
                     chunkData.get("alias"), 
                     chunkData.get("userFriendlyName"), 
                     chunkData.get("defaultVal"), 
@@ -148,7 +183,7 @@ function loadSavedScriptParams(savedScriptParams) {
     var len = savedScriptParams.length;
     for(var i = 0; i < len; ++i) {
         var name = savedScriptParams[i].get("name");
+        addRowToLoadParamsTable(name);
     }
-    
 }
 

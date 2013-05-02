@@ -138,7 +138,7 @@
 						<h3>Cut and Paste into your Command Line</h3>
 					</div>
 					<div class="modal-body">
-						<p>perl /home/X/montecarlo.pl -n ~/input.txt | less</p>
+						<p id="commandText">perl /home/X/montecarlo.pl -n ~/input.txt | less</p>
 					</div>
 					<div class="modal-footer">
 						<a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -146,7 +146,7 @@
 						<a href="#" class="btn btn-primary">Copy to Clipboard</a>
 					</div>
 				</div>
-				<a class="btn btn-block btn-primary" data-toggle="modal" href="#genCommand" >Generate Command</a>
+				<a class="btn btn-block btn-primary" id="generateBtn" data-toggle="modal" href="#genCommand" >Generate Command</a>
 			</div>
 			<div class="span3">
 				<div class="modal hide fade" id="saveParams">
