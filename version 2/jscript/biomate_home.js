@@ -2,6 +2,18 @@ Parse.$ = jQuery;
 
 Parse.initialize("C9TPknemAEmJzz1xcKFbBC855l64A4T4R2EFjxBH", "iJGffHXEvURl0BDlT0PeeL7ex2s0qT7uJA6BJvEV");
 
+var translate = function(btnName){
+	if(btnName == "btnUseScript")
+		return "runScript";
+	else if(btnName == "btnHistory")
+		return "history";
+	else if(btnName == "btnNotes")
+		return "notes";
+	else if(btnName == "btnCreateScript")
+		return "createScript";
+	
+}
+
 
 var currentUser = Parse.User.current();
 if (currentUser == null) {
@@ -80,51 +92,56 @@ $(document).ready(function(){
 	});
 
 	//set the highlight and bubble default based on the homepageGridDefault class
-	/*currentGridSelector = $(".homepageGridDefault").attr("id");
-	$("#" + currentGridSelector).attr("src", "../images/"+ currentGridSelector + "-on.png");
-	$("#middleBubble").html("<p></br><b>" + $(".homepageGridDefault").data("bubble1") + "</b></p>");*/
+	currentGridSelector = null;
+	//currentGridSelector = $(".homepageGridDefault").attr("id");
+	//$("#" + currentGridSelector).attr("src", "../images/"+ currentGridSelector + "-on.png");
+	//$("#middleBubble").html("<p></br><b>" + $(".homepageGridDefault").data("bubble1") + "</b></p>");*/
 
 	//Setup the grid to change the highlighted bubble on mouseover ans click
-	/*$("#divCircle img").mouseover(function(){
+	$("#divCircle button").hover(function(){
+		//console.log("I am inside over")
 		//if the selected option has changed, deactivate the current selection
 		if(currentGridSelector != $(this).attr("id"))
 		{
-			$("#" + currentGridSelector).attr("src", "../images/"+ currentGridSelector + "-off.png");
+			$("#" + translate(currentGridSelector)).attr("src", "../images/"+ translate(currentGridSelector) + "-off.png");
 		}
 		//turn on the new selection
-		$(this).attr("src", "../images/"+ $(this).attr("id") + "-on.png");
+		$("#"+translate($(this).attr("id"))).attr("src", "../images/"+ translate($(this).attr("id")) + "-on.png");
 		//set the content of the center bubble
-		$("#middleBubble").html("<p><b></br>" + $(this).data("bubble1") + "</b></p>");
+		//$("#middleBubble").html("<p><b></br>" + $(this).data("bubble1") + "</b></p>");
 		currentGridSelector = $(this).attr("id");
 	});
 
-	$("#divCircle img").mouseleave(function(){
+	$("#divCircle button").mouseout(function(){
+		//if the selected option has changed, deactivate the current selection
+		//console.log("I am inside over")
 		//if the selected option has changed, deactivate the current selection
 		if(currentGridSelector != $(this).attr("id"))
 		{
-			$("#" + currentGridSelector).attr("src", "../images/"+ currentGridSelector + "-off.png");
+			$("#" + translate(currentGridSelector)).attr("src", "../images/"+ translate(currentGridSelector) + "-on.png");
+			currentGridSelector = null;		
 		}
-		//turn off the new selection
-		$(this).attr("src", "../images/"+ $(this).attr("id") + "-off.png");
-		//set the content of the center bubble
-		$("#middleBubble").html("<p><b></br>" + "" + "</b></p>");
-		currentGridSelector = null;
-	});*/
+		//turn on the new selection
+		$("#"+translate($(this).attr("id"))).attr("src", "../images/"+ translate($(this).attr("id")) + "-off.png");
+		//currentGridSelector = null;
+	});
 	
-	$("#btnUseScript").hover(function(e){
+	var currentBtn = null;
+	
+	/*$("#btnUseScript").hover(function(e){
 		//console.log("I am here");
-		im = document.getElementById("useScript");
+		im = document.getElementById("runScript");
 		im.innerHTML = "<img src=\"../images/runScript-on.png\"></img><br/>";
 	});
 	$("#btnUseScript").mouseout(function(e){
-		im = document.getElementById("useScript");
+		im = document.getElementById("runScript");
 		im.innerHTML = "<img src=\"../images/runScript-off.png\"></img><br/>";
-	});
+	});*/
 	$("#btnUseScript").click(function(e){
 		//console.log("I am here");
 		window.location="lab_bench_view.html";
 	});
-	$("#btnHistory").hover(function(e){
+	/*$("#btnHistory").hover(function(e){
 		//console.log("I am here");
 		im = document.getElementById("history");
 		im.innerHTML = "<img src=\"../images/history-on.png\"></img><br/>";
@@ -132,11 +149,11 @@ $(document).ready(function(){
 	$("#btnHistory").mouseout(function(e){
 		im = document.getElementById("history");
 		im.innerHTML = "<img src=\"../images/history-off.png\"></img><br/>";
-	});
+	});*/
 	$("#btnHistory").click(function(e){
 		$("#historyTable").modal("show");
 	});
-	$("#btnNotes").hover(function(e){
+	/*$("#btnNotes").hover(function(e){
 		//console.log("I am here");
 		im = document.getElementById("notes");
 		im.innerHTML = "<img src=\"../images/notes-on.png\"></img><br/>";
@@ -144,11 +161,11 @@ $(document).ready(function(){
 	$("#btnNotes").mouseout(function(e){
 		im = document.getElementById("notes");
 		im.innerHTML = "<img src=\"../images/notes-off.png\"></img><br/>";
-	});
+	});*/
 	$("#btnNotes").click(function(e){
 		$("#noteTable").modal("show");
 	});
-	$("#btnCreateScript").hover(function(e){
+	/*$("#btnCreateScript").hover(function(e){
 		//console.log("I am here");
 		im = document.getElementById("createScript");
 		im.innerHTML = "<img src=\"../images/createScript-on.png\"></img><br/>";
@@ -156,7 +173,7 @@ $(document).ready(function(){
 	$("#btnCreateScript").mouseout(function(e){
 		im = document.getElementById("createScript");
 		im.innerHTML = "<img src=\"../images/createScript-off.png\"></img><br/>";
-	});
+	});*/
 	$("#btnCreateScript").click(function(e){
 		window.location="programmer_facing.html";
 	});
