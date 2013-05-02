@@ -43,8 +43,79 @@
 	<div class="page-header">
 		<h2 id="pageHeaderContents">Create/Edit a script</h2>
 	</div>
+	
 	<div class="ui-widget" id="scriptSelection">
 		<input id="enterTitle" class="input-block-level" type="text" placeholder="Enter script title or select from list"> </input> <button type="createScript" class="btn" id="createLoadScriptBtn">Create/Edit Script</button>
+	</div>
+	
+	<div id='programmer-layout' style="display: none;">
+		<div class='row'>
+			<div class='span4'>
+				<a class="btn btn-block btn-success mainAddStaticTextBtn" href='#staticTextWindow' id='addStaticText' title="Used to build invariant parts of the command not associated with parameters or flags">Add Static Text</a>
+			</div>
+			<div class='span4'>
+				<a class="btn btn-block btn-success" title="Use this to add parameters or flags, eg: inputFile, --verbosity, etc." id='addParamMainBtn' href='#addParamWindow'>Add Parameter/Flag</a>
+			</div>
+			<div class='span4'>
+				<a class="btn btn-block" data-toggle='modal' href='#moreInfoWindow'>More Information</a>
+			</div>
+		</div>
+		<div class='container' id='chunksContainer'> </div>
+		<table class='table' id='paramsTable' style="display: none;">
+			<thead>
+			<tr>
+				<th>Alias</th>
+				<th>Prefix/Flag</th>
+				<th>User-friendly name</th>
+				<th>Input Type</th>
+				<th>Required?</th>
+				<th>Warnings</th>
+				<th>Tooltip</th>
+			</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<div class="row scriptSpecific">
+			<label for='required' class="span12 programmerLabel">Caveats</label>
+			<div class='span12'>
+				<textarea class="input-xlarge input-block-level" id='Caveats' class='input-block-level' type='text' placeholder="Eg: Output of this command appears in terminal"></textarea>
+			</div>
+			<label for='required' class="span12 programmerLabel">General instructions</label>
+			<div class='span12'>
+				<textarea class="input-xlarge input-block-level" id='generalInstructions' type='text' placeholder="Eg: If you have more questions, email xyz@gmail.com"></textarea>
+			</div>
+			<div class = 'span12'>
+				<label> Last saved at: <span id='lastSavedAt'>Never</span></label>
+			</div>
+			<div class='span3'>
+				<a href='#saveBeforeExit' data-toggle='modal' id='mainCancelBtn' class="btn btn-block">Cancel</a>
+			</div>
+			<div class='span3'>
+				<a class='btn btn-block' data-toggle='modal' href='#saveAs' id='saveAsBtn'>Save As</a>
+			</div>
+			<div class='span3'>
+				<button class='btn btn-block' id='saveBtn'>Save</button>
+			</div>
+			<div class='span3'>
+				<a class='btn btn-block btn-primary' data-toggle='modal' href='#saveNshare' id='saveNshareBtn'>Save & Share</a>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	<div class="modal hide fade" id='staticTextWindow'>
+		<div class='modal-header'>
+			<a class='close' data-dismiss='modal'>×</a>
+			<h3>Enter segment of static text</h3>
+		</div>
+		<div class='modal-body'>
+			<input id='staticTextInput' class="input-block-level warningTooltip" data-toggle='tooltip' title='Required' type='text' placeholder="Eg:   'head'   '| less'   'python x.py'   etc."></input>
+		</div>
+		<div class='modal-footer'>
+			<a href='#' class='btn' data-dismiss='modal'>Cancel</a>
+			<a href='#' class='btn btn-primary' id='popupAddStaticTextBtn'>Add Static Text</a>
+		</div>
 	</div>
 	
 	
@@ -64,6 +135,98 @@
 	</div>
 	
 	
+	<div class='modal hide fade' id='addParamWindow'>
+		<div class='modal-header'>
+			<a class='close' data-dismiss='modal'>×</a>
+			<h3>Add Parameter/Flag</h3>
+		</div>
+		<div class='modal-body'>
+			<div class='row'>
+				<div class='span2'>
+					<label id='aliasLabel' class='popupLabel' data-toggle='tooltip' title="Programmer-defined name for referring to the parameter/flag" for='inputAlias'>Alias</label>
+				</div>
+				<div class='span3'>
+					<input id='inputAlias' class="input-block-level aFormInput warningTooltip" title='Required' data-toggle='tooltip' type='text' placeholder='Eg: num_of_iterations'></input>
+				</div>
+				<div class='span2'>
+					<label id='prefixFlagLabel' class='popupLabel' data-toggle='tooltip' title="The prefix/flag (if any) that comes before the parameter; can be blank" for='prefixFlagInput'>Prefix/Flag</label>
+				</div>
+				<div class='span3'>
+					<input id='prefixFlagInput' class="input-block-level aFormInput" type='text' placeholder="Eg: -v or --verbosity"></input>
+				</div>
+				<div class='span2'>
+					<label id='ufNameLabel' class='popupLabel' data-toggle='tooltip' title="A user friendly name visible to the users; this is how the input field will be labelled" for='ufNameInput'>User-Friendly Name</label>
+				</div>
+				<div class='span3'>
+					<input id='ufNameInput' class="input-block-level aFormInput warningTooltip" data-toggle='tooltip' title='Required' type='text' placeholder="Eg: 'Detailed Output?'"></input>
+				</div>
+				<div class='span2'>
+					<label id='typeLabel' class='popupLabel' data-toggle='tooltip' title="Category of the input" for='typeInput'>Input Type</label>
+				</div>
+				<div class='span3'>
+					<select id='typeInput' class="input-block-level warningTooltip" data-toggle='tooltip' title="Required">
+						<option>Select...</option>
+						<option value='Flag'>Flag</option>
+						<option value='String'>String</option>
+						<option value='Integer'>Integer</option>
+						<option value='Float'>Float</option>
+					</select>
+				</div>
+				<div class='span2'>
+					<label id='requiredLabel' class='popupLabel' data-toggle='tooltip' title="Check if the parameter is required" for='requiredInput'>Required?</label>
+				</div>
+				<div class='span3 aFormCheckbox'>
+					<center><input id='requiredInput' type='checkbox'></input></center>
+				</div>
+				<div class='span2'>
+					<label id='warningsLabel' class='popupLabel' data-toggle='tooltip' title="Warnings displayed to the user up-front" for='warningsInput'>Warnings</label>
+				</div>
+				<div class='span3'>
+					<input id='warningsInput' class="input-block-level aFormInput exitAddParamOnEnter" type='text' placeholder="Eg: 'File paths must be absolute'"></input>
+				</div>
+				<div class='span2'>
+					<label id='tooltipLabel' class='popupLabel' data-toggle='tooltip' title="Information displayed to user as a tooltip in hover text" for='tooltipInput'>Tooltip</label>
+				</div>
+				<div class='span3'>
+					<input id='tooltipInput' class="input-block-level aFormInput exitAddParamOnEnter" type='text' placeholder="Eg: 'Enter the path to the input file'"></input>
+				</div>
+			</div>
+		</div>
+		<div class='modal-footer'>
+			<a href='#' class='btn' data-dismiss='modal'>Cancel</a>
+			<a href='#' class='btn btn-primary paramBtn' id='popupAddParameterBtn'>Add Parameter/Flag</a>
+		</div>
+	</div>
+	
+	
+	<div class="modal hide fade" id='saveBeforeExit'>
+		<div class='modal-header'>
+			<a class='close' data-dismiss='modal'>×</a>
+			<h3>Save before exiting?</h3>
+		</div>
+		<div class='modal-footer'>
+			<a href='./programmer_facing.html' class='btn' >No</a>
+			<a href='./programmer_facing.html' class='btn btn-primary'>Yes</a>
+		</div>
+	</div>
+	
+	
+	<div class='modal hide fade' id='saveAs'>
+		<div class='modal-header'>
+			<a class='close' data-dismiss='modal'>×</a>
+			<h3>Save As</h3>
+		</div>
+		<div class='modal-body'>
+			<input id='saveAsName' class='input-block-level' type='text' placeholder="Enter new file name"></input>
+		</div>
+		<div class='modal-footer'>
+			<a href='#' class='btn' data-dismiss='modal'>Cancel</a>
+			<a href='#' class="btn btn-primary" id='saveAsBtnPopup' data-dismiss='modal'>Save</a>
+		</div>
+	</div>
+
+	
+	
 	<div class='modal hide fade' id='saveNshare'>
 		<div class='modal-header'>
 			<a class='close' data-dismiss='modal'>×</a>
@@ -75,6 +238,44 @@
 		<div class='modal-footer'>
 			<a href='#' class='btn' data-dismiss='modal'>Cancel</a>
 			<a href='#' class='btn btn-primary' id='share' data-dismiss='modal'>Share</a>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="modal hide fade" id='moreInfoWindow'>
+		<div class='modal-header'>
+			<a class='close' data-dismiss='modal'>×</a>
+			<h3> Usage instructions </h3>
+		</div>
+		<div class='modal-body'>
+			<p> Commands are constructed as chunks of 'static text' and parameters/flags.</p>
+			<p>'Static text' refers to parts of the command that are not associated with parameters or flags and which are the same accross all uses of the command. Parameters/flags depend on user input.</p>
+			<p>For example, in the command: </p>
+			<p> <span class='cmd'>perl /home/X/montecarlo.pl [-v] [-n numIterations] <inputFile> | less </span></p>
+			<p>The chunks of static text are:</p>
+			<ul>
+			<li> perl /home/X/montecarlo.pl </li>
+			<li> | less </li>
+			</ul>
+			<p> And the chunks of parameters/flags are:</p>
+			<ul>
+			<li> -v (verbosity flag)</li>
+			<li> -n numIterations (integer parameter, alias numIterations, with prefix -n) </li>
+			<li> inputFile (string parameter, no prefix)</li>
+			</ul>
+			<p> The result looks as follows: </p>
+			<center><img class='framedImg' src='../images/chunks.png'></img></center>
+			<p> Once added, the order of the chunks can be changed by dragging and dropping the chunks. </p>
+		</div>
+		<div class='modal-footer'>
+			<a href='#' class='btn' data-dismiss='modal'>Close</a>
 		</div>
 	</div>
 </div>
