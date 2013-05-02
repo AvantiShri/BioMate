@@ -24,8 +24,6 @@ var sendEmail = function(scriptId){
 	}
 }
 
-var tooltipShow = 0; //a hack to handle unwanted upwards event propagation.
-openWarningTooltip = undefined; //keeps track of the warning tooltip that is open.
 
 $(function() {
 	
@@ -33,6 +31,23 @@ $(function() {
 	//General utility functions and variable declaration
 	//**************************************************
 	var scriptName = "";
+	var tooltipShow = 0; //a hack to handle unwanted upwards event propagation.
+	var currentOpenWarningTooltipObject = undefined; //keeps track of the warning tooltip that is open.
+	var staticTextInstanceLookup = {}; //dictionary for looking up the static text parse objects using the object id.
+	var parametersInstanceLookup = {};
+	
+	var openWarningTooltip = function(objectToOpenTooltipFor) {
+		tooltipShow = 1;
+		objectToOpenTooltipFor.tooltip("show");
+		if (currentOpenWarningTooltipObject != undefined) {
+			if (currentOpenWarningTooltipObject.attr("id") !=  objectToOpenTooltipFor.attr("id")) {
+				console.log("hiding tooltip for "+currentOpenWarningTooltipObject.attr("id"));
+				currentOpenWarningTooltipObject.tooltip("hide");
+			}
+		}
+		currentOpenWarningTooltipObject = objectToOpenTooltipFor;
+	}
+	
 	
 	var getTheDate = function() {
 		var today = new Date();
@@ -57,9 +72,9 @@ $(function() {
 		];
 	
 	
-	//*************************************************************
+	//**********************************************************************************
 	//functions pertaining to the selection and loading of a script (the landing screen)
-	//*************************************************************
+	//**********************************************************************************
 	var enableOrDisableCreateScript = function() {
 		console.log("script name is: "+scriptName);
 		if (scriptName.length == 0) {
@@ -94,7 +109,7 @@ $(function() {
 		enableOrDisableCreateScript();
 	});
 	
-	$( "#enterTitle" ).autocomplete({minLength: 0,
+	$("#enterTitle").autocomplete({minLength: 0,
 		source: availableScripts,
 		select: function(a,b) {
 			autocompleteSelect(b.item.value);
@@ -137,75 +152,66 @@ $(function() {
 	var addStaticText = function(staticTextInstance) {
 		var text = staticTextInstance.get("text");
 		var theId = staticTextInstance.id;
+		staticTextInstanceLookup[theId] = staticTextInstance;
 		$("#chunksContainer").append(
-		"<a href='#' class='chunk btn' id='"+theId+"' rel='popover' data-content=\"<a class='btn popoverButton popoverEditButton staticTextBtn' targetid='"+theId+"'>Edit</a> <div class='btn popoverButton popoverDeleteButton staticTextBtn' targetid='"+theId+"'>Delete</div>\">"+text+"</a>");
+		"<a href='#' class='chunk btn' id='"+theId+"' rel='popover' data-content=\"<a class='btn popoverButton popoverEditButton staticTextChunk' targetid='"+theId+"'>Edit</a> <div class='btn popoverButton popoverDeleteButton staticTextChunk' targetid='"+theId+"'>Delete</div>\">"+text+"</a>");
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
-		$("#staticTextInput").val("")
+		$("#staticTextInput").val("");
 	}
 	
-	var checkAddStaticText = function() {
+	var checkAddOrEditStaticText = function() {
 		if ($("#staticTextInput").val() == "") {
-			$("#staticTextInput").focus();
-			$("#staticTextInput").tooltip("show");
+			openWarningTooltip($("#staticTextInput"));
 		} else {
-			$("#staticTextWindow").modal("hide");
-			StaticText.createStaticText($("#staticTextInput").val(), addStaticText);
-		}
-	}
-	
-	var checkEditStaticText = function() {
-		if ($("#editStaticTextInput").val() == "") {
-			$("#editStaticTextInput").focus();
-			$("#editStaticTextInput").tooltip("show");
-		} else {
-			var targetid = $("#editStaticTextBtn").attr("targetid");
-			console.log(targetid);
-			var chunk = $("#"+targetid);
-			chunk.html($("#editStaticTextInput").val());
-			$("#editStaticTextWindow").modal("hide");
-			$(".chunk").popover("hide");
+			if ($("#staticTextWindow").attr("addOrEdit") == "add") {
+				$("#staticTextWindow").modal("hide");
+				StaticText.createStaticText($("#staticTextInput").val(), addStaticText);
+			} else if ($("#staticTextWindow").attr("addOrEdit") == "edit") {
+				var targetid = $("#popupAddStaticTextBtn").attr("targetid");
+				var parseInstance = staticTextInstanceLookup[targetid];
+				console.log(targetid);
+				var chunk = $("#"+targetid);
+				parseInstance.editStaticText({text: $("#staticTextInput").val()});
+				chunk.html($("#staticTextInput").val());
+				$("#staticTextWindow").modal("hide");
+				$(".chunk").popover("hide");
+			}
 		}
 	}
 	
 	//tooltips pertaining to add static text...
 	$("#staticTextInput").tooltip({trigger: 'manual'});
-	$("#editStaticTextInput").tooltip({trigger: 'manual'});
 	$("#addStaticText").tooltip();
 	$("#addStaticText").hover(function(e) {$("#addStaticText").tooltip();});
-	
 	
 	//event listeners pertaining adding static text...
 	
 	//the button on the main screen (not a popup)
 	$("#addStaticText").click(function(e) {
 		$("#addStaticText").tooltip("hide");
+		$("#staticTextWindowHeader").html("Enter segment of static text");
+		$("#popupAddStaticTextBtn").html("Add Static Text");
+		$("#staticTextWindow").attr("addOrEdit","add");
 		$("#staticTextWindow").modal("show");
 	});
 	
 	//focus on the input when staticTextWindow is shown.
-	$("#staticTextWindow").on('shown', function() {$("#staticTextInput").focus();});
-	$("#editStaticTextWindow").on('shown', function() {$("#editStaticTextInput").focus();});
+	$("#staticTextWindow").on('shown', function() {
+		if (tooltipShow == 0) { //the manual showing of a tooltip propagates  show event upwards. This is so that the show resulting from displaying a tooltip is not interpeted as a show of the modal window itself.
+			$("#staticTextInput").focus();
+		}
+		tooltipShow = 0;
+	});
 	
 	//in the add static text popup...
 	$("#popupAddStaticTextBtn").click(function (e) {
-		checkAddStaticText();
+		checkAddOrEditStaticText();
 	});
 	
 	$("#staticTextInput").keypress(function(e) {
 		if (e.which == 13) {
-			checkAddStaticText();
-		}
-	});
-	
-	//in the edit static text popup...
-	$('#editStaticTextBtn').click(function(e) {
-		checkEditStaticText();
-	});
-	
-	$('#editStaticTextInput').keypress(function(e) {
-		if (e.which == 13) {
-			checkEditStaticText();
+			checkAddOrEditStaticText();
 		}
 	});
 	
@@ -214,12 +220,23 @@ $(function() {
 	//Add/Edit Parameters and Flags
 	//*****************************
 	
-	var parameterNumber = 0;
+	var addParameterToTable = function (parameterParseObject) {
+		
+	
+	}
 	
 	//extracts the data in the popup, calls function to create the new chunk, adds a row to the table.
 	var addParameterFromPopup = function() {
-		parameterNumber += 1;
+		
+		
+		var inputAlias = $("#inputAlias").val()
+		var prefixFlagVal = $("#prefixFlagInput").val();
 		var selectedTyp = $("#typeInput :selected").val();
+		var isRequired = ($("#requiredInput").prop("checked") == 1)? true : false;
+		var defaultVal = $("#defaultValInput").val();
+		var warnings = $("#warningsInput").val();
+		var tooltip = $("#tooltipInput").val();
+		
 		console.log(selectedTyp);
 		if (selectedTyp != "Flag") {
 			addParameter($("#prefixFlagInput").val(),$("#inputAlias").val());
@@ -276,53 +293,30 @@ $(function() {
 	//does error checking to make sure the values input into the popup are acceptable.
 	var checkAddParameter = function() {
 		if ($("#inputAlias").val() == "") {
-			tooltipShow = 1;
-			$("#inputAlias").tooltip("show");
-			if (openWarningTooltip != undefined) {
-				if (openWarningTooltip.attr("id") !=  "inputAlias") {
-					console.log("hidingTooltip");
-					openWarningTooltip.tooltip("hide");
-				}
-			}
-			openWarningTooltip = $("#inputAlias");
+			openWarningTooltip($("#inputAlias"));
 			$("#inputAlias").focus();
-			console.log("showing tooltip");
 		} else if ($("#ufNameInput").val() == "") {
-			if (openWarningTooltip != undefined) {
-				console.log(openWarningTooltip.attr("id"));
-				if (openWarningTooltip.attr("id") !=  "ufNameInput") {
-					console.log("hidingTooltip");
-					openWarningTooltip.tooltip("hide");
-				}
-			}
-			openWarningTooltip = $("#ufNameInput");
-			tooltipShow = 1;
-			$("#ufNameInput").tooltip("show");
+			openWarningTooltip($("#ufNameInput"));
 			$("#ufNameInput").focus();
-			console.log("focused on ufname");
 		} else if ($("#typeInput :selected").val()=="Select...") {
-			tooltipShow = 1;
-			$("#typeInput").tooltip("show");
-			if (openWarningTooltip != undefined) {
-				if (openWarningTooltip.attr("id") != "typeInput") {
-					console.log("hidingTooltip");
-					openWarningTooltip.tooltip("hide");
-				}
-			}
-			openWarningTooltip = $("#typeInput");
+			openWarningTooltip($("#typeInput"));
 			$("#typeInput").focus();
+		} else if ($("#typeInput :selected").val()=="Flag" && $("#prefixFlagInput").val() == "") {
+			openWarningTooltip($("#prefixFlagInput"));
+			$("#prefixFlagInput").focus();
 		} else {
 			$("#addParamWindow").modal("hide");
-			if (openWarningTooltip != undefined) {
-				openWarningTooltip.tooltip("hide");
+			if (currentOpenWarningTooltipObject != undefined) {
+				currentOpenWarningTooltipObject.tooltip("hide");
 			}
-			openWarningTooltip = undefined;
+			currentOpenWarningTooltipObject = undefined;
 			addParameterFromPopup();
 		}
 	}
 	
 	//tooltips for add/edit parameter
 	$("#inputAlias").tooltip({trigger: 'manual', placement: 'bottom'});
+	$("#prefixFlagInput").tooltip({trigger: 'manual'});
 	$("#ufNameInput").tooltip({trigger: 'manual'});
 	$("#typeInput").tooltip({trigger: 'manual'});
 	$("#aliasLabel").tooltip({placement: 'bottom'});
@@ -340,36 +334,70 @@ $(function() {
 	
 	//focus on the inputAlias field when the modal is first shown.
 	$("#addParamWindow").on('shown', function() {
-		if (tooltipShow == 0) {
-			console.log("event fired"); 
+		if (tooltipShow == 0) { //the manual showing of a tooltip propagates  show event upwards. This is so that the show resulting from displaying a tooltip is not interpeted as a show of the modal window itself.
 			$("#inputAlias").focus();
 		}
 		tooltipShow = 0;
 	});
 	
+	//deactivate the 'required' box if the type is set to flag.
+	$("#typeInput").change( function(e) {
+		if ($("#typeInput :selected").val() == "Flag") {
+			$("#requiredLabel").css("color","black");
+			$("#requiredInput").prop("checked", 0);
+			$("#requiredInput").attr("disabled", true);
+			$("#defaultValLabel").html("On by default?");
+			$("#defaultValInputContainer").html("<input id='defaultValInput' type='checkbox'></input>");
+		} else {
+			$("#requiredLabel").css("color","");
+			if ($("#requiredInput").attr("disabled") != undefined) {
+				$("#requiredInput").removeAttr("disabled");
+			}
+			if ($("#requiredInput").prop("checked") == 1) {
+				$("#defaultValLabel").html("Suggested Value");
+				$("#defaultValInputContainer").html("<input id='defaultValInput' class='input-block-level aFormInput exitAddParamOnEnter' type='text''></input>");
+				$("#defaultValInput").attr("placeholder", "Eg: '/put/path/to/input/here'");
+			} else {
+				$("#defaultValLabel").html("Default Value");
+				$("#defaultValInputContainer").html("<input id='defaultValInput' class='input-block-level aFormInput exitAddParamOnEnter' type='text'></input>");
+				$("#defaultValInput").attr("placeholder", "Eg: '100'");
+			}
+		}
+	});
+	$("#requiredInput").change( function (e) {
+		if ($("#typeInput :selected").val() != "Flag") { //this change event may have been fired as a result of changing the parameter type to flag, so don't respond to that...
+			if ($("#requiredInput").prop("checked") == 1) {
+				$("#defaultValLabel").html("Suggested Value");
+				$("#defaultValInput").attr("placeholder", "Eg: '/put/path/to/input/here'");
+			} else {
+				$("#defaultValLabel").html("Default Value");
+				$("#defaultValInput").attr("placeholder", "Eg: '100'");
+			}
+		}
+	});
+	
 	//functions to make pressing enter move to the next input field, as necessary.
 	$("#inputAlias").keypress(function(e) {
 		if (e.which == 13) {
-			$("#prefixFlagInput").focus();
+			$("#popupAddParameterBtn").click();
 		}
 	});
 	
 	$("#prefixFlagInput").keypress(function(e) {
 		if (e.which == 13) {
-			$("#ufNameInput").focus();
+			$("#popupAddParameterBtn").click();
 		}
 	});
 	
 	$("#ufNameInput").keypress(function(e) {
 		if (e.which == 13) {
-			$("#typeInput").focus();
+			$("#popupAddParameterBtn").click();
 		}
 	});
 	
 	$(".exitAddParamOnEnter").keypress(function (e) {
 		if (e.which == 13) {
 			$("#popupAddParameterBtn").click();
-			$("#addParamWindow").modal("hide");
 		}
 	});
 	
@@ -382,10 +410,11 @@ $(function() {
 	//Pertaining to the chunks container...
 	//*************************************
 	
+	$("#paramsTable").sortable();
 	$( "#chunksContainer" ).sortable({
 		start: function(event, ui) {
 		ui.item.bind("click.prevent",
-			function(event) { event.preventDefault(); });
+			function(event) { event.preventDefault(); }); //prevents the popup from appearing on a drag...?
 		},
 		stop: function(event, ui) {
 			setTimeout(function(){ui.item.unbind("click.prevent");}, 300);
@@ -428,8 +457,8 @@ $(function() {
 		&& e.target.id != "popupAddStaticTextBtn"
 		&& e.target.id != "editStaticTextBtn") {
 			console.log(e.target.id);
-			if (openWarningTooltip != undefined) {
-				openWarningTooltip.tooltip("hide");
+			if (currentOpenWarningTooltipObject != undefined) {
+				currentOpenWarningTooltipObject.tooltip("hide");
 			}
 		}
 		
@@ -451,14 +480,19 @@ $(function() {
 				var targetid = theButton.attr("targetid");
 				console.log(theButton.attr("targetid"));
 				//if static text...
-				if (theButton.hasClass("staticTextBtn")) {
-					$('#editStaticTextInput').val($("#"+targetid).html());
-					$('#editStaticTextBtn').attr("targetid",targetid);
-					$('#editStaticTextWindow').modal('show');
+				if (theButton.hasClass("staticTextChunk")) {
+					$('#staticTextInput').val($("#"+targetid).html());
+					$('#popupAddStaticTextBtn').attr("targetid",targetid);
+					$('#staticTextWindowHeader').html("Edit segment of static text");
+					$('#popupAddStaticTextBtn').html("Edit Static Text");
+					$("#staticTextWindow").attr("addOrEdit","edit");
+					$('#staticTextWindow').modal('show');
 				}
 			//delete
 			} else if (theButton.hasClass("popoverDeleteButton")) {
 				var targetId = theButton.attr("targetid");
+				var parseObject = staticTextInstanceLookup[targetId];
+				parseObject.deleteStaticText();
 				$('#'+targetId).popover('hide')
 				$('#'+targetId).remove();
 			}
