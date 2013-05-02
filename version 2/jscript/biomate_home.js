@@ -116,10 +116,11 @@ $(document).ready(function(){
 		if(currentGridSelector != $(this).attr("id"))
 		{
 			$("#" + translate(currentGridSelector)).attr("src", "../images/"+ translate(currentGridSelector) + "-on.png");
+			currentGridSelector = null;		
 		}
 		//turn on the new selection
 		$("#"+translate($(this).attr("id"))).attr("src", "../images/"+ translate($(this).attr("id")) + "-off.png");
-		currentGridSelector = null;
+		//currentGridSelector = null;
 	});
 	
 	var currentBtn = null;
