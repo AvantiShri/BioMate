@@ -24,10 +24,16 @@ var dateToStringForHistory = function(date) {
 	hrDiff = today.getHours() - date.getHours();
 	minDiff = today.getMinutes() - date.getMinutes();
 	if(hrDiff != 0){
-		dateStr = hrDiff + " hours ago";
+		dateStr = hrDiff + " hour";
+		if(hrDiff > 1)
+			dateStr += "s";
+		dateStr += " ago";
 	}
 	else if(minDiff != 0){
-		dateStr = minDiff + " minutes ago";
+		dateStr = minDiff + " minute ago";
+		if(minDiff > 1)
+			dateStr += "s";
+		dateStr += " ago";
 	}
 	else{
 		dateStr = "Just now";
