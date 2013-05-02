@@ -9,7 +9,13 @@ if (!currentUser) {
 // has finished loading in the browser.
 else {
 $(function() { 
-	
+    var userSpan = document.getElementById("userName");
+    userSpan.innerHTML = currentUser.get("name");
+    
+    $("#btnSignOut").click(function(e){
+	Parse.User.logOut();
+	window.location = "biomate_login.html";
+    });
     // list the user's scripts in the dropdown
     setScriptSelections();
     
