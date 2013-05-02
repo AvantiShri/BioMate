@@ -249,7 +249,7 @@ $(document).ready(function(){
             $("#notesTableBody").append(
                 "<tr noteId='" + note.id + "'><td>Note on " + script.get("name") +
                 "</td><td>" + owner.get("name") +
-                "</td><td>" + dateToString(note.updatedAt) +
+                "</td><td>" + dateToStringForHistory(note.updatedAt) +
                 "</td></tr>");
         }
     }
