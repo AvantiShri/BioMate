@@ -4,7 +4,10 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-
+#userName{
+	font-size:1.2em;
+	color:white;
+}
 #lab-bench-layout .row {
 	padding-top: 1em;
 	padding-bottom: 1em;
