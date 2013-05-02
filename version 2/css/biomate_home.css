@@ -18,10 +18,54 @@ body {
 	position: relative;
 }
 
-#divCircle img{
+#btnUseScript{
+	-webkit-border-radius: 30x;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	font-size: 1.2em;
 	position: absolute;
-	width: 31%;
-	height: 31%;
+	height: 35%;
+	width:35%;
+}
+
+#btnHistory{
+	-webkit-border-radius: 30x;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	font-size: 1.2em;
+	position: absolute;
+	height: 35%;
+	width:35%;
+}
+
+#userName{
+	font-size:1.2em;
+	color:white;
+}
+
+img{
+	width: 80%;
+	height: 80%;
+}
+
+#btnNotes{
+	-webkit-border-radius: 30x;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	font-size: 1.2em;
+	position: absolute;
+	height: 35%;
+	width:35%;
+}
+
+#btnCreateScript{
+	-webkit-border-radius: 30x;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	font-size: 1.2em;
+	position: absolute;
+	height: 35%;
+	width:35%;
 }
 
 #middleBubble {

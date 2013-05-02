@@ -24,8 +24,19 @@ var sendEmail = function(scriptId){
 	}
 }
 
+var currentUser = Parse.User.current();
+if (!currentUser) {
+	window.location = "biomate_login.html";
+}
 
 $(function() {
+	
+	var userSpan = document.getElementById("userName");
+	userSpan.innerHTML = currentUser.get("name");
+	$("#btnSignOut").click(function(e){
+		Parse.User.logOut();
+		window.location = "biomate_login.html";
+	});
 	
 	//**************************************************
 	//General utility functions and variable declaration

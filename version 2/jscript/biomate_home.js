@@ -5,13 +5,21 @@ Parse.initialize("C9TPknemAEmJzz1xcKFbBC855l64A4T4R2EFjxBH", "iJGffHXEvURl0BDlT0
 
 var currentUser = Parse.User.current();
 if (currentUser == null) {
-	window.location = "biomate_login.html";
+	var logInUrl = "biomate_login.html";
+	if ($.getUrlVar('scriptId')) {
+		//Show the notification
+		logInUrl = logInUrl + "?scriptId=" + $.getUrlVar('scriptId');
+		//alert(logInUrl);
+	} else {
+		//alert("nothing");
+	}
+	window.location = logInUrl;
 }
 
 else{
 $(document).ready(function(){
 	
-    // create some fake data
+	// create some fake data
 //    var chunks = [];
 //    Parameter.createParameter("alias4", "prefixFlag4", "userFriendyName4", "defaultVal4",
 //                              InputType.STRING, true, "warnings4", "tooltip4", parameterCreated);
@@ -41,19 +49,20 @@ $(document).ready(function(){
 //    } 
     
 	//Center the "info" bubble in the  "circle" div
-	var divTop = ($("#divCircle").height() - $("#middleBubble").height())/2;
+	/*var divTop = ($("#divCircle").height() - $("#middleBubble").height())/2;
 	var divLeft = ($("#divCircle").width() - $("#middleBubble").width())/2;
 	$("#divCircle").disableSelection();
 	$("#middleBubble").css("top",divTop + "px");
-	$("#middleBubble").css("left",divLeft + "px");
+	$("#middleBubble").css("left",divLeft + "px");*/
 
 	//Arrange the icons in a circle centered in the div
-	numItems = $( "#divCircle img" ).length; //How many items are in the circle?
+	numItems = $( "#divCircle button" ).length; //How many items are in the circle?
+	
 	start = 0; //the angle to put the first image at. a number between 0 and 2pi
 	step = (2*Math.PI)/numItems; //calculate the amount of space to put between the items.
-
+	console.log(numItems, step);
 	//Now loop through the buttons and position them in a circle
-	$( "#divCircle img" ).each(function( index ) {
+	$( "#divCircle button" ).each(function( index ) {
 		radius = ($("#divCircle").width() - $(this).width())/2; //The radius is the distance from the center of the div to the middle of an icon
 		//the following lines are a standard formula for calculating points on a circle. x = cx + r * cos(a); y = cy + r * sin(a)
 		//We have made adjustments because the center of the circle is not at (0,0), but rather the top/left coordinates for the center of the div
@@ -61,19 +70,19 @@ $(document).ready(function(){
 		tmpTop = (($("#divCircle").height()/2) + radius * Math.sin(start)) - ($(this).height()/2);
 		tmpLeft = (($("#divCircle").width()/2) + radius * Math.cos(start)) - ($(this).width()/2);
 		start += step; //add the "step" number of radians to jump to the next icon
-		
+		console.log($(this).height(), $(this).width(), index, tmpTop,tmpLeft);
 		//set the top/left settings for the image
 		$(this).css("top",tmpTop);
 		$(this).css("left",tmpLeft);
 	});
 
 	//set the highlight and bubble default based on the homepageGridDefault class
-	currentGridSelector = $(".homepageGridDefault").attr("id");
+	/*currentGridSelector = $(".homepageGridDefault").attr("id");
 	$("#" + currentGridSelector).attr("src", "../images/"+ currentGridSelector + "-on.png");
-	$("#middleBubble").html("<p></br><b>" + $(".homepageGridDefault").data("bubble1") + "</b></p>");
+	$("#middleBubble").html("<p></br><b>" + $(".homepageGridDefault").data("bubble1") + "</b></p>");*/
 
 	//Setup the grid to change the highlighted bubble on mouseover ans click
-	$("#divCircle img").mouseover(function(){
+	/*$("#divCircle img").mouseover(function(){
 		//if the selected option has changed, deactivate the current selection
 		if(currentGridSelector != $(this).attr("id"))
 		{
@@ -97,7 +106,84 @@ $(document).ready(function(){
 		//set the content of the center bubble
 		$("#middleBubble").html("<p><b></br>" + "" + "</b></p>");
 		currentGridSelector = null;
+	});*/
+	
+	$("#btnUseScript").hover(function(e){
+		//console.log("I am here");
+		im = document.getElementById("useScript");
+		im.innerHTML = "<img src=\"../images/runScript-on.png\"></img><br/>";
 	});
+	$("#btnUseScript").mouseout(function(e){
+		im = document.getElementById("useScript");
+		im.innerHTML = "<img src=\"../images/runScript-off.png\"></img><br/>";
+	});
+	$("#btnUseScript").click(function(e){
+		//console.log("I am here");
+		window.location="lab_bench_view.html";
+	});
+	$("#btnHistory").hover(function(e){
+		//console.log("I am here");
+		im = document.getElementById("history");
+		im.innerHTML = "<img src=\"../images/history-on.png\"></img><br/>";
+	});
+	$("#btnHistory").mouseout(function(e){
+		im = document.getElementById("history");
+		im.innerHTML = "<img src=\"../images/history-off.png\"></img><br/>";
+	});
+	$("#btnHistory").click(function(e){
+		$("#historyTable").modal("show");
+	});
+	$("#btnNotes").hover(function(e){
+		//console.log("I am here");
+		im = document.getElementById("notes");
+		im.innerHTML = "<img src=\"../images/notes-on.png\"></img><br/>";
+	});
+	$("#btnNotes").mouseout(function(e){
+		im = document.getElementById("notes");
+		im.innerHTML = "<img src=\"../images/notes-off.png\"></img><br/>";
+	});
+	$("#btnNotes").click(function(e){
+		$("#noteTable").modal("show");
+	});
+	$("#btnCreateScript").hover(function(e){
+		//console.log("I am here");
+		im = document.getElementById("createScript");
+		im.innerHTML = "<img src=\"../images/createScript-on.png\"></img><br/>";
+	});
+	$("#btnCreateScript").mouseout(function(e){
+		im = document.getElementById("createScript");
+		im.innerHTML = "<img src=\"../images/createScript-off.png\"></img><br/>";
+	});
+	$("#btnCreateScript").click(function(e){
+		window.location="programmer_facing.html";
+	});
+	
+	var curScName = "";
+	var collName = "";
+	var sName = document.getElementById("curScriptName");
+	var cName = document.getElementById("collabName");
+	if ($.getUrlVar('scriptId')) {
+		//Show the notification
+		var sid = $.getUrlVar('scriptId');
+		Script.getScriptById(sid, function(script){
+			curScName = script.get("name");
+			collName = script.get("owner").get("name");
+			console.log(curScName, collName);
+			cName.innerHTML = collName;
+			sName.innerHTML = curScName;
+			$("#notify").modal("show");
+			UserScript.getUserScriptByUserScript(currentUser, script, function(userScript){
+				if(!userScript)
+					UserScript.createUserScript(currentUser, script, function(){alert(sid + " created!!");});
+			});
+		});
+		
+	} else {
+		//alert("nothing");
+	}
+	
+	var userSpan = document.getElementById("userName");
+	userSpan.innerHTML = currentUser.get("name");
 	
 	$("#btnSignOut").click(function(e){
 		Parse.User.logOut();

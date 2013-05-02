@@ -50,9 +50,9 @@
           <a class="brand" href="biomate_home.html">BioMate</a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
-				<li><p class="navbar-text">Sam Salamander</p></li>
+				<li><p class="navbar-text" id="userName"></p></li>
  			    <li><a href="biomate_home.html"><i class="icon-home icon-white"></i></a></li>
-				<button class="btn btn-primary" type="submit" id="btnSignOut">
+				<button class="btn btn-danger" type="submit" id="btnSignOut">
 				<i class="icon-off icon-white"></i>
 				</button></li>
             </ul>
@@ -66,11 +66,27 @@
 	  <div class="masthead">
       </div>
 	  <div id="divCircle">
-        	<div id="middleBubble">&nbsp;</div>
+        	<!--div id="middleBubble">&nbsp;</div>
 			<a href="lab_bench_view.html"><img src="../images/runScript-off.png" id="runScript" data-bubble1="Use a<br />Script"></a>
 			<a data-toggle="modal" href="#historyTable" class="history"><img src="../images/history-off.png" id="history" data-bubble1="<br />History"></a>
 			<a data-toggle="modal" href="#noteTable" class='notes'><img src="../images/notes-off.png" id="notes" data-bubble1="My<br />Notes"></a>
-			<a href="programmer_facing.html"><img src="../images/createScript-off.png" id="createScript" data-bubble1="Create or Edit<br />a Script" class="homepageGridDefault"></a>
+			<a href="programmer_facing.html"><img src="../images/createScript-off.png" id="createScript" data-bubble1="Create or Edit<br />a Script" class="homepageGridDefault"></a-->
+			<button class="btn" id="btnUseScript">
+				<span id="useScript"><img src="../images/runScript-off.png"></img><br/></span>
+				Use a<br />Script
+			</button>
+			<button class="btn" id="btnHistory">
+				<span id="history"><img src="../images/history-off.png"></img><br/></span>
+				History<br/>
+			</button>
+			<button class="btn" id="btnNotes">
+				<span id="notes"><img src="../images/notes-off.png"></img><br/></span>
+				Notes<br/>
+			</button>
+			<button class="btn" id="btnCreateScript">
+				<span id="createScript"><img src="../images/createScript-off.png"></img><br/></span>
+				Create or Edit<br />a Script
+			</button>
       </div>
 	  
 	  <div id="historyTable" class="modal hide fade in" style="display: none; ">  
@@ -132,9 +148,18 @@
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
 		</div>  
 	  </div>
-      <footer>
-        <p>&copy; BioMate 2013</p>
-      </footer>
+      <div class="modal hide fade" id="notify">
+		<div class="modal-header">
+			<a href="#" class="close" id="closeNotification1" data-dismiss="modal">×</a>
+			<h3>Notification</h3>
+		</div>
+		<div class="modal-body">
+		<p><b><span id="collabName"></span></b> has shared <b><span id="curScriptName"></span></b> script with you. Click on <b>"Use a Script"</b> and select it from the dropdown list to start using it.</p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" id="closeNotification2" data-dismiss="modal">Close</a>
+		</div>
+	  </div>
 
     </div> <!-- /container -->
 

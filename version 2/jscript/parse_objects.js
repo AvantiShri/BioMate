@@ -211,6 +211,22 @@ var UserScript = Parse.Object.extend("UserScript", {
         });
     },
     
+    // Get a UserScript for a given user and script if it exists
+    // results are returned via the callback function
+    getUserScriptByUserScript: function(user, script, callback) {
+        var query = new Parse.Query(UserScript);
+        query.equalTo("user", user);
+        query.equalTo("script", script);
+        query.first({
+            success: function(userScript) {
+                callback(userScript);
+            },
+            error: function(error) {
+                alert("Error: " + error.code + " " + error.message);
+            }
+        });
+    },
+    
     // Get the user-script matching a given id, if it exists
     // results are returned via the callback function
     getUserScriptById: function(id, callback) {
