@@ -211,7 +211,7 @@ $(document).ready(function(){
 	});
 	
     // load history listing
-	$(".history").on('click', function(){ 
+	$("#history").on('click', function(){ 
 		$("#historyTableBody").empty();
         History.getUserHistory(currentUser, 10, loadHistory);
 	});
@@ -234,7 +234,7 @@ $(document).ready(function(){
     }
 	
     // load notes listing
-	$(".notes").on('click', function(){ 		
+	$("#notes").on('click', function(){ 		
         $("#notesTableBody").empty();
         Note.getUserNotes(currentUser, loadNotes);
 	});

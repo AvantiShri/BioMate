@@ -25,6 +25,30 @@ $(function() {
 	});
 	
 	$("#saveParamsBtn").click( function () {
+        var params = getInputParameters();
+        var commandStrings = [];
+        if(chunks) {
+            var len = chunks.length;
+            for(var i = 0; i < len; ++i) {
+                chunk = chunks[i];
+                if(chunk.get("commandChunkType") === CommandChunkType.PARAMETER) {
+                    var parameter = chunk.get("parameter");
+                    var id = chunkData.id;
+                    var val = params[id];
+                    if(chunkData.get("inputType") === InputType.BOOLEAN) {
+                        if(val) {
+                            val = "on";
+                        }
+                        else {
+                            val = "off";
+                        }
+                    }
+                    SavedParameter.createSavedParameter(parameter, val, function () {
+                    
+                    });
+                }
+            }
+        }
 		$("#savedMsg").html("Saved Parameters at " + dateToString(new Date()));
 		$("#savedMsg").show();
 	});
@@ -34,7 +58,6 @@ $(function() {
         var commandStrings = [];
         if(chunks) {
             var len = chunks.length;
-            console.log("got chunks" + len)
             for(var i = 0; i < len; ++i) {
                 chunk = chunks[i];
                 if(chunk.get("commandChunkType") === CommandChunkType.PARAMETER) {
