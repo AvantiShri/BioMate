@@ -34,24 +34,28 @@ $(function() {
         var commandStrings = [];
         if(chunks) {
             var len = chunks.length;
+            console.log("got chunks" + len)
             for(var i = 0; i < len; ++i) {
                 chunk = chunks[i];
                 if(chunk.get("commandChunkType") === CommandChunkType.PARAMETER) {
                     var chunkData = chunk.get("parameter");
+                    var id = chunkData.id;
+                    var val = params[id];
+                    var prefix = chunkData.get("prefixFlag");
                     if(chunkData.get("inputType") === InputType.BOOLEAN) {
-                        //val = 
+                        if(val) {
+                            commandStrings.push(prefix);
+                        }
                     }
                     else {
-                        addInputParameter(
-                            chunkData.id, 
-                            chunkData.get("alias"), 
-                            chunkData.get("userFriendlyName"), 
-                            chunkData.get("defaultVal"), 
-                            chunkData.get("tooltip"), 
-                            chunkData.get("warnings"),
-                            chunkData.get("required")
-                        );
+                        if(val) {
+                            commandStrings.push(prefix + " " + val);
+                        }
                     }
+                }
+                else {
+                    var chunkData = chunk.get("staticText");
+                    commandStrings.push(chunkData.get("text"));
                 }
             }
         }
