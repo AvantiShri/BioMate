@@ -95,7 +95,7 @@ $(document).ready(function(){
 	//$("#middleBubble").html("<p></br><b>" + $(".homepageGridDefault").data("bubble1") + "</b></p>");*/
 
 	//Setup the grid to change the highlighted bubble on mouseover ans click
-	$("#divCircle button").hover(function(){
+	$("#divCircle button").mouseover(function(){
 		//console.log("I am inside over")
 		//if the selected option has changed, deactivate the current selection
 		if(currentGridSelector != $(this).attr("id"))
