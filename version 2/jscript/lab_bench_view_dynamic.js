@@ -33,14 +33,18 @@ var setCaveats = function(caveats) {
 	$("#caveats").html(caveats);
 }
 
-var addInputParameter = function(alias, userFriendlyName, defaultVal, tooltip, warning, isRequired) {
+var setGeneratedCommand = function(command) {
+	$("#commandText").html(command);
+}
+
+var addInputParameter = function(inputId, alias, userFriendlyName, defaultVal, tooltip, warning, isRequired) {
 	var toAppendTo;
 	if (isRequired) {
 		toAppendTo = $("#required");
 	} else {
 		toAppendTo = $("#optional");
 	}
-	var inputId = "inputParam_"+alias;
+	//var inputId = "inputParam_"+alias;
 	var warningText = "";
 	if (warning != "") {
 		warningText = "<span class='span10 offset3 text-warning'>"+warning+"</span>";
@@ -74,8 +78,8 @@ var addInputParameter = function(alias, userFriendlyName, defaultVal, tooltip, w
 	}
 }
 
-var addFlag = function(alias, userFriendlyName, defaultVal, tooltip, warning) {
-	var inputId = "inputParam_"+alias;
+var addFlag = function(inputId, alias, userFriendlyName, defaultVal, tooltip, warning) {
+	//var inputId = "inputParam_"+alias;
 	var warningText = "";
 	if (warning != "") {
 		warningText = "<span class='span10 offset3 text-warning'>"+warning+"</span>";
@@ -100,4 +104,20 @@ var addFlag = function(alias, userFriendlyName, defaultVal, tooltip, warning) {
 	if (defaultVal == true) {
 		$("#"+inputId).attr("checked",true);
 	}
+}
+
+var getInputParameters = function() {
+    var optional = $("#optional").children();
+    var lenOpt = optional.length;
+    for(var i = 0; i < lenOpt; ++i) {
+        console.log(optional[i]);
+        console.log(optional[i].find("input").val());
+    }
+    
+    var required = $("#required").children();
+    var lenReq = required.length;
+    for(var i = 0; i < lenReq; ++i) {
+        console.log(required[i]);
+        console.log(required[i].find("input").val());
+    }
 }

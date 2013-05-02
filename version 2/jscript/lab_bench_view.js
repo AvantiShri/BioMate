@@ -28,6 +28,13 @@ $(function() {
 		$("#savedMsg").html("Saved Parameters at " + dateToString(new Date()));
 		$("#savedMsg").show();
 	});
+    
+    $("#generateBtn").click( function () {
+        //var params = getInputParameters();
+        getInputParameters();
+        var command = "";
+        setGeneratedCommand(command);
+    });
 	
 	$('.info').tooltip();
 	$('#selectScriptLbl').tooltip();
@@ -116,6 +123,7 @@ function loadScript(script) {
             var chunkData = chunk.get("parameter");
             if(chunkData.get("inputType") === InputType.BOOLEAN) {
                 addFlag(
+                    chunkData.id, 
                     chunkData.get("alias"), 
                     chunkData.get("userFriendlyName"), 
                     chunkData.get("defaultVal"), 
@@ -125,6 +133,7 @@ function loadScript(script) {
             }
             else {
                 addInputParameter(
+                    chunkData.id, 
                     chunkData.get("alias"), 
                     chunkData.get("userFriendlyName"), 
                     chunkData.get("defaultVal"), 
@@ -148,7 +157,7 @@ function loadSavedScriptParams(savedScriptParams) {
     var len = savedScriptParams.length;
     for(var i = 0; i < len; ++i) {
         var name = savedScriptParams[i].get("name");
+        addRowToLoadParamsTable(name);
     }
-    
 }
 
