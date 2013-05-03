@@ -25,17 +25,17 @@ $(function() {
 	});
 	
 	$("#saveParamsBtn").click( function () {
-        var params = getInputParameters();
-        var commandStrings = [];
-        if(chunks) {
+        if(chunks && currentScript) {
+            var params = getInputParameters();
+            var savedParams = [];
             var len = chunks.length;
             for(var i = 0; i < len; ++i) {
                 chunk = chunks[i];
                 if(chunk.get("commandChunkType") === CommandChunkType.PARAMETER) {
                     var parameter = chunk.get("parameter");
-                    var id = chunkData.id;
+                    var id = parameter.id;
                     var val = params[id];
-                    if(chunkData.get("inputType") === InputType.BOOLEAN) {
+                    if(parameter.get("inputType") === InputType.BOOLEAN) {
                         if(val) {
                             val = "on";
                         }
@@ -43,20 +43,23 @@ $(function() {
                             val = "off";
                         }
                     }
-                    SavedParameter.createSavedParameter(parameter, val, function () {
-                    
-                    });
+                    savedParams.push(SavedParameter.createSavedParameter(parameter, val, false));
                 }
             }
+            SavedScriptParams.createSavedScriptParams(
+                currentUser, currentScript, savedParams, $("#paramsName").val(), 
+                function (savedScriptParams) {
+                    $("#savedMsg").html("Saved Parameters at " + dateToString(new Date()));
+                    $("#savedMsg").show();
+                });            
         }
-		$("#savedMsg").html("Saved Parameters at " + dateToString(new Date()));
-		$("#savedMsg").show();
+		
 	});
     
     $("#generateBtn").click( function () {
-        var params = getInputParameters();
-        var commandStrings = [];
         if(chunks) {
+            var params = getInputParameters();
+            var commandStrings = [];
             var len = chunks.length;
             for(var i = 0; i < len; ++i) {
                 chunk = chunks[i];
@@ -81,8 +84,8 @@ $(function() {
                     commandStrings.push(chunkData.get("text"));
                 }
             }
+            setGeneratedCommand(commandStrings.join(" "));
         }
-        setGeneratedCommand(commandStrings.join(" "));
     });
 	
 	$('.info').tooltip();
@@ -116,9 +119,10 @@ $(function() {
 });
 }
 
-// store the chunks after loading the script so they can be used to
+// store the script and script chunks after loading the script so they can be used to
 // generate the command and save parameters
 var chunks = null;
+var currentScript = null;
 
 // load user's scripts in drop-down
 function setScriptSelections() {
@@ -149,6 +153,7 @@ function loadScriptAndSetSelected(script) {
 
 // load data for a particular script
 function loadScript(script) {
+    currentScript = script;
     var scriptName = script.get("name");
     var owner = script.get("owner");
     var scriptData = null;

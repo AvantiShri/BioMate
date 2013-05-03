@@ -726,11 +726,15 @@ var SavedParameter = Parse.Object.extend("SavedParameter", {
     // Create a saved parameter value
     // @param parameter: the parameter reference, type Parameter
     // @param value: the value of the parameter, type corresponds to inputType of parameter
+    // @param save: if false, return the object and don't save it to the parse backend
     // @param callback: a function to call upon successful creation
-    createSavedParameter: function(parameter, value, callback) {
+    createSavedParameter: function(parameter, value, save, callback) {
         var savedParameter = new SavedParameter();
         savedParameter.set("parameter", parameter);
         savedParameter.set("value", value);
+        if(!save) {
+            return savedParameter;
+        }
         savedParameter.save({
             success: function(savedParameter) {
                 callback(savedParameter);
