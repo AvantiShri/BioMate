@@ -55,9 +55,9 @@ var addInputParameter = function(inputId, alias, userFriendlyName, defaultVal, t
 	toAppendTo.append(
 		"<div class='row'>"+
 			"<div class='span3 truncate'>"+
-				"<label for='"+inputId+"'>"+
-					"<a href='#' data-toggle='tooltip' title='"+tooltip+"' class='btn btn-link info'>"+
-						"<i class='icon-question-sign'></i>"+
+				"<label for='"+inputId+"' tabIndex='-1'>"+
+					"<a href='#' data-toggle='tooltip' title='"+tooltip+"' class='btn btn-link info' tabIndex='-1'>"+
+						"<i class='icon-question-sign' tabIndex='-1'></i>"+
 					"</a>"+
 					userFriendlyName+
 				"</label>"+
@@ -89,9 +89,9 @@ var addFlag = function(inputId, alias, userFriendlyName, defaultVal, tooltip, wa
 	$("#optional").append(
 		"<div class='row'>"+
 			"<div class='span3 truncate'>"+
-				"<label for='"+inputId+"'>"+
-					"<a href='#' data-toggle='tooltip' title='"+tooltip+"' class='btn btn-link info'>"+
-						"<i class='icon-question-sign'></i>"+
+				"<label for='"+inputId+"' tabIndex='-1'>"+
+					"<a href='#' data-toggle='tooltip' title='"+tooltip+"' class='btn btn-link info' tabIndex='-1'>"+
+						"<i class='icon-question-sign' tabIndex='-1'></i>"+
 					"</a>"+
 					userFriendlyName+
 				"</label>"+
