@@ -50,8 +50,14 @@ $(function() {
 	var staticTextInstanceLookup = {}; //dictionary for looking up the static text parse objects using the object id.
 	var parametersInstanceLookup = {};
 	
+	var updateParameter = function (parameter) {
+		console.log("update called");
+		parametersInstanceLookup[parameter.id] = parameter;
+	}
+	
 	var openWarningTooltip = function(objectToOpenTooltipFor) {
 		tooltipShow = 1;
+		console.log("opening tooltip for "+objectToOpenTooltipFor.attr("id"));
 		objectToOpenTooltipFor.tooltip("show");
 		if (currentOpenWarningTooltipObject != undefined) {
 			if (currentOpenWarningTooltipObject.attr("id") !=  objectToOpenTooltipFor.attr("id")) {
@@ -277,6 +283,11 @@ $(function() {
 		$("#"+ufNameId).val(userFriendlyName);
 		$("#"+inputTypeId+" option[value='"+selectedTyp+"']")[0].selected=true; //select in dropdown option
 		$("#"+inputTypeId).trigger("change");
+		if (required == true) {
+			$("#"+requiredCheckboxId).prop("checked", 1);
+		} else {
+			$("#"+requiredCheckboxId).prop("checked", 0);
+		}
 		if (selectedTyp == "Flag") {
 			console.log(defaultVal);
 			if (defaultVal == "on") {
@@ -311,10 +322,7 @@ $(function() {
 		var warningsId = theId+"_warnings";
 		var tooltipId = theId+"_tooltip";
 		
-		var aliasTd = "<td> <input id='"+aliasId+"' targetid='"+theId+"' class='tableDataInput' type='text'></input></td>";
-		var prefixFlagTd = "<td> <input id='"+prefixFlagId+"' targetid='"+theId+"' class='tableDataInput' type='text'></input></td>";
-		var ufNameTd = "<td> <input id='"+ufNameId+"' targetid='"+theId+"' type='text' class='tableDataInput'></input></td>";
-		var requiredCheckboxTd = "<td> <input id='"+requiredCheckboxId+"' targetid='"+theId+"' type='checkbox'> </input></td>";
+		var aliasTd = "<td> <input id='"+aliasId+"' targetid='"+theId+"' class='tableDataInput warningTooltipTable' type='text'></input></td>";
 		var inputTypeTd = "<td>"+
 					"<select id='"+inputTypeId+"' targetid='"+theId+"' class='input-block-level tableDataSelect'>"+
 						"<option value='Flag'>Flag</option>"+
@@ -323,6 +331,11 @@ $(function() {
 						"<option value='Float'>Float</option>"+
 					"</select>"+
 				"</td>";
+		
+		var prefixFlagTd = "<td> <input id='"+prefixFlagId+"' targetid='"+theId+"' class='tableDataInput' type='text'></input></td>";
+		var ufNameTd = "<td> <input id='"+ufNameId+"' targetid='"+theId+"' type='text' class='tableDataInput warningTooltipTable'></input></td>";
+		var requiredCheckboxTd = "<td> <input id='"+requiredCheckboxId+"' targetid='"+theId+"' type='checkbox'> </input></td>";
+		
 		var defaultValTd;
 		if (selectedTyp != "Flag") {
 			defaultValTd = "<td> <input id='"+defaultValId+"' targetid='"+theId+"' type='text' class='tableDataInput'></input></td>";
@@ -346,8 +359,6 @@ $(function() {
 						tooltipTd+
 					"</tr>");
 		
-		//add a change listener to the type selector which adjust the required/defaultVal fields as necessary
-		
 		//formatting
 		$("#"+aliasId).css("max-width","160px");
 		$("#"+prefixFlagId).css("max-width","160px");
@@ -361,36 +372,51 @@ $(function() {
 		//add listeners to the fields in the table, such that when they are edited, the value is stored.
 		
 		//alias
-		$("#"+aliasId).change( function(e) {
-			console.log("change event detected for alias");
+		$("#"+aliasId).blur( function(e) {
+			console.log("blur event detected for alias");
 			var theId = $("#"+aliasId).attr("targetid");
 			var parameterInstance = parametersInstanceLookup[theId];
 			var theAlias = $("#"+aliasId).val();
-			var thePrefixFlag = parameterInstance.get("prefixFlag");
-			var selectedTyp = parameterInstance.get("inputType");
-			parameterInstance.editParameter({alias: theAlias});
-			setParamChunkHtml(theId, theAlias, thePrefixFlag, selectedTyp);
+			if (theAlias == "") {//invalid, go back to the old one.
+				$("#"+aliasId).val(parameterInstance.get("alias"));
+			} else {
+				console.log(parameterInstance);
+				var thePrefixFlag = parameterInstance.get("prefixFlag");
+				var selectedTyp = parameterInstance.get("inputType");
+				parameterInstance.editParameter({alias: theAlias});
+				setParamChunkHtml(theId, thePrefixFlag, theAlias, selectedTyp);
+			}
 		});
 		
 		//prefixFlag
-		$("#"+prefixFlagId).change( function(e) {
-			console.log("change event detected for prefixFlag");
+		$("#"+prefixFlagId).blur( function(e) {
+			console.log("blur event detected for prefixFlag");
 			var theId = $("#"+aliasId).attr("targetid");
 			var parameterInstance = parametersInstanceLookup[theId];
 			var theAlias = parameterInstance.get("alias");
 			var thePrefixFlag = $("#"+prefixFlagId).val();
 			var selectedTyp = parameterInstance.get("inputType");
-			parameterInstance.editParameter({prefixFlag: thePrefixFlag});
-			setParamChunkHtml(theId, theAlias, thePrefixFlag, selectedTyp);
+			if (selectedTyp == "Flag" && thePrefixFlag == "") {
+				console.log("this code executed");
+				$("#"+prefixFlagId).val(parameterInstance.get("prefixFlag"));
+			} else {
+				console.log("edit code executed "+thePrefixFlag);
+				parameterInstance.editParameter({prefixFlag: thePrefixFlag, callback: updateParameter});
+				setParamChunkHtml(theId, thePrefixFlag, theAlias,  selectedTyp);
+			}
 		});
 		
 		//userFriendlyName
-		$("#"+ufNameId).change( function(e) {
-			console.log("change event detected for ufName");
+		$("#"+ufNameId).blur( function(e) {
+			console.log("blur event detected for ufName");
 			var theId = $("#"+ufNameId).attr("targetid");
 			var parameterInstance = parametersInstanceLookup[theId];
 			var ufName = $("#"+ufNameId).val()
-			parameterInstance.editParameter({userFriendlyName: ufName});
+			if (ufName == "") {
+				$("#"+ufNameId).val(parameterInstance.get("userFriendlyName"));
+			} else {
+				parameterInstance.editParameter({userFriendlyName: ufName});
+			}
 		});
 		
 		//input type field..
@@ -399,13 +425,20 @@ $(function() {
 			
 			var theId = $("#"+inputTypeId).attr("targetid");
 			var parameterInstance = parametersInstanceLookup[theId];
+			var theAlias = parameterInstance.get("alias");
+			var thePrefixFlag = parameterInstance.get("prefixFlag");
 			var selectedTyp = $("#"+inputTypeId+" :selected").val();
 			parameterInstance.editParameter({inputType: selectedTyp});
 			
 			//modify the required/default checkboxes as appropriate
 			if (selectedTyp == "Flag") {
-				setParamChunkHtml(theId, parameterInstance.get("alias"), parameterInstance.get("prefixFlag"), selectedTyp);
-			
+				if (thePrefixFlag == "") {
+					thePrefixFlag = "--defaultFlag";
+					$("#"+prefixFlagId).val(thePrefixFlag);
+					parameterInstance.editParameter({prefixFlag: thePrefixFlag});
+					openWarningTooltip($("#"+prefixFlagId));
+					$("#"+prefixFlagId).focus();
+				}
 				$("#"+requiredCheckboxId).prop("checked", 0);
 				parameterInstance.editParameter({required: false});
 				$("#"+requiredCheckboxId).attr("disabled", "disabled");
@@ -417,7 +450,6 @@ $(function() {
 				} else {
 					parameterInstance.editParameter({defaultVal: "off"});
 				}
-				
 			} else {
 				if ($("#"+requiredCheckboxId).attr("disabled") != undefined) {
 					$("#"+requiredCheckboxId).removeAttr("disabled");
@@ -425,6 +457,8 @@ $(function() {
 				$("#"+defaultValId).attr("type", "text");
 				$("#"+defaultValId).attr("class", "input-block-level aFormInput exitAddParamOnEnter");
 			}
+			
+			setParamChunkHtml(theId, thePrefixFlag, theAlias, selectedTyp);
 		});
 		
 		//required checkbox
@@ -544,7 +578,7 @@ $(function() {
 		parameterInstance.editParameter({alias: theAlias, prefixFlag: thePrefixFlag, userFriendlyName: ufName, inputType: theInputType, required: isRequired, defaultVal: theDefaultVal, warnings: theWarnings, tooltip: theTooltip});
 		
 		editTableEntries(theId, theAlias, thePrefixFlag, ufName, theInputType, isRequired, theDefaultVal);
-		setParamChunkHtml(theId,thePrefixFlag, alias);
+		setParamChunkHtml(theId,thePrefixFlag, theAlias, theInputType);
 	}
 	
 	//does error checking to make sure the values input into the popup are acceptable.
@@ -700,7 +734,7 @@ $(function() {
 		console.log("saving tooltip");
 		var theId = $("#tooltipSaveEditsBtn").attr("targetid");
 		var parametersInstance = parametersInstanceLookup[theId];
-		parametersInstance.editParameter({tooltip: $("#tooltipSaveEditsBtn").val()});
+		parametersInstance.editParameter({tooltip: $("#editTooltipInput").val()});
 	});
 	
 	//*************************************

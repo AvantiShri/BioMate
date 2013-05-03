@@ -623,14 +623,14 @@ var Parameter = Parse.Object.extend("Parameter", {
     // Edit the parameter
     // optionally pass in a callback function on successful save
     editParameter: function(args) {
-        if(args && args.alias) this.set("alias", args.alias);
-        if(args && args.prefixFlag) this.set("prefixFlat", args.prefixFlag);
-        if(args && args.userFriendlyName) this.set("userFriendlyName", args.userFriendlyName);
-        if(args && args.defaultVal) this.set("defaultVal", args.defaultVal);
-        if(args && args.inputType) this.set("inputType", args.inputType);
-        if(args && args.required) this.set("required", args.required);
-        if(args && args.warnings) this.set("warnings", args.warnings);
-        if(args && args.tooltip) this.set("tooltip", args.tooltip);
+        if(args && args.alias != undefined) this.set("alias", args.alias);
+        if(args && args.prefixFlag != undefined) this.set("prefixFlag", args.prefixFlag);
+        if(args && args.userFriendlyName != undefined) this.set("userFriendlyName", args.userFriendlyName);
+        if(args && args.defaultVal != undefined) this.set("defaultVal", args.defaultVal);
+        if(args && args.inputType != undefined) this.set("inputType", args.inputType);
+        if(args && args.required != undefined) this.set("required", args.required);
+        if(args && args.warnings != undefined) this.set("warnings", args.warnings);
+        if(args && args.tooltip != undefined) this.set("tooltip", args.tooltip);
         this.save({
             success: function(parameter) {
                 if(args && args.callback) args.callback(parameter);
