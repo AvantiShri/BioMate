@@ -53,6 +53,7 @@ $(function() {
 	var finalCommandChunkObjects = []; //array which objects of type command chunk
 	var scriptObjectId = undefined;
 	var scriptParseObject = undefined;
+	var shareAfterSaving = false; //used to implement save and share, without problems of interleaving.
 	
 	var addToFinalCommandChunkObjects = function(commandChunkObject) {
 		finalCommandChunkObjects.push(commandChunkObject);
@@ -790,6 +791,9 @@ $(function() {
 		scriptParseObject = scriptObject;
 		//add the creator to the list of users
 		UserScript.createUserScript(currentUser, scriptParseObject, function() {$("#lastSavedAt").html(getTheDate())});
+		if (shareAfterSaving == true) {
+			scriptParseObject.shareScript({callback: function() {sendEmail(scriptParseObject.id)}});
+		}
 	}
 	
 	var createOrEditScriptFromScriptData = function(scriptData) {
@@ -818,11 +822,12 @@ $(function() {
 	});
 	
 	//clicking save and share
-	$("#saveNshareBtn").click(function (e) { $("#saveBtn").click() });
+//	$("#saveNshareBtn").click(function (e) { });
 	
 	//clicking share on the modal popup
 	$("#share").click(function (e) {
-		scriptParseObject.shareScript({callback: function() {sendEmail(scriptParseObject.id)}});
+		$("#saveBtn").click() 
+		shareAfterSaving = true;
 	});
 	
 	//*****************************************************************************
