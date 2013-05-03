@@ -52,6 +52,7 @@ $(function() {
 	var numCommandChunkObjects = 0; //is needed so that createScriptData is only called after all the commandChunk objects are created.
 	var finalCommandChunkObjects = []; //array which objects of type command chunk
 	var scriptObjectId = undefined;
+	var scriptParseObject = undefined;
 	
 	var addToFinalCommandChunkObjects = function(commandChunkObject) {
 		finalCommandChunkObjects.push(commandChunkObject);
@@ -786,14 +787,14 @@ $(function() {
 	
 	var createScript = function (scriptObject) {
 		console.log('this is called too');
-		scriptObjectId = scriptObject.id;
+		scriptParseObject = scriptObject;
 		//add the creator to the list of users
-		UserScript.createUserScript(currentUser, scriptObject, function() {$("#lastSavedAt").html(getTheDate())});
+		UserScript.createUserScript(currentUser, scriptParseObject, function() {$("#lastSavedAt").html(getTheDate())});
 	}
 	
 	var createOrEditScriptFromScriptData = function(scriptData) {
 		console.log("create or edit called...");
-		if (scriptObjectId == undefined) {
+		if (scriptParseObject == undefined) {
 			Script.createScript(currentUser, $("#theScriptName").val(), scriptData, createScript);
 		}
 	}
@@ -821,7 +822,7 @@ $(function() {
 	
 	//clicking share on the modal popup
 	$("#share").click(function (e) {
-		sendEmail(scriptObjectId);
+		scriptParseObject.shareScript({callback: function() {sendEmail(scriptParseObject.id)}});
 	});
 	
 	//*****************************************************************************
