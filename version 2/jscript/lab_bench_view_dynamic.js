@@ -25,8 +25,10 @@ var setInstructionsContents = function(instructionsContents) {
 	});
 }
 
-var addRowToLoadParamsTable = function (savedParametersName) {
-	$("#loadParamsTableBody").append("<tr> <td> <a href='#' data-dismiss='modal'>"+savedParametersName+"</a></td></tr>");
+var addRowToLoadParamsTable = function (id, savedParametersName, date) {
+	$("#loadParamsTableBody").append(
+        "<tr paramsId='" + id + "'> <td>" + savedParametersName + 
+        "</td><td>" + dateToStringForHistory(date) + "</td></tr>");
 } 
 
 var setCaveats = function(caveats) {
@@ -147,4 +149,48 @@ var getInputParameters = function() {
     }
     
     return paramsMap;
+}
+
+var setInputParameters = function(paramsMap) {
+    var optional = $("#optional :input");
+    var lenOpt = optional.length;
+    for(var i = 0; i < lenOpt; ++i) {
+        var param = optional[i];
+        var id = $(param).attr("id");
+        var value = paramsMap[id];
+        if($(param).is(":checkbox")) {
+            if(value === "on") {
+                $(param).prop("checked", true);
+            }
+            else {
+                $(param).prop("checked", false);
+            }
+        }
+        else {
+            if(value) {
+                $(param).val(value);
+            }
+        }
+    }
+    
+    var required = $("#required :input");
+    var lenReq = required.length;
+    for(var i = 0; i < lenReq; ++i) {
+        var param = required[i];
+        var id = $(param).attr("id");
+        var value = paramsMap[id];
+        if($(param).is(":checkbox")) {
+            if(value === "on") {
+                $(param).prop("checked", true);
+            }
+            else {
+                $(param).prop("checked", false);
+            }
+        }
+        else {
+            if(value) {
+                $(param).val(value);
+            }
+        }
+    }
 }

@@ -825,6 +825,7 @@ var SavedScriptParams = Parse.Object.extend("SavedScriptParams", {
     // results are returned via the callback function
     getSavedScriptParamsById: function(id, callback) {
         var query = new Parse.Query(SavedScriptParams);
+        query.include("savedParams.parameter");
         query.get(id, {
             success: function(savedScriptParams) {
                 callback(savedScriptParams);

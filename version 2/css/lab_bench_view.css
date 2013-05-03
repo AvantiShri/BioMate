@@ -41,3 +41,7 @@ body {
 #savedMsg {
 	display: none;
 }
+
+#loadParamsTableBody td:hover {
+    cursor: pointer;
+}

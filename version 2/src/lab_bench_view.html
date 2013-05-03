@@ -98,17 +98,29 @@
 				  <h3>Load Saved Parameter Settings for <span class="scriptName">Default Script Name</span></h3>
 				</div>
 				<div class="modal-body">
+                    <table id="loadParamsTable" width="500px" class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Saved At</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loadParamsTableBody">
+                        </tbody>
+                    </table>
+<!--
 				  <table id="loadParamsTable" class="table table-bordered table-hover">
 				    <tbody id="loadParamsTableBody">
 				    </tbody>
 				  </table>
+-->
 				</div>
 				<div class="modal-footer">
 				  <a href="#" class="btn" data-dismiss="modal">Close</a>
-				  <a href="#" class="btn btn-primary disabled" data-dismiss="modal" id="btnLoad">Load</a>
+<!--				  <a href="#" class="btn btn-primary disabled" data-dismiss="modal" id="btnLoad">Load</a>-->
 				</div>
 			  </div>
-			  <a id="notesBtn" class="btn btn-block" data-toggle="modal" href="#loadParams" >Load Parameters</a>
+			  <a id="loadParamsBtn" class="btn btn-block" data-toggle="modal" href="#loadParams" >Load Parameters</a>
 		    </div>
 		  </div>
 		</div>
@@ -162,7 +174,7 @@
 						<a href="#" class="btn btn-primary" data-dismiss="modal" id="saveParamsBtn">Save</a>
 					</div>
 				</div>
-				<a class="btn btn-block" data-toggle="modal" href="#saveParams" >Save Parameters</a>
+				<a class="btn btn-block" id="saveParameters" data-toggle="modal" href="#saveParams" >Save Parameters</a>
 			</div>
 			<div class="span6">
 				<p class="text-success" id="savedMsg">Saved Parameters</p>
