@@ -443,15 +443,18 @@ var ScriptData = Parse.Object.extend("ScriptData", {
     // @param instructions: instructions for the user, type string
     // @param callback: a function to call upon successful creation
     createScriptData: function(chunks, caveats, instructions, callback) {
+        console.log('create script data called');
         var scriptData = new ScriptData();
         scriptData.set("chunks", chunks);
         scriptData.set("caveats", caveats);
         scriptData.set("instructions", instructions);
         scriptData.save({
             success: function(scriptData) {
+            	console.log('callback called');
                 callback(scriptData);
             },
             error: function(scriptData, error) {
+            	console.log("weird error");
                 alert("Error: " + error.code + " " + error.message);
             }
         });
@@ -614,6 +617,7 @@ var StaticText = Parse.Object.extend("StaticText", {
             }
         });
     }
+    
 });
 
 

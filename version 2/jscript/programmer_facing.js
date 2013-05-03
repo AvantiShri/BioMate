@@ -49,6 +49,34 @@ $(function() {
 	var currentOpenWarningTooltipObject = undefined; //keeps track of the warning tooltip that is open.
 	var staticTextInstanceLookup = {}; //dictionary for looking up the static text parse objects using the object id.
 	var parametersInstanceLookup = {};
+	var numCommandChunkObjects = 0; //is needed so that createScriptData is only called after all the commandChunk objects are created.
+	var finalCommandChunkObjects = []; //array which objects of type command chunk
+	var scriptObjectId = undefined;
+	
+	var addToFinalCommandChunkObjects = function(commandChunkObject) {
+		finalCommandChunkObjects.push(commandChunkObject);
+		console.log(numCommandChunkObjects+" "+finalCommandChunkObjects.length);
+		if (finalCommandChunkObjects.length == numCommandChunkObjects) {
+			ScriptData.createScriptData(finalCommandChunkObjects, $("#caveatsInput").val(), $("#generalInstructionsInput").val(), createOrEditScriptFromScriptData);
+		}
+	}
+	
+	var getListOfChunkObjects = function() { //iterates over the chunks container.
+		chunks = document.getElementById("chunksContainer").childNodes;
+		chunkObjectsArray = [];
+		numCommandChunkObjects = 0;
+		for (i = 0; i < chunks.length; i++) {
+			var elem = $("#"+chunks[i].id);
+			if (elem.hasClass("staticTextChunk")) {
+				chunkObjectsArray.push({chunk: staticTextInstanceLookup[elem.attr("id")], type: CommandChunkType.STATIC_TEXT});
+				numCommandChunkObjects += 1;
+			} else if (elem.hasClass("parameterChunk")) {
+				chunkObjectsArray.push({chunk: parametersInstanceLookup[elem.attr("id")], type: CommandChunkType.PARAMETER});
+				numCommandChunkObjects += 1;
+			}
+		}
+		return chunkObjectsArray;
+	}
 	
 	var updateParameter = function (parameter) {
 		console.log("update called");
@@ -174,7 +202,7 @@ $(function() {
 		var theId = staticTextInstance.id;
 		staticTextInstanceLookup[theId] = staticTextInstance;
 		$("#chunksContainer").append(
-		"<a href='#' class='chunk btn' id='"+theId+"' rel='popover' data-content=\"<a class='btn popoverButton popoverEditButton staticTextChunk' targetid='"+theId+"'>Edit</a> <div class='btn popoverButton popoverDeleteButton staticTextChunk' targetid='"+theId+"'>Delete</div>\">"+text+"</a>");
+		"<a href='#' class='chunk btn staticTextChunk' id='"+theId+"' rel='popover' data-content=\"<a class='btn popoverButton popoverEditButton staticTextChunkPopover' targetid='"+theId+"'>Edit</a> <div class='btn popoverButton popoverDeleteButton staticTextChunkPopover' targetid='"+theId+"'>Delete</div>\">"+text+"</a>");
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
 		$("#staticTextInput").val("");
@@ -258,9 +286,9 @@ $(function() {
 	var addParameterChunk = function(theId,prefix,alias,type) {
 		
 		$("#chunksContainer").append(
-		"<a href='#' class='chunk btn btn-primary' id='"+theId+"' rel='popover' data-content=\""+
-		"<div class='btn popoverButton popoverEditButton parameterChunk' targetid='"+theId+"'>Edit</div>"+
-		"<div class='btn popoverButton popoverDeleteButton parameterChunk' targetid='"+theId+"'>Delete</div>"+
+		"<a href='#' class='chunk btn btn-primary parameterChunk' id='"+theId+"' rel='popover' data-content=\""+
+		"<div class='btn popoverButton popoverEditButton parameterChunkPopover' targetid='"+theId+"'>Edit</div>"+
+		"<div class='btn popoverButton popoverDeleteButton parameterChunkPopover' targetid='"+theId+"'>Delete</div>"+
 		"\">"+
 		"</a>");
 		setParamChunkHtml(theId,prefix,alias, type);
@@ -756,8 +784,31 @@ $(function() {
 	//Listeners for buttons and the bottom of the screen
 	//**************************************************
 	
+	var createScript = function (scriptObject) {
+		console.log('this is called too');
+		scriptObjectId = scriptObject.id;
+		//add the creator to the list of users
+		UserScript.createUserScript(currentUser, scriptObject, function() {$("#lastSavedAt").html(getTheDate())});
+	}
+	
+	var createOrEditScriptFromScriptData = function(scriptData) {
+		console.log("create or edit called...");
+		if (scriptObjectId == undefined) {
+			Script.createScript(currentUser, $("#theScriptName").val(), scriptData, createScript);
+		}
+	}
+	
 	//clicking save on the main screen
-	$("#saveBtn").click(function (e) {var today = new Date();  $("#lastSavedAt").html(getTheDate())});
+	$("#saveBtn").click(function (e) {
+		chunks = getListOfChunkObjects();
+		
+		for (var i = 0; i < chunks.length; i++) {
+			console.log(chunks[i]);
+			CommandChunk.createCommandChunk(chunks[i].type, chunks[i].chunk, addToFinalCommandChunkObjects);
+		}
+		
+		console.log(chunks);
+	});
 	
 	//clicking save as on the main screen
 	$("#saveAsBtnPopup").click(function(e) {
@@ -766,12 +817,11 @@ $(function() {
 	});
 	
 	//clicking save and share
-	$("#saveNshareBtn").click(function (e) {var today = new Date(); $("#lastSavedAt").html(getTheDate())});
+	$("#saveNshareBtn").click(function (e) { $("#saveBtn").click() });
 	
 	//clicking share on the modal popup
 	$("#share").click(function (e) {
-		/////
-		sendEmail(scriptId);
+		sendEmail(scriptObjectId);
 	});
 	
 	//*****************************************************************************
@@ -808,7 +858,7 @@ $(function() {
 				var targetid = theButton.attr("targetid");
 				console.log(theButton.attr("targetid"));
 				//if static text...
-				if (theButton.hasClass("staticTextChunk")) {
+				if (theButton.hasClass("staticTextChunkPopover")) {
 					$('#staticTextInput').val($("#"+targetid).html());
 					$('#popupAddStaticTextBtn').attr("targetid",targetid);
 					$('#staticTextWindowHeader').html("Edit segment of static text");
@@ -818,7 +868,7 @@ $(function() {
 				}
 				
 				//if parameter
-				if (theButton.hasClass("parameterChunk")) {
+				if (theButton.hasClass("parameterChunkPopover")) {
 					theParamInstance = parametersInstanceLookup[targetid];
 					$('#aliasInput').val(theParamInstance.get("alias"));
 					$('#prefixFlagInput').val(theParamInstance.get("prefixFlag"));
@@ -851,11 +901,11 @@ $(function() {
 				var targetId = theButton.attr("targetid");
 				$('#'+targetId).popover('hide')
 				$('#'+targetId).remove();
-				if (theButton.hasClass("staticTextChunk")) {
+				if (theButton.hasClass("staticTextChunkPopover")) {
 					var parseObject = staticTextInstanceLookup[targetId];
 					parseObject.deleteStaticText();
 					delete staticTextInstanceLookup[targetId];
-				} else {
+				} else if (theButton.hasClass("parameterChunkPopover")){
 					var parseObject = parametersInstanceLookup[targetId];
 					parseObject.deleteParameter();
 					//delete from table.
