@@ -103,6 +103,15 @@ $(function() {
         var paramsId = $(this).attr("paramsId");
         SavedScriptParams.getSavedScriptParamsById(paramsId, loadSavedParams);
 	});
+    
+    $("#saveNoteBtn").click(function () {
+        if(currentNote) {
+            currentNote.editNote({ text: getNoteContents(), callback: function (note) {}});
+        }
+        else {
+            Note.createNote(currentUser, currentScript, getNoteContents(), function (note) {});
+        }
+    });
 	
 	$('.info').tooltip();
 	$('#selectScriptLbl').tooltip();
@@ -139,6 +148,9 @@ $(function() {
 // generate the command and save parameters
 var chunks = null;
 var currentScript = null;
+
+// store the current note so it can be loaded and edited
+var currentNote = null;
 
 // load user's scripts in drop-down
 function setScriptSelections() {
@@ -220,8 +232,11 @@ function loadScript(script) {
 
 // callback to show the note for this script
 function loadNote(note) {
-    var text = note.get("text");
-    setNoteContents(text);
+    if(note) {
+        currentNote = note;
+        var text = note.get("text");
+        setNoteContents(text);
+    }
 }
 
 // callback to show the list of saved parameters for this script
