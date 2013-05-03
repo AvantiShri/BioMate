@@ -318,7 +318,7 @@ $(function() {
 		
 		var rowId = theId+"_row";
 		//adding a row to the table.
-		$("#paramsTable").append("<tr id='"+rowId+"'>"+
+		$("#paramsTableBody").append("<tr id='"+rowId+"'>"+
 						aliasTd+
 						prefixFlagTd+
 						ufNameTd+
@@ -563,7 +563,7 @@ $(function() {
 	//Pertaining to the chunks container...
 	//*************************************
 	
-	$("#paramsTable").sortable();
+	$("#paramsTableBody").sortable();
 	$( "#chunksContainer" ).sortable({
 		start: function(event, ui) {
 		ui.item.bind("click.prevent",
@@ -674,10 +674,21 @@ $(function() {
 			//delete
 			} else if (theButton.hasClass("popoverDeleteButton")) {
 				var targetId = theButton.attr("targetid");
-				var parseObject = staticTextInstanceLookup[targetId];
-				parseObject.deleteStaticText();
 				$('#'+targetId).popover('hide')
 				$('#'+targetId).remove();
+				if (theButton.hasClass("staticTextChunk")) {
+					var parseObject = staticTextInstanceLookup[targetId];
+					parseObject.deleteStaticText();
+				} else {
+					var parseObject = parametersInstanceLookup[targetId];
+					parseObject.deleteParameter();
+					//delete from table.
+					$("#"+targetId+"_row").remove();
+					if ($("#paramsTableBody").html() == "") {
+						$("#paramsTable").css("display","none");
+					}
+				}
+				
 			}
 		}
 	});

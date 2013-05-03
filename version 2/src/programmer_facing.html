@@ -76,7 +76,7 @@
 				<th>Tooltip</th>
 			</tr>
 			</thead>
-			<tbody></tbody>
+			<tbody id='paramsTableBody'></tbody>
 		</table>
 		<div class="row scriptSpecific">
 			<label for='required' class="span12 programmerLabel">Caveats</label>
@@ -168,7 +168,7 @@
 			</div>
 			<div class='row'>
 				<div class='span2'>
-					<label id='requiredLabel' class='popupLabel' data-toggle='tooltip' title="Check if the parameter is required; does not apply to flags" for='requiredInput'>Required?</label>
+					<label id='requiredLabel' class="popupLabel exitAddParamOnEnter" data-toggle='tooltip' title="Check if the parameter is required; does not apply to flags" for='requiredInput'>Required?</label>
 				</div>
 				<div class='span3 aFormCheckbox'>
 					<input id='requiredInput' type='checkbox'></input>
