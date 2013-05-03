@@ -30,7 +30,7 @@ var dateToStringForHistory = function(date) {
 		dateStr += " ago";
 	}
 	else if(minDiff != 0){
-		dateStr = minDiff + " minute ago";
+		dateStr = minDiff + " minute";
 		if(minDiff > 1)
 			dateStr += "s";
 		dateStr += " ago";
