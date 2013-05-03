@@ -234,17 +234,46 @@ $(function() {
 	//Add/Edit Parameters and Flags
 	//*****************************
 	
+	//clears all fields except type and required, to facilitated fast entry of similar parameters.
+	var clearAddParamFields = function() {
+		$("#aliasInput").val("");
+		$("#prefixFlagInput").val("");
+		$("#ufNameInput").val("");
+		$("#defaultValInput").val("");
+		$("#warningsInput").val("");
+		$("#tooltipInput").val("");
+	}
+	
 	//adds a parameter chunk to the chunksContainer
 	var addParameterChunk = function(theId,prefix,alias,type) {
+		
+		var htmlContents = prefix+((prefix == "")?"":" ")+(type!="Flag"? alias : "");
 		$("#chunksContainer").append(
-		"<a href='#' class='chunk btn btn-primary' id='"+theId+"' rel='popover' data-content=\"<a class='btn popoverButton popoverEditButton parameterChunk' targetid='"+theId+"'>Edit</a> <div class='btn popoverButton popoverDeleteButton parameterChunk' targetid='"+theId+"'>Delete</div>\">"+prefix+((prefix == "")?"":" ")+(type!="Flag"? alias : "")+"</a>");
+		"<a href='#' class='chunk btn btn-primary' id='"+theId+"' rel='popover' data-content=\"<a class='btn popoverButton popoverEditButton parameterChunk' targetid='"+theId+"'>Edit</a> <div class='btn popoverButton popoverDeleteButton parameterChunk' targetid='"+theId+"'>Delete</div>\">"+htmlContents+"</a>");
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
 	}
 	
+	var editTableEntries = function (theId, alias, prefixFlag, userFriendlyName, selectedTyp, required, defaultVal) {
+		
+		var aliasId = theId+"_alias";
+		var prefixFlagId = theId+"_prefixFlag";
+		var ufNameId = theId+"_ufName";
+		var requiredCheckboxId = theId+"_checkbox";
+		var inputTypeId = theId+"_inputType";
+		var defaultValId = theId+"_defaultVal";
+		
+		$("#"+aliasId).val(alias);
+		$("#"+prefixFlagId).val(prefixFlag);
+		$("#"+ufNameId).val(userFriendlyName);
+		$("#"+inputTypeId+" option[value='"+selectedTyp+"']")[0].selected=true; //select in dropdown option
+
+	};
+	
 	var addParameterToTable = function (parameterInstance) {
 		
 		var theId = parameterInstance.id;
+		parametersInstanceLookup[theId] = parameterInstance;
 		var alias = parameterInstance.get("alias");
 		var prefixFlag = parameterInstance.get("prefixFlag");
 		var selectedTyp = parameterInstance.get("inputType");
@@ -255,18 +284,18 @@ $(function() {
 		$("#paramsTable").show();
 	
 		var aliasId = theId+"_alias";
-		var aliasTd = "<td> <input id='"+aliasId+"' targetid='"+theId+"' class='tableDataInput' type='text'></input></td>";
-		
 		var prefixFlagId = theId+"_prefixFlag";
-		var prefixFlagTd = "<td> <input id='"+prefixFlagId+"' targetid='"+theId+"' class='tableDataInput' type='text'></input></td>";
-		
 		var ufNameId = theId+"_ufName";
-		var ufNameTd = "<td> <input id='"+ufNameId+"' targetid='"+theId+"' type='text' class='tableDataInput'></input></td>";
-		
 		var requiredCheckboxId = theId+"_checkbox";
-		var requiredCheckboxTd = "<td> <input id='"+requiredCheckboxId+"' targetid='"+theId+"' type='checkbox'> </input></td>";
-		
 		var inputTypeId = theId+"_inputType";
+		var defaultValId = theId+"_defaultVal";
+		var warningsId = theId+"_warnings";
+		var tooltipId = theId+"_tooltip";
+		
+		var aliasTd = "<td> <input id='"+aliasId+"' targetid='"+theId+"' class='tableDataInput' type='text'></input></td>";
+		var prefixFlagTd = "<td> <input id='"+prefixFlagId+"' targetid='"+theId+"' class='tableDataInput' type='text'></input></td>";
+		var ufNameTd = "<td> <input id='"+ufNameId+"' targetid='"+theId+"' type='text' class='tableDataInput'></input></td>";
+		var requiredCheckboxTd = "<td> <input id='"+requiredCheckboxId+"' targetid='"+theId+"' type='checkbox'> </input></td>";
 		var inputTypeTd = "<td>"+
 					"<select id='"+inputTypeId+"' targetid='"+theId+"' class='input-block-level tableDataSelect'>"+
 						"<option>Select...</option>"+
@@ -277,19 +306,14 @@ $(function() {
 					"</select>"+
 				"</td>";
 		
-		var defaultValId = theId+"_defaultVal";
 		var defaultValTd;
-		
 		if (selectedTyp != "Flag") {
 			defaultValTd = "<td> <input id='"+defaultValId+"' targetid='"+theId+"' type='text' class='tableDataInput'></input></td>";
 		} else {
 			defaultValTd = "<td> <input id='"+defaultValId+"' targetid='"+theId+"' type='checkbox'></input></td>";
 		}
 		
-		var warningsId = theId+"_warnings";
 		var warningsTd = "<td> <button id='"+warningsId+"' targetid='"+theId+"' class='btn tdBtn'>View/Edit</button></td>";
-		
-		var tooltipId = theId+"_tooltip";
 		var tooltipTd = "<td> <button id='"+tooltipId+"' targetid='"+theId+"' class='btn tdBtn'>View/Edit</button></td>";
 		
 		var rowId = theId+"_row";
@@ -304,7 +328,9 @@ $(function() {
 						warningsTd+
 						tooltipTd+
 					"</tr>");
-					
+		
+		//add a change listener to the type selector which adjust the required/defaultVal fields as necessary
+		
 		//formatting
 		$("#"+aliasId).css("max-width","120px");
 		$("#"+prefixFlagId).css("max-width","120px");
@@ -315,29 +341,28 @@ $(function() {
 		}
 		
 		//modify the data in the row as necessary
+		editTableEntries(theId, alias, prefixFlag, parameterInstance.get("userFriendlyName"), selectedTyp, required, parameterInstance.get("defaultVal"));
 		
-		$("#"+aliasId).val(alias);
-		$("#"+prefixFlagId).val();
-		$("#"+ufNameId).val(parameterInstance.get("userFriendlyName"));
-		$("#"+inputTypeId+" option[value='"+selectedTyp+"']")[0].selected=true; //selectin dropdown option
-		if (required) { //checking checkbox
-			$("#"+requiredCheckboxId).prop("checked", 1);
-		}
-		if (selectedTyp == "Flag") { //disabling checkbox if applicable
-			$("#"+requiredCheckboxId).attr("disabled", "disabled");
-		}
-		if (selectedTyp != "Flag") {
-			$("#"+defaultValId).val(parameterInstance.get("defaultVal"));
-		} else {
-			if (parameterInstance.get("defaultVal") == "on") {
-				$("#"+defaultValId).prop("checked", 1);
+		//add a change listener to the input type field..
+		$("#"+inputTypeId).change( function(e) {
+			if ($("#"+inputTypeId+" :selected").val() == "Flag") {
+				$("#"+requiredCheckboxId).prop("checked", 0);
+				$("#"+requiredCheckboxId).attr("disabled", true);
+				$("#"+defaultValId).attr("type", "checkbox");
+				$("#"+defaultValId).attr("class", "");
+			} else {
+				if ($("#"+requiredCheckboxId).attr("disabled") != undefined) {
+					$("#"+requiredCheckboxId).removeAttr("disabled");
+				}
+				$("#"+defaultValId).attr("type", "text");
+				$("#"+defaultValId).attr("class", "input-block-level aFormInput exitAddParamOnEnter");
 			}
-		}
+		});
 	}
 	
 	//extracts the data in the popup, calls function to create the new chunk, adds a row to the table.
 	var addParameterFromPopup = function() {
-		var alias = $("#inputAlias").val()
+		var alias = $("#aliasInput").val()
 		var prefixFlag = $("#prefixFlagInput").val();
 		var ufName = $("#ufNameInput").val();
 		var inputType = $("#typeInput :selected").val();
@@ -347,18 +372,58 @@ $(function() {
 		var tooltip = $("#tooltipInput").val();
 		Parameter.createParameter(alias, prefixFlag, ufName, defaultVal, inputType, isRequired, warnings, tooltip, addParameterToTable);
 		//clear the fields. Remember the input type to facilitate streamlined entry of parameters of the same type.
-		$("#inputAlias").val("");
-		$("#ufNameInput").val("");
-		$("#defaultValInput").val("");
-		$("#warningsInput").val("");
-		$("#tooltipInput").val("");
+	}
+	
+	var editParameterFromPopup = function(theId) {
+		var parameterInstance = parametersInstanceLookup[theId];
+		
+		var theAlias = $("#aliasInput").val()
+		var thePrefixFlag = $("#prefixFlagInput").val();
+		var ufName = $("#ufNameInput").val();
+		var theInputType = $("#typeInput :selected").val();
+		var isRequired = ($("#requiredInput").prop("checked") == 1)? true : false;
+		var theDefaultVal = $("#defaultValInput").val();
+		var theWarnings = $("#warningsInput").val();
+		var theTooltip = $("#tooltipInput").val();
+		
+		parameterInstance.editParameter({alias: theAlias, prefixFlag: thePrefixFlag, userFriendlyName: ufName, inputType: theInputType, required: isRequired, defaultVal: theDefaultVal, warnings: theWarnings, tooltip: theTooltip});
+		
+		editTableEntries(theId, theAlias, thePrefixFlag, ufName, theInputType, isRequired, theDefaultVal);
+		var htmlContents = thePrefixFlag+((thePrefixFlag == "")?"":" ")+(theInputType!="Flag"? theAlias : "");
+		$("#"+theId).html(htmlContents);
+		
+		
+		if (required) { //checking checkbox
+			$("#"+requiredCheckboxId).prop("checked", 1);
+		} else {
+			$("#"+requiredCheckboxId).prop("checked", 0);
+		}
+		
+		if (selectedTyp == "Flag") { //disabling checkbox if applicable
+			$("#"+requiredCheckboxId).attr("disabled", "disabled");
+		} else {
+			console.log("#"+requiredCheckboxId);
+			if ($("#"+requiredCheckboxId).attr("disabled" == undefined)) {
+				$("#"+requiredCheckboxId).removeAttr("disabled");
+			}
+		}
+		
+		if (selectedTyp != "Flag") {
+			$("#"+defaultValId).val(defaultVal);
+		} else {
+			if (defaultVal == "on") {
+				$("#"+defaultValId).prop("checked", 1);
+			} else {
+				$("#"+defaultValId).prop("checked", 0);
+			}
+		}
 	}
 	
 	//does error checking to make sure the values input into the popup are acceptable.
 	var checkAddParameter = function() {
-		if ($("#inputAlias").val() == "") {
-			openWarningTooltip($("#inputAlias"));
-			$("#inputAlias").focus();
+		if ($("#aliasInput").val() == "") {
+			openWarningTooltip($("#aliasInput"));
+			$("#aliasInput").focus();
 		} else if ($("#ufNameInput").val() == "") {
 			openWarningTooltip($("#ufNameInput"));
 			$("#ufNameInput").focus();
@@ -374,12 +439,21 @@ $(function() {
 				currentOpenWarningTooltipObject.tooltip("hide");
 			}
 			currentOpenWarningTooltipObject = undefined;
-			addParameterFromPopup();
+			
+			if ($("#addParamWindow").attr("addOrEdit") == "add") {
+				addParameterFromPopup();
+				console.log("adding");
+			}
+			if ($("#addParamWindow").attr("addOrEdit") == "edit") {
+				theId = $("#popupAddParameterBtn").attr("targetid");
+				editParameterFromPopup(theId);
+				console.log("editing");
+			}
 		}
 	}
 	
 	//tooltips for add/edit parameter
-	$("#inputAlias").tooltip({trigger: 'manual', placement: 'bottom'});
+	$("#aliasInput").tooltip({trigger: 'manual', placement: 'bottom'});
 	$("#prefixFlagInput").tooltip({trigger: 'manual'});
 	$("#ufNameInput").tooltip({trigger: 'manual'});
 	$("#typeInput").tooltip({trigger: 'manual'});
@@ -399,46 +473,48 @@ $(function() {
 	//on the main screen, the button that brings up the add paramaters modal.
 	$("#addParamMainBtn").click(function(e) {
 		$("#addParamMainBtn").tooltip("hide");
+		clearAddParamFields();
+		$("#addParamWindow").attr("addOrEdit", "add");
+		$("#addParamWindowHeader").html("Add Parameter/Flag");
+		$("#popupAddParameterBtn").html("Add Parameter/Flag");
 		$("#addParamWindow").modal("show");
 	});
 	
-	//focus on the inputAlias field when the modal is first shown.
+	//focus on the aliasInput field when the modal is first shown.
 	$("#addParamWindow").on('shown', function() {
 		if (tooltipShow == 0) { //the manual showing of a tooltip propagates  show event upwards. This is so that the show resulting from displaying a tooltip is not interpeted as a show of the modal window itself.
-			$("#inputAlias").focus();
+			$("#aliasInput").focus();
 		}
 		tooltipShow = 0;
 	});
 	
-	//deactivate the 'required' box if the type is set to flag.
+	
+	//deactivate the 'required' box if the type is set to flag, turn default val into a checkbox if Flag.
 	$("#typeInput").change( function(e) {
 		if ($("#typeInput :selected").val() == "Flag") {
 			$("#requiredLabel").css("color","black");
 			$("#requiredInput").prop("checked", 0);
 			$("#requiredInput").attr("disabled", true);
 			$("#defaultValLabel").html("On by default?");
-			$("#defaultValInputContainer").html("<input id='defaultValInput' type='checkbox'></input>");
+			$("#defaultValInput").attr("type", "checkbox");
+			$("#defaultValInput").attr("class", "");
 		} else {
 			$("#requiredLabel").css("color","");
 			if ($("#requiredInput").attr("disabled") != undefined) {
 				$("#requiredInput").removeAttr("disabled");
 			}
+			$("#defaultValInput").attr("type", "text");
+			$("#defaultValInput").attr("class", "input-block-level aFormInput exitAddParamOnEnter");
 			if ($("#requiredInput").prop("checked") == 1) {
 				$("#defaultValLabel").html("Suggested Value");
-				$("#defaultValInputContainer").html("<input id='defaultValInput' class='input-block-level aFormInput exitAddParamOnEnter' type='text''></input>");
 				$("#defaultValInput").attr("placeholder", "Eg: '/put/path/to/input/here'");
 			} else {
 				$("#defaultValLabel").html("Default Value");
-				$("#defaultValInputContainer").html("<input id='defaultValInput' class='input-block-level aFormInput exitAddParamOnEnter' type='text'></input>");
 				$("#defaultValInput").attr("placeholder", "Eg: '100'");
 			}
-			$("#defaultValInput").keypress(function (e) {
-				if (e.which == 13) {
-					$("#popupAddParameterBtn").click();
-				}
-			});
 		}
 	});
+	
 	$("#requiredInput").change( function (e) {
 		if ($("#typeInput :selected").val() != "Flag") { //this change event may have been fired as a result of changing the parameter type to flag, so don't respond to that...
 			if ($("#requiredInput").prop("checked") == 1) {
@@ -452,7 +528,7 @@ $(function() {
 	});
 	
 	//functions to make pressing enter move to the next input field, as necessary.
-	$("#inputAlias").keypress(function(e) {
+	$("#aliasInput").keypress(function(e) {
 		if (e.which == 13) {
 			$("#popupAddParameterBtn").click();
 		}
@@ -472,12 +548,14 @@ $(function() {
 	
 	$(".exitAddParamOnEnter").keypress(function (e) {
 		if (e.which == 13) {
+			console.log("enter as a click...");
 			$("#popupAddParameterBtn").click();
 		}
 	});
 	
 	//clicking add parameter on the modal popup
 	$("#popupAddParameterBtn").click(function (e) {
+		console.log(e.target.id);
 		checkAddParameter();
 	});
 	
@@ -563,6 +641,36 @@ $(function() {
 					$("#staticTextWindow").attr("addOrEdit","edit");
 					$('#staticTextWindow').modal('show');
 				}
+				
+				//if parameter
+				if (theButton.hasClass("parameterChunk")) {
+					theParamInstance = parametersInstanceLookup[targetid];
+					$('#aliasInput').val(theParamInstance.get("alias"));
+					$('#prefixFlagInput').val(theParamInstance.get("prefixFlag"));
+					$('#ufNameInput').val(theParamInstance.get("userFriendlyName"));
+					selectedTyp = theParamInstance.get("inputType");
+					if (theParamInstance.get("required")) {
+						$("#requiredInput").prop("checked", 1);
+					}
+					$("#typeInput option[value='"+selectedTyp+"']")[0].selected=true; //select type in dropdown option
+					if (selectedTyp == "Flag") {
+						if (theParamInstance.get("defaultVal")=="on") {
+							$("#defaultValInput").prop("checked", 1);
+						}
+					} else {
+						$("#defaultValInput").val(theParamInstance.get("defaultVal"));
+					}
+					$("#warningsInput").val(theParamInstance.get("warnings"));
+					$("#tooltipInput").val(theParamInstance.get("tooltip"));
+					$("#addParamWindow").attr("addOrEdit", "edit");
+					$("#popupAddParameterBtn").attr("targetid", targetid);
+					
+					$("#addParamWindowHeader").html("Edit Parameter/Flag");
+					$("#popupAddParameterBtn").html("Save Edits");
+					
+					$("#addParamWindow").modal('show');
+				}
+				
 			//delete
 			} else if (theButton.hasClass("popoverDeleteButton")) {
 				var targetId = theButton.attr("targetid");

@@ -125,15 +125,15 @@
 	<div class='modal hide fade' id='addParamWindow'>
 		<div class='modal-header'>
 			<a class='close' data-dismiss='modal'>×</a>
-			<h3>Add Parameter/Flag</h3>
+			<h3 id="addParamWindowHeader" >Add Parameter/Flag</h3>
 		</div>
 		<div class='modal-body'>
 			<div class='row'>
 				<div class='span2'>
-					<label id='aliasLabel' class='popupLabel' data-toggle='tooltip' title="Programmer-defined name for referring to the parameter/flag" for='inputAlias'>Alias</label>
+					<label id='aliasLabel' class='popupLabel' data-toggle='tooltip' title="Programmer-defined name for referring to the parameter/flag" for='aliasInput'>Alias</label>
 				</div>
 				<div class='span3'>
-					<input id='inputAlias' class="input-block-level aFormInput warningTooltip" title='Required' data-toggle='tooltip' type='text' placeholder='Eg: num_of_iterations'></input>
+					<input id='aliasInput' class="input-block-level aFormInput warningTooltip" title='Required' data-toggle='tooltip' type='text' placeholder="Eg: num_of_iterations"></input>
 				</div>
 			</div>
 			<div class='row'>
@@ -178,7 +178,7 @@
 				<div class='span2'>
 					<label id='defaultValLabel' class='popupLabel' data-toggle='tooltip' title="For optional parameters, this is a default value that appears with pending delete. For required parameters, this is a suggested value that appears as a placeholder. For flags, this is 'on or off'." for='defaultValInput'>Default/Suggested Value</label>
 				</div>
-				<div class='span3' id='defaultValInputContainer'>
+				<div class='span3'>
 					<input id='defaultValInput' class="input-block-level aFormInput exitAddParamOnEnter" type='text' placeholder="Eg: '100'"></input>
 				</div>
 			</div>
@@ -195,7 +195,7 @@
 					<label id='tooltipLabel' class='popupLabel' data-toggle='tooltip' title="Information displayed to user as a tooltip in hover text" for='tooltipInput'>Tooltip</label>
 				</div>
 				<div class='span3'>
-					<textarea id='warningsInput' class="input-xlarge input-block-level exitAddParamOnEnter" type='text' placeholder="Eg: 'Enter path to the input file'"></textarea>
+					<textarea id='tooltipInput' class="input-xlarge input-block-level exitAddParamOnEnter" type='text' placeholder="Eg: 'Enter path to the input file'"></textarea>
 				</div>
 			</div>
 		</div>
