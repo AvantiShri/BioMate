@@ -14,7 +14,11 @@ var initializeLoadScript = function(scriptName) {
 }
 
 var setNoteContents = function(noteContents) {
-	$("#noteContents").html(noteContents);
+	$("#noteContents").val(noteContents);
+}
+
+var getNoteContents = function() {
+	return $("#noteContents").val();
 }
 
 var setInstructionsContents = function(instructionsContents) {
