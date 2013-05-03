@@ -92,7 +92,7 @@ $(function() {
     });
     
     // load the list of saved parameters
-    $("#loadParamsBtn").on('click', function(){ 
+    $("#loadParamsBtn").click( function(){ 
         $("#loadParamsTableBody").empty();
         SavedScriptParams.getSavedScriptParamsByUserScript(
             currentUser, currentScript, loadSavedScriptParams);
@@ -104,6 +104,13 @@ $(function() {
         SavedScriptParams.getSavedScriptParamsById(paramsId, loadSavedParams);
 	});
     
+    // load the note on the current script
+    $("#notesBtn").click( function(){ 
+        setNoteContents("");
+        Note.getNoteByUserScript(currentUser, currentScript, loadNote);
+	});
+    
+    // save updates to the note
     $("#saveNoteBtn").click(function () {
         if(currentNote) {
             currentNote.editNote({ text: getNoteContents(), callback: function (note) {}});
@@ -132,6 +139,9 @@ $(function() {
 	if( inputScript.selectedIndex !== 0 ) {
 		$(".scriptSpecific").show();
 	}
+    else {
+        $(".scriptSpecific").hide();
+    }
 	
 	var input = document.getElementById("inputfile");
 	var iter = document.getElementById("iterations");
@@ -197,7 +207,6 @@ function loadScript(script) {
 
 	setInstructionsContents(scriptData.get("instructions"));
 	setCaveats(scriptData.get("caveats"));
-    Note.getNoteByUserScript(currentUser, script, loadNote);
     History.createHistory(currentUser, script, function (history) {});
     
     var len = chunks.length;
@@ -237,6 +246,7 @@ function loadNote(note) {
         var text = note.get("text");
         setNoteContents(text);
     }
+    $("#notes").modal();
 }
 
 // callback to show the list of saved parameters for this script
@@ -247,6 +257,7 @@ function loadSavedScriptParams(savedScriptParams) {
         var name = params.get("name");
         addRowToLoadParamsTable(params.id, name, params.createdAt);
     }
+    $("#loadParams").modal();
 }
 
 // callback to load a specific saved parameter setting

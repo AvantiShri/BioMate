@@ -260,15 +260,26 @@ $(document).ready(function(){
         Note.getNoteById(noteId, loadNote);
 	});
     
+    // store the current note so it can be edited
+    var currentNote = null;
+    
     // callback to show a specific note
     function loadNote(note) {
+        currentNote = note;
         var script = note.get("script");
         var owner = script.get("owner");
         var text = note.get("text");
         $("#noteHeader").html("Note on " + script.get("name") + " (" + owner.get("name") + ")");
-        $("#noteText").html(text);
+        $("#noteText").val(text);
 		$("#noteTextPopup").modal();
 		$("#noteTable").modal("hide");
     }
+    
+    // save edits to the note
+    $("#saveNoteBtn").click(function () {
+        if(currentNote) {
+            currentNote.editNote({ text: $("#noteText").val(), callback: function (note) {}});
+        }
+    });
 });
 }
