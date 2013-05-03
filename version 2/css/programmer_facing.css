@@ -56,8 +56,16 @@ body {
 }
 
 .modal-body {
-	overflow-y: visible;
 }
+
+#staticTextWindowBody {
+	overflow-y: visible; 
+}
+
+#addParamWindowBody {
+	overflow-y: visible; 
+}
+
 
 #enterTitle {
 	display: inline;
