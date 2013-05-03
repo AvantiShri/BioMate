@@ -617,9 +617,6 @@ $(function() {
 	//tooltips for add/edit parameter
 	$("#aliasInput").tooltip({trigger: 'manual', placement: 'bottom'});
 	$(".warningTooltip").tooltip({trigger: 'manual'});
-	$(".warningTooltip").blur(function (e) {
-		$(this).tooltip("hide");
-	});
 	$(".popupLabel").tooltip();
 	$("#addParamMainBtn").tooltip();
 	$("#caveatsLabel").tooltip();
