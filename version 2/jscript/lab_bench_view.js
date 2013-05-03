@@ -24,6 +24,10 @@ $(function() {
 		$("#btnLoad").removeClass("disabled");
 	});
 	
+    $("#saveParameters").click( function () {
+        $("#paramsName").val("");
+    });
+    
 	$("#saveParamsBtn").click( function () {
         if(chunks && currentScript) {
             var params = getInputParameters();
@@ -52,8 +56,7 @@ $(function() {
                     $("#savedMsg").html("Saved Parameters at " + dateToString(new Date()));
                     $("#savedMsg").show();
                 });            
-        }
-		
+        }		
 	});
     
     $("#generateBtn").click( function () {
@@ -87,6 +90,19 @@ $(function() {
             setGeneratedCommand(commandStrings.join(" "));
         }
     });
+    
+    // load the list of saved parameters
+    $("#loadParamsBtn").on('click', function(){ 
+        $("#loadParamsTableBody").empty();
+        SavedScriptParams.getSavedScriptParamsByUserScript(
+            currentUser, currentScript, loadSavedScriptParams);
+	});
+    
+    // load a specific set of parameters
+	$(document).on("click", "#loadParamsTableBody tr", function () {
+        var paramsId = $(this).attr("paramsId");
+        SavedScriptParams.getSavedScriptParamsById(paramsId, loadSavedParams);
+	});
 	
 	$('.info').tooltip();
 	$('#selectScriptLbl').tooltip();
@@ -170,9 +186,7 @@ function loadScript(script) {
 	setInstructionsContents(scriptData.get("instructions"));
 	setCaveats(scriptData.get("caveats"));
     Note.getNoteByUserScript(currentUser, script, loadNote);
-    SavedScriptParams.getSavedScriptParamsByUserScript(currentUser, 
-                                                       script, 
-                                                       loadSavedScriptParams);
+    History.createHistory(currentUser, script, function (history) {});
     
     var len = chunks.length;
     for(var i = 0; i < len; ++i) {
@@ -210,12 +224,28 @@ function loadNote(note) {
     setNoteContents(text);
 }
 
-// callback to show the saved parameters for this script
+// callback to show the list of saved parameters for this script
 function loadSavedScriptParams(savedScriptParams) {
     var len = savedScriptParams.length;
     for(var i = 0; i < len; ++i) {
-        var name = savedScriptParams[i].get("name");
-        addRowToLoadParamsTable(name);
+        params = savedScriptParams[i];
+        var name = params.get("name");
+        addRowToLoadParamsTable(params.id, name, params.createdAt);
     }
 }
 
+// callback to load a specific saved parameter setting
+function loadSavedParams(savedScriptParams) {
+    var savedParams = savedScriptParams.get("savedParams");
+    var len = savedParams.length;
+    var savedParamsMap = {};
+    for(var i = 0; i < len; ++i) {
+        var savedParam = savedParams[i];
+        var param = savedParam.get("parameter");
+        var value = savedParam.get("value");
+        savedParamsMap[param.id] = value;
+    }
+    
+    setInputParameters(savedParamsMap);
+    $("#loadParams").modal("hide");
+}
