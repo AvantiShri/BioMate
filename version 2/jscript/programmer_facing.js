@@ -281,7 +281,7 @@ $(function() {
 	}
 	
 	var setParamChunkHtml = function(theId, prefix, alias, type) {
-		var htmlContents = prefix+((prefix == "")?"":" ")+(type!="Flag"? alias : "");
+		var htmlContents = prefix+((prefix == "")?"":" ")+(type!=InputType.BOOLEAN? alias : "");
 		$("#"+theId).html(htmlContents);
 	}
 	//adds a parameter chunk to the chunksContainer
@@ -318,7 +318,7 @@ $(function() {
 		} else {
 			$("#"+requiredCheckboxId).prop("checked", 0);
 		}
-		if (selectedTyp == "Flag") {
+		if (selectedTyp == InputType.BOOLEAN) {
 			console.log(defaultVal);
 			if (defaultVal == "on") {
 				$("#"+defaultValId).prop("checked", 1);
@@ -355,10 +355,10 @@ $(function() {
 		var aliasTd = "<td> <input id='"+aliasId+"' targetid='"+theId+"' class='tableDataInput warningTooltipTable' type='text'></input></td>";
 		var inputTypeTd = "<td>"+
 					"<select id='"+inputTypeId+"' targetid='"+theId+"' class='input-block-level tableDataSelect'>"+
-						"<option value='Flag'>Flag</option>"+
-						"<option value='String'>String</option>"+
-						"<option value='Integer'>Integer</option>"+
-						"<option value='Float'>Float</option>"+
+						"<option value='"+InputType.BOOLEAN+"'>Flag</option>"+
+						"<option value='"+InputType.STRING+"'>String</option>"+
+						"<option value='"+InputType.INT+"'>Integer</option>"+
+						"<option value='"+InputType.FLOAT+"'>Float</option>"+
 					"</select>"+
 				"</td>";
 		
@@ -367,7 +367,7 @@ $(function() {
 		var requiredCheckboxTd = "<td> <input id='"+requiredCheckboxId+"' targetid='"+theId+"' type='checkbox'> </input></td>";
 		
 		var defaultValTd;
-		if (selectedTyp != "Flag") {
+		if (selectedTyp != InputType.BOOLEAN) {
 			defaultValTd = "<td> <input id='"+defaultValId+"' targetid='"+theId+"' type='text' class='tableDataInput'></input></td>";
 		} else {
 			defaultValTd = "<td> <input id='"+defaultValId+"' targetid='"+theId+"' type='checkbox'></input></td>";
@@ -426,7 +426,7 @@ $(function() {
 			var theAlias = parameterInstance.get("alias");
 			var thePrefixFlag = $("#"+prefixFlagId).val();
 			var selectedTyp = parameterInstance.get("inputType");
-			if (selectedTyp == "Flag" && thePrefixFlag == "") {
+			if (selectedTyp == InputType.BOOLEAN && thePrefixFlag == "") {
 				console.log("this code executed");
 				$("#"+prefixFlagId).val(parameterInstance.get("prefixFlag"));
 			} else {
@@ -461,7 +461,7 @@ $(function() {
 			parameterInstance.editParameter({inputType: selectedTyp});
 			
 			//modify the required/default checkboxes as appropriate
-			if (selectedTyp == "Flag") {
+			if (selectedTyp == InputType.BOOLEAN) {
 				if (thePrefixFlag == "") {
 					thePrefixFlag = "--defaultFlag";
 					$("#"+prefixFlagId).val(thePrefixFlag);
@@ -508,7 +508,7 @@ $(function() {
 			var parameterInstance = parametersInstanceLookup[theId];
 			
 			var theDefaultVal;
-			if (parameterInstance.get("inputType") == "Flag") {
+			if (parameterInstance.get("inputType") == InputType.BOOLEAN) {
 				theDefaultVal = ($("#"+defaultValId).prop("checked") == 1) ? "on" : "off";
 			} else {
 				theDefaultVal = $("#"+defaultValId).val();
@@ -576,7 +576,7 @@ $(function() {
 		var inputType = $("#typeInput :selected").val();
 		var isRequired = ($("#requiredInput").prop("checked") == 1)? true : false;
 		var defaultVal;
-		if (inputType == "Flag") {
+		if (inputType == InputType.BOOLEAN) {
 			defaultVal = ($("#defaultValInput").prop("checked") == 1)? "on" : "off";
 		} else {
 			defaultVal = $("#defaultValInput").val();
@@ -597,7 +597,7 @@ $(function() {
 		var theInputType = $("#typeInput :selected").val();
 		var isRequired = ($("#requiredInput").prop("checked") == 1)? true : false;
 		var theDefaultVal;
-		if (theInputType == "Flag") {
+		if (theInputType == InputType.BOOLEAN) {
 			theDefaultVal = ($("#defaultValInput").prop("checked") == 1)? "on" : "off";
 		} else {
 			theDefaultVal = $("#defaultValInput").val();
@@ -619,7 +619,7 @@ $(function() {
 		} else if ($("#typeInput :selected").val()=="Select...") {
 			openWarningTooltip($("#typeInput"));
 			$("#typeInput").focus();
-		} else if ($("#typeInput :selected").val()=="Flag" && $("#prefixFlagInput").val() == "") {
+		} else if ($("#typeInput :selected").val()==InputType.BOOLEAN && $("#prefixFlagInput").val() == "") {
 			openWarningTooltip($("#prefixFlagInput"));
 			$("#prefixFlagInput").focus();
 		} else if ($("#ufNameInput").val() == "") {
@@ -674,7 +674,7 @@ $(function() {
 	
 	//deactivate the 'required' box if the type is set to flag, turn default val into a checkbox if Flag.
 	$("#typeInput").change( function(e) {
-		if ($("#typeInput :selected").val() == "Flag") {
+		if ($("#typeInput :selected").val() == InputType.BOOLEAN) {
 			$("#requiredLabel").css("color","black");
 			$("#requiredInput").prop("checked", 0);
 			$("#requiredInput").attr("disabled", true);
@@ -699,7 +699,7 @@ $(function() {
 	});
 	
 	$("#requiredInput").change( function (e) {
-		if ($("#typeInput :selected").val() != "Flag") { //this change event may have been fired as a result of changing the parameter type to flag, so don't respond to that...
+		if ($("#typeInput :selected").val() != InputType.BOOLEAN) { //this change event may have been fired as a result of changing the parameter type to flag, so don't respond to that...
 			if ($("#requiredInput").prop("checked") == 1) {
 				$("#defaultValLabel").html("Suggested Value");
 				$("#defaultValInput").attr("placeholder", "Eg: '/put/path/to/input/here'");
@@ -884,7 +884,7 @@ $(function() {
 						$("#requiredInput").prop("checked", 1);
 					}
 					$("#typeInput option[value='"+selectedTyp+"']")[0].selected=true; //select type in dropdown option
-					if (selectedTyp == "Flag") {
+					if (selectedTyp == InputType.BOOLEAN) {
 						if (theParamInstance.get("defaultVal")=="on") {
 							$("#defaultValInput").prop("checked", 1);
 						}

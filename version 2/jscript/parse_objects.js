@@ -6,10 +6,10 @@ var CommandChunkType = {
 };
 
 var InputType = {
-	INT: "int",
-	FLOAT: "float",
-	STRING: "string",
-	BOOLEAN: "boolean"
+	INT: "Integer",
+	FLOAT: "Float",
+	STRING: "String",
+	BOOLEAN: "Flag"
 };
 
 var Script = Parse.Object.extend("Script", {

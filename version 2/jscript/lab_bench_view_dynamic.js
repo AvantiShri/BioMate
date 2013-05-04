@@ -108,7 +108,7 @@ var addFlag = function(inputId, alias, userFriendlyName, defaultVal, tooltip, wa
 	);
 
 	if (defaultVal == "on") {
-		$("#"+inputId).attr("checked",true);
+		$("#"+inputId).prop("checked",1);
 	}
 }
 
