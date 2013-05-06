@@ -29,6 +29,9 @@ if (!currentUser) {
 	window.location = "biomate_login.html";
 }
 
+var dragsort = ToolMan.dragsort()
+var junkdrawer = ToolMan.junkdrawer()
+
 $(function() {
 	
 	//***************
@@ -265,14 +268,16 @@ $(function() {
 	//********************
 	
 	var addStaticText = function(staticTextInstance) {
+		$("#infoMessage").hide();
 		var text = staticTextInstance.get("text");
 		var theId = staticTextInstance.id;
 		staticTextInstanceLookup[theId] = staticTextInstance;
 		$("#chunksContainer").append(
-		"<a href='#' class='chunk btn staticTextChunk' id='"+theId+"' rel='popover' data-content=\"<a class='btn popoverButton popoverEditButton staticTextChunkPopover' targetid='"+theId+"'>Edit</a> <div class='btn popoverButton popoverDeleteButton staticTextChunkPopover' targetid='"+theId+"'>Delete</div>\">"+text+"</a>");
+		"<li href='#' class='chunk btn staticTextChunk' id='"+theId+"' rel='popover' data-content=\"<a class='btn popoverButton popoverEditButton staticTextChunkPopover' targetid='"+theId+"'>Edit</a> <div class='btn popoverButton popoverDeleteButton staticTextChunkPopover' targetid='"+theId+"'>Delete</div>\">"+text+"</li>");
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
 		$("#staticTextInput").val("");
+		dragsort.makeListSortable(document.getElementById("chunksContainer"), saveOrder)
 	}
 	
 	var checkAddOrEditStaticText = function() {
@@ -351,17 +356,18 @@ $(function() {
 	}
 	//adds a parameter chunk to the chunksContainer
 	var addParameterChunk = function(theId,prefix,alias,type) {
-		
+		$("#infoMessage").hide();
 		$("#chunksContainer").append(
-		"<a href='#' class='chunk btn btn-primary parameterChunk' id='"+theId+"' rel='popover' data-content=\""+
+		"<li href='#' class='chunk btn btn-primary parameterChunk' id='"+theId+"' rel='popover' data-content=\""+
 		"<div class='btn popoverButton popoverEditButton parameterChunkPopover' targetid='"+theId+"'>Edit</div>"+
 		"<div class='btn popoverButton popoverDeleteButton parameterChunkPopover' targetid='"+theId+"'>Delete</div>"+
 		"\">"+
-		"</a>");
+		"</li>");
 		setParamChunkHtml(theId,prefix,alias, type);
 		
 		$( ".chunk" ).disableSelection();
 		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
+		dragsort.makeListSortable(document.getElementById("chunksContainer"), saveOrder)
 	}
 	
 	var editTableEntries = function (theId, alias, prefixFlag, userFriendlyName, selectedTyp, required, defaultVal) {
@@ -384,6 +390,7 @@ $(function() {
 			$("#"+requiredCheckboxId).prop("checked", 0);
 		}
 		if (selectedTyp == InputType.BOOLEAN) {
+			$("#"+requiredCheckboxId).attr("disabled","disabled");
 			console.log(defaultVal);
 			if (defaultVal == "on") {
 				$("#"+defaultValId).prop("checked", 1);
@@ -740,13 +747,15 @@ $(function() {
 	//deactivate the 'required' box if the type is set to flag, turn default val into a checkbox if Flag.
 	$("#typeInput").change( function(e) {
 		if ($("#typeInput :selected").val() == InputType.BOOLEAN) {
-			$("#requiredLabel").css("color","black");
+			//$("#requiredLabel").css("color","black");
+			$("#requiredInputRow").hide();
 			$("#requiredInput").prop("checked", 0);
 			$("#requiredInput").attr("disabled", true);
 			$("#defaultValLabel").html("On by default?");
 			$("#defaultValInput").attr("type", "checkbox");
 			$("#defaultValInput").attr("class", "");
 		} else {
+			$("#requiredInputRow").show();
 			$("#requiredLabel").css("color","");
 			if ($("#requiredInput").attr("disabled") != undefined) {
 				$("#requiredInput").removeAttr("disabled");
@@ -834,15 +843,28 @@ $(function() {
 	//*************************************
 	
 	$("#paramsTableBody").sortable();
-	$( "#chunksContainer" ).sortable({
-		start: function(event, ui) {
-		ui.item.bind("click.prevent",
-			function(event) { event.preventDefault(); }); //prevents the popup from appearing on a drag...?
-		},
-		stop: function(event, ui) {
-			setTimeout(function(){ui.item.unbind("click.prevent");}, 300);
-		}
-	});
+	//$( "#chunksContainer" ).sortable({
+	//	start: function(event, ui) {
+	//	ui.item.bind("click.prevent",
+	//		function(event) { event.preventDefault(); }); //prevents the popup from appearing on a drag...?
+	//	},
+	//	stop: function(event, ui) {
+	//		setTimeout(function(){ui.item.unbind("click.prevent");}, 300);
+	//	}
+	//});
+	
+	function saveOrder(item) {
+		var group = item.toolManDragGroup
+		var list = group.element.parentNode
+		var id = list.getAttribute("id")
+		if (id == null) return
+		group.register('dragend', function() {
+			ToolMan.cookies().set("list-" + id, 
+					junkdrawer.serializeList(list), 365)
+		})
+	}
+	
+	dragsort.makeListSortable(document.getElementById("chunksContainer"), saveOrder)
 	$( ".chunk" ).disableSelection();
 	$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
 

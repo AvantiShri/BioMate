@@ -4,6 +4,15 @@
 	<meta charset="utf-8" />
 	<title>Create/Edit a script</title>
 	<link rel="stylesheet" href="../external/jquery/css/ui-lightness/jquery-ui-1.10.0.custom.css" />
+	
+	<script language="JavaScript" type="text/javascript" src="../jscript/dragging/core.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../jscript/dragging/events.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../jscript/dragging/css.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../jscript/dragging/coordinates.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../jscript/dragging/drag.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../jscript/dragging/dragsort.js"></script>
+	<script language="JavaScript" type="text/javascript" src="../jscript/dragging/cookies.js"></script>
+	
 	<script src="../external/jquery/js/jquery-1.9.0.min.js"></script>
 	<script src="../external/jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
 	<script src="../external/bootstrap/js/bootstrap.min.js"></script>
@@ -17,6 +26,9 @@
 	<link href="../css/programmer_facing.css" rel="stylesheet">
 	<script src="../external/bootstrap/js/bootstrap-popover.js"></script>  
 	<script src="../external/bootstrap/js/bootstrap-tooltip.js"></script>
+	
+	
+
 
 </head>
 <body>
@@ -65,7 +77,7 @@
 				<a class="btn btn-block" data-toggle='modal' href='#moreInfoWindow'>More Information</a>
 			</div>
 		</div>
-		<div class='container' id='chunksContainer'> </div>
+		<ul class='container' id='chunksContainer'><div id='infoMessage'>Use the buttons above to construct the command here, chunk by chunk</div></ul>
 		<table class='table' id='paramsTable' style="display: none;">
 			<thead>
 			<tr>
@@ -176,7 +188,7 @@
 				</div>
 				<div class='span1'></div>
 				<div class='span3'>
-					<input id='prefixFlagInput' class="input-block-level aFormInput warningTooltip" data-toggle='tooltip' title="Required for flags" type='text' placeholder="Eg: -v or --verbosity"></input>
+					<input id='prefixFlagInput' class="input-block-level aFormInput warningTooltip" data-toggle='tooltip' title="Required for flags" type='text' placeholder="Eg: -v or --verbosity. Can be blank."></input>
 				</div>
 			</div>
 			<div class='row'>
@@ -187,7 +199,7 @@
 					<input id='ufNameInput' class="input-block-level aFormInput warningTooltip" data-toggle='tooltip' title='Required' type='text' placeholder="Eg: 'Detailed Output?'"></input>
 				</div>
 			</div>
-			<div class='row'>
+			<div class='row' id="requiredInputRow">
 				<div class='span1'>
 					<label id='requiredLabel' class="popupLabel exitAddParamOnEnter" data-toggle='tooltip' title="Check if the parameter is required; does not apply to flags" for='requiredInput'>Required?</label>
 				</div>
