@@ -30,45 +30,6 @@ if (currentUser == null) {
 
 else{
 $(document).ready(function(){
-	
-	// create some fake data
-//    var chunks = [];
-//    Parameter.createParameter("alias5", "prefixFlag5", "userFriendyName5", "defaultVal5",
-//                              InputType.FLOAT, true, "warnings5", "tooltip5", parameterCreated);
-//    Parameter.createParameter("alias5flag", "prefixFlag5flag", "userFriendyName5flag", 
-//                              "defaultVal5flag", InputType.BOOLEAN, false, 
-//                              "warnings5flag", "tooltip5flag", parameterCreated);
-//    function parameterCreated(parameter) {
-//        CommandChunk.createCommandChunk(CommandChunkType.PARAMETER, parameter, chunkCreated);
-//        StaticText.createStaticText("static text5", staticTextCreated);
-//    }
-//    function staticTextCreated(staticText) {
-//        CommandChunk.createCommandChunk(CommandChunkType.STATIC_TEXT, staticText, chunkCreated);
-//    }
-//    function chunkCreated(chunk) {
-//        chunks.push(chunk);
-//        if(chunks.length == 4) {
-//            ScriptData.createScriptData(chunks, "caveats5", "instructions5", scriptDataCreated);
-//        }
-//    }
-//    function scriptDataCreated(scriptData) {
-//        Script.createScript(currentUser, "script5", scriptData, scriptCreated);
-//    }
-//    function scriptCreated(script) {
-//        History.createHistory(currentUser, script, done);
-//        Note.createNote(currentUser, script, "script5 awesome note", done);
-//        script.shareScript();
-//        UserScript.createUserScript(currentUser, script, done);
-//    }
-//    function done(data) {
-//    } 
-    
-	//Center the "info" bubble in the  "circle" div
-	/*var divTop = ($("#divCircle").height() - $("#middleBubble").height())/2;
-	var divLeft = ($("#divCircle").width() - $("#middleBubble").width())/2;
-	$("#divCircle").disableSelection();
-	$("#middleBubble").css("top",divTop + "px");
-	$("#middleBubble").css("left",divLeft + "px");*/
 
 	//Arrange the icons in a circle centered in the div
 	numItems = $( "#divCircle button" ).length; //How many items are in the circle?
@@ -93,13 +54,9 @@ $(document).ready(function(){
 
 	//set the highlight and bubble default based on the homepageGridDefault class
 	currentGridSelector = null;
-	//currentGridSelector = $(".homepageGridDefault").attr("id");
-	//$("#" + currentGridSelector).attr("src", "../images/"+ currentGridSelector + "-on.png");
-	//$("#middleBubble").html("<p></br><b>" + $(".homepageGridDefault").data("bubble1") + "</b></p>");*/
 
 	//Setup the grid to change the highlighted bubble on mouseover ans click
 	$("#divCircle button").mouseover(function(){
-		//console.log("I am inside over")
 		//if the selected option has changed, deactivate the current selection
 		if(currentGridSelector != $(this).attr("id"))
 		{
@@ -108,13 +65,10 @@ $(document).ready(function(){
 		//turn on the new selection
 		$("#"+translate($(this).attr("id"))).attr("src", "../images/"+ translate($(this).attr("id")) + "-on.png");
 		//set the content of the center bubble
-		//$("#middleBubble").html("<p><b></br>" + $(this).data("bubble1") + "</b></p>");
 		currentGridSelector = $(this).attr("id");
 	});
 
 	$("#divCircle button").mouseout(function(){
-		//if the selected option has changed, deactivate the current selection
-		//console.log("I am inside over")
 		//if the selected option has changed, deactivate the current selection
 		if(currentGridSelector != $(this).attr("id"))
 		{
@@ -128,52 +82,20 @@ $(document).ready(function(){
 	
 	var currentBtn = null;
 	
-	/*$("#btnUseScript").hover(function(e){
-		//console.log("I am here");
-		im = document.getElementById("runScript");
-		im.innerHTML = "<img src=\"../images/runScript-on.png\"></img><br/>";
-	});
-	$("#btnUseScript").mouseout(function(e){
-		im = document.getElementById("runScript");
-		im.innerHTML = "<img src=\"../images/runScript-off.png\"></img><br/>";
-	});*/
 	$("#btnUseScript").click(function(e){
-		//console.log("I am here");
 		window.location="lab_bench_view.html";
 	});
-	/*$("#btnHistory").hover(function(e){
-		//console.log("I am here");
-		im = document.getElementById("history");
-		im.innerHTML = "<img src=\"../images/history-on.png\"></img><br/>";
-	});
-	$("#btnHistory").mouseout(function(e){
-		im = document.getElementById("history");
-		im.innerHTML = "<img src=\"../images/history-off.png\"></img><br/>";
-	});*/
+	
 	$("#btnHistory").click(function(e){
-		$("#historyTable").modal("show");
+		$("#historyTableBody").empty();
+        History.getUserHistory(currentUser, 10, loadHistory);
 	});
-	/*$("#btnNotes").hover(function(e){
-		//console.log("I am here");
-		im = document.getElementById("notes");
-		im.innerHTML = "<img src=\"../images/notes-on.png\"></img><br/>";
-	});
-	$("#btnNotes").mouseout(function(e){
-		im = document.getElementById("notes");
-		im.innerHTML = "<img src=\"../images/notes-off.png\"></img><br/>";
-	});*/
+	
 	$("#btnNotes").click(function(e){
-		$("#noteTable").modal("show");
+		$("#notesTableBody").empty();
+        Note.getUserNotes(currentUser, loadNotes);
 	});
-	/*$("#btnCreateScript").hover(function(e){
-		//console.log("I am here");
-		im = document.getElementById("createScript");
-		im.innerHTML = "<img src=\"../images/createScript-on.png\"></img><br/>";
-	});
-	$("#btnCreateScript").mouseout(function(e){
-		im = document.getElementById("createScript");
-		im.innerHTML = "<img src=\"../images/createScript-off.png\"></img><br/>";
-	});*/
+	
 	$("#btnCreateScript").click(function(e){
 		window.location="programmer_facing.html";
 	});
@@ -210,12 +132,6 @@ $(document).ready(function(){
 		window.location = "biomate_login.html";
 	});
 	
-    // load history listing
-	$("#history").on('click', function(){ 
-		$("#historyTableBody").empty();
-        History.getUserHistory(currentUser, 10, loadHistory);
-	});
-    
     // callback to load user history
     function loadHistory(history) {
         var len = history.length;
@@ -231,14 +147,9 @@ $(document).ready(function(){
                 "<a href='lab_bench_view.html?scriptId=" + script.id + "'>Use Script</a>" + 
                 "</td></tr>");
         }
+        $("#historyTable").modal("show");
     }
 	
-    // load notes listing
-	$("#notes").on('click', function(){ 		
-        $("#notesTableBody").empty();
-        Note.getUserNotes(currentUser, loadNotes);
-	});
-    
     // callback to load user notes
     function loadNotes(notes) {
         var len = notes.length;
@@ -252,6 +163,7 @@ $(document).ready(function(){
                 "</td><td>" + dateToStringForHistory(note.updatedAt) +
                 "</td></tr>");
         }
+        $("#noteTable").modal("show");
     }
 	
 	// show the text for a specific note
