@@ -56,18 +56,20 @@ $(function() {
 	var shareAfterSaving = false; //used to implement save and share, without problems of interleaving.
 	
 	var availableScripts = []; //will store the list of scripts that this user can edit.
+	var availableScriptsLookup = {};
 	
 	//argument passed in is a list of all the scripts associated with the user.
-	var loadOwnedScripts = function(allUserAssociatedScript) {
-		for (var i = 0; i < allUserAssociatedScript.length; i++) {
-			if (allUserAssociatedScript[i].get("script").get("owner").get("username") == currentUser.get("username")) {
-				availableScripts.push(allUserAssociatedScript[i].get("script").get("name"));
+	var loadOwnedScripts = function(ownedScripts) {
+		for (var i = 0; i < ownedScripts.length; i++) {
+			var name = ownedScripts[i].get("name");
+			console.log(name);
+			if (name != undefined) {
+				availableScripts.push(name);
+				availableScriptsLookup[name] = ownedScripts[i].id;
 			}
 		}
-		
-		
 	}
-	UserScript.getUserScripts(currentUser, loadOwnedScripts); //load the available scripts.
+	Script.getOwnerScripts(currentUser, loadOwnedScripts); //load the available scripts.
 	
 	var updateParameter = function (parameter) { //not sure if this is necessary
 		console.log("update called");
@@ -150,8 +152,12 @@ $(function() {
 			$("#createLoadScriptBtn").removeAttr("disabled");
 			if ($.inArray(scriptName, availableScripts) == -1) {
 				$("#createLoadScriptBtn").html("Create New Script");
+				$("#createLoadScriptBtn").attr("action", "createNew");
 			} else {
 				$("#createLoadScriptBtn").html("Edit Script");
+				console.log("setting attribute");
+				$("#createLoadScriptBtn").attr("action", "loadScript");
+				console.log("set "+$("#createLoadScriptBtn").attr("action"));
 			}
 		}
 	}
@@ -162,7 +168,33 @@ $(function() {
 		enableOrDisableCreateScript()
 	}
 	
-	var loadScript = function(e) {
+	var loadScript = function(script) {
+		//iterate over the command chunks and add them in.
+		var scriptName = script.get("name");
+		console.log(scriptName+" loaded");
+		var scriptData = null;
+		scriptData = script.get("privateScriptData");
+		chunks = scriptData.get("chunks");
+		var len = chunks.length;
+		console.log("num chunks: "+len);
+		for(var i = 0; i < len; ++i) {
+			var chunk = chunks[i];
+			if(chunk.get("commandChunkType") === CommandChunkType.PARAMETER) {
+				var chunkData = chunk.get("parameter");
+				addParameterToTable(chunkData);
+			} else {
+				var chunkData = chunk.get("staticText");
+				addStaticText(chunkData);
+			}
+		}
+	}
+	
+	var createOrLoadScript = function(e) {
+		console.log($("#createLoadScriptBtn").attr("action"));
+		if ($("#createLoadScriptBtn").attr("action") == "loadScript") {
+			console.log("will load script "+scriptName);
+			Script.getScriptById(availableScriptsLookup[scriptName], loadScript);
+		}
 		$("#scriptSelection").remove();
 		$("#programmer-layout").show();
 		$("#pageHeaderContents").html("<input id='theScriptName' class='input-block-level' type='text' value='"+scriptName+"'</input>");
@@ -184,7 +216,7 @@ $(function() {
 	$("#enterTitle").keypress(function (e) {
 		if (e.which == 13) {
 			if (scriptName.length > 0) {
-				loadScript();
+				createOrLoadScript();
 			}
 		}
 	});
@@ -196,7 +228,7 @@ $(function() {
 	$("#createLoadScriptBtn").attr("disabled", "disabled");
 	console.log("hello");
 	$("#createLoadScriptBtn").click( function(e) {
-		loadScript();
+		createOrLoadScript();
 	})
 	
 	//*********************************************************************************
