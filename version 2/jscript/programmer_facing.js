@@ -59,6 +59,43 @@ $(function() {
 	var availableScripts = []; //will store the list of scripts that this user can edit.
 	var availableScriptsLookup = {};
 	
+	
+	var loadScript = function(script) {
+		$("#scriptSelection").remove();
+		$("#programmer-layout").show();
+		//iterate over the command chunks and add them in.
+		scriptParseObject = script;
+		scriptName = script.get("name");
+		$("#pageHeaderContents").html("<input id='theScriptName' class='input-block-level' type='text' value='"+scriptName+"'</input>");
+		console.log(scriptName+" loaded");
+		var scriptData = script.get("privateScriptData");
+		chunks = scriptData.get("chunks");
+		var len = chunks.length;
+		console.log("num chunks: "+len);
+		for(var i = 0; i < len; ++i) {
+			var chunk = chunks[i];
+			if(chunk.get("commandChunkType") === CommandChunkType.PARAMETER) {
+				var chunkData = chunk.get("parameter");
+				addParameterToTable(chunkData);
+			} else {
+				var chunkData = chunk.get("staticText");
+				addStaticText(chunkData);
+			}
+		}
+		console.log(scriptData.get("caveats"));
+		console.log(scriptData.get("instructions"));
+		$("#caveatsInput").val(scriptData.get("caveats"));
+		$("#generalInstructionsInput").val(scriptData.get("instructions"));
+		
+	}
+	
+	
+	//check if script id passed in...
+	if ($.getUrlVar('scriptId')) {
+		var scriptId = $.getUrlVar('scriptId');
+		Script.getScriptById(scriptId, loadScript);
+	}
+	
 	//argument passed in is a list of all the scripts associated with the user.
 	var loadOwnedScripts = function(ownedScripts) {
 		for (var i = 0; i < ownedScripts.length; i++) {
@@ -169,40 +206,17 @@ $(function() {
 		enableOrDisableCreateScript()
 	}
 	
-	var loadScript = function(script) {
-		//iterate over the command chunks and add them in.
-		scriptParseObject = script;
-		console.log(scriptName+" loaded");
-		var scriptData = script.get("privateScriptData");
-		chunks = scriptData.get("chunks");
-		var len = chunks.length;
-		console.log("num chunks: "+len);
-		for(var i = 0; i < len; ++i) {
-			var chunk = chunks[i];
-			if(chunk.get("commandChunkType") === CommandChunkType.PARAMETER) {
-				var chunkData = chunk.get("parameter");
-				addParameterToTable(chunkData);
-			} else {
-				var chunkData = chunk.get("staticText");
-				addStaticText(chunkData);
-			}
-		}
-		console.log(scriptData.get("caveats"));
-		console.log(scriptData.get("instructions"));
-		$("#caveatsInput").val(scriptData.get("caveats"));
-		$("#generalInstructionsInput").val(scriptData.get("instructions"));
-		
-	}
 	
 	var createOrLoadScript = function(e) {
 		console.log($("#createLoadScriptBtn").attr("action"));
 		if ($("#createLoadScriptBtn").attr("action") == "loadScript") {
 			console.log("will load script "+scriptName);
 			Script.getScriptById(availableScriptsLookup[scriptName], loadScript);
+		} else {
+			$("#scriptSelection").remove();
+			$("#programmer-layout").show();
+			$("#pageHeaderContents").html("<input id='theScriptName' class='input-block-level' type='text' value='"+scriptName+"'</input>");
 		}
-		$("#scriptSelection").remove();
-		$("#programmer-layout").show();
-		$("#pageHeaderContents").html("<input id='theScriptName' class='input-block-level' type='text' value='"+scriptName+"'</input>");
 	}
 	
 	$("#enterTitle").keyup(function (e) {
