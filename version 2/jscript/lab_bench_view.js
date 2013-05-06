@@ -91,6 +91,7 @@ $(function() {
                 }
             }
             setGeneratedCommand(commandStrings.join(" "));
+            History.createHistory(currentUser, currentScript, function (history) {});
         }
     });
     
@@ -226,7 +227,6 @@ function loadScript(script) {
 
 	setInstructionsContents(scriptData.get("instructions"));
 	setCaveats(scriptData.get("caveats"));
-    History.createHistory(currentUser, script, function (history) {});
     
     var len = chunks.length;
     for(var i = 0; i < len; ++i) {
