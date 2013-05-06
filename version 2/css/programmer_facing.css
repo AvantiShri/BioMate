@@ -1,3 +1,6 @@
+#topNav{
+	width: 73%;
+}
 .truncate {
 	/*width: 250px;*/
 	white-space: nowrap;
@@ -7,6 +10,7 @@
 #userName{
 	font-size:1.2em;
 	color:white;
+	cursor: default;
 }
 #lab-bench-layout .row {
 	padding-top: 1em;
@@ -14,7 +18,7 @@
 }
 
 body {
-		padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+	padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
 }
 
 textarea{

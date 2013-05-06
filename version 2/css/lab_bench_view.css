@@ -1,3 +1,6 @@
+#topNav{
+	width:75%;
+}
 .truncate {
 	/*width: 250px;*/
 	white-space: nowrap;
@@ -7,6 +10,7 @@
 #userName{
 	font-size:1.2em;
 	color:white;
+	cursor: default;
 }
 #lab-bench-layout .row {
 	padding-top: 1em;

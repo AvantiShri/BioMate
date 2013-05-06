@@ -5,11 +5,15 @@ body {
 	font-size: 14px;
 }
 
-#mainContainer{ 
+.container{ 
 	width: 100%; 
 	text-align:center;
 }
-		
+	
+#topNav{
+	width=80%;
+}
+	
 #divCircle {
 	margin-left:auto; 
 	margin-right:auto; 
@@ -41,6 +45,7 @@ body {
 #userName{
 	font-size:1.2em;
 	color:white;
+	cursor: default;
 }
 
 img{
