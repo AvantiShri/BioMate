@@ -43,6 +43,10 @@ var setGeneratedCommand = function(command) {
 	$("#commandText").html(command);
 }
 
+var getGeneratedCommand = function() {
+	return $("#commandText").text();
+}
+
 var addInputParameter = function(inputId, alias, userFriendlyName, defaultVal, tooltip, warning, isRequired) {
 	var toAppendTo;
 	if (isRequired) {

@@ -94,6 +94,22 @@ $(function() {
         }
     });
     
+    $("#saveToNotesBtn").click( function () {
+        Note.getNoteByUserScript(currentUser, currentScript, function (note) {
+            var text = "";
+            if(note) {
+                currentNote = note;
+                text = note.get("text") + "\n";
+            }
+            setNoteContents(text + getGeneratedCommand());
+            $("#genCommand").modal("hide");
+            $("#notes").modal();
+        });
+    });
+    
+    $("#copyToClipboardBtn").click( function () {
+    });
+    
     // load the list of saved parameters
     $("#loadParamsBtn").click( function(){ 
         $("#loadParamsTableBody").empty();
