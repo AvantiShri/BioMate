@@ -54,6 +54,7 @@ $(function() {
 	var scriptObjectId = undefined;
 	var scriptParseObject = undefined;
 	var shareAfterSaving = false; //used to implement save and share, without problems of interleaving.
+	var exitAfterSaving = false; //used to implement save before exit.
 	
 	var availableScripts = []; //will store the list of scripts that this user can edit.
 	var availableScriptsLookup = {};
@@ -170,10 +171,9 @@ $(function() {
 	
 	var loadScript = function(script) {
 		//iterate over the command chunks and add them in.
-		var scriptName = script.get("name");
+		scriptParseObject = script;
 		console.log(scriptName+" loaded");
-		var scriptData = null;
-		scriptData = script.get("privateScriptData");
+		var scriptData = script.get("privateScriptData");
 		chunks = scriptData.get("chunks");
 		var len = chunks.length;
 		console.log("num chunks: "+len);
@@ -187,6 +187,11 @@ $(function() {
 				addStaticText(chunkData);
 			}
 		}
+		console.log(scriptData.get("caveats"));
+		console.log(scriptData.get("instructions"));
+		$("#caveatsInput").val(scriptData.get("caveats"));
+		$("#generalInstructionsInput").val(scriptData.get("instructions"));
+		
 	}
 	
 	var createOrLoadScript = function(e) {
@@ -832,22 +837,43 @@ $(function() {
 	//Listeners for buttons and the bottom of the screen
 	//**************************************************
 	
+	var finishSave = function() {
+		numCommandChunkObjects = 0; //reset
+		finalCommandChunkObjects = [];
+		$("#lastSavedAt").html(getTheDate());
+		if (shareAfterSaving == true) {
+			scriptParseObject.shareScript({callback: function() {sendEmail(scriptParseObject.id)}});
+			shareAfterSaving = false;
+		}
+		if (exitAfterSaving == true) {
+			//load the programmer facing page.
+			window.location = "./programmer_facing.html";
+		}
+	}
+	
 	var createScript = function (scriptObject) {
 		console.log('this is called too');
 		scriptParseObject = scriptObject;
 		//add the creator to the list of users
-		UserScript.createUserScript(currentUser, scriptParseObject, function() {$("#lastSavedAt").html(getTheDate())});
-		if (shareAfterSaving == true) {
-			scriptParseObject.shareScript({callback: function() {sendEmail(scriptParseObject.id)}});
+		UserScript.createUserScript(currentUser, scriptParseObject, finishSave);
+	}
+	
+	var createOrEditScriptFromScriptData = function(theScriptData) {
+		console.log("create or edit called...");
+		if (scriptParseObject == undefined) {
+			console.log("creating...");
+			Script.createScript(currentUser, $("#theScriptName").val(), theScriptData, createScript);
+		} else {
+			console.log("saving edits...");
+			scriptParseObject.editScript({scriptData: theScriptData, name: $("#theScriptName").val(), callback: finishSave});
 		}
 	}
 	
-	var createOrEditScriptFromScriptData = function(scriptData) {
-		console.log("create or edit called...");
-		if (scriptParseObject == undefined) {
-			Script.createScript(currentUser, $("#theScriptName").val(), scriptData, createScript);
-		}
-	}
+	//saveBeforeExit - on the popup if hit cancel
+	$("#yesSaveBeforeExit").click(function(e) {
+		exitAfterSaving = true;
+		saveTheScript();
+	});
 	
 	//clicking save on the main screen
 	$("#saveBtn").click(function (e) {
@@ -856,8 +882,13 @@ $(function() {
 	
 	//clicking save as on the main screen
 	$("#saveAsBtnPopup").click(function(e) {
-		$("#theScriptName").val($("#saveAsName").val());
-		$("#lastSavedAt").html(getTheDate());
+		var theName = $("#saveAsName").val();
+		$("#theScriptName").val(theName);
+		if (scriptParseObject == undefined) {
+			saveTheScript(); //effectively equivalent to saving the script. don't mind the asynchronous naming...
+		} else {
+			scriptParseObject.copyScript({owner: currentUser, name: theName, callback: createScript});
+		}
 	});
 	
 	//clicking save and share
