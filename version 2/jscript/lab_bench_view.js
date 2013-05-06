@@ -74,17 +74,20 @@ $(function() {
                     if(chunkData.get("inputType") === InputType.BOOLEAN) {
                         if(val) {
                             commandStrings.push(prefix);
+                            console.log(prefix);
                         }
                     }
                     else {
                         if(val) {
                             commandStrings.push(prefix + " " + val);
+                            console.log(prefix + " " + val);
                         }
                     }
                 }
                 else {
                     var chunkData = chunk.get("staticText");
                     commandStrings.push(chunkData.get("text"));
+                    console.log(chunkData.get("text"));
                 }
             }
             setGeneratedCommand(commandStrings.join(" "));

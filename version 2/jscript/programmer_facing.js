@@ -55,12 +55,62 @@ $(function() {
 	var scriptParseObject = undefined;
 	var shareAfterSaving = false; //used to implement save and share, without problems of interleaving.
 	
+	var availableScripts = []; //will store the list of scripts that this user can edit.
+	
+	//argument passed in is a list of all the scripts associated with the user.
+	var loadOwnedScripts = function(allUserAssociatedScript) {
+		for (var i = 0; i < allUserAssociatedScript.length; i++) {
+			if (allUserAssociatedScript[i].get("script").get("owner").get("username") == currentUser.get("username")) {
+				availableScripts.push(allUserAssociatedScript[i].get("script").get("name"));
+			}
+		}
+		
+		
+	}
+	UserScript.getUserScripts(currentUser, loadOwnedScripts); //load the available scripts.
+	
+	var updateParameter = function (parameter) { //not sure if this is necessary
+		console.log("update called");
+		parametersInstanceLookup[parameter.id] = parameter;
+	}
+	
+	var openWarningTooltip = function(objectToOpenTooltipFor) {
+		tooltipShow = 1;
+		console.log("opening tooltip for "+objectToOpenTooltipFor.attr("id"));
+		objectToOpenTooltipFor.tooltip("show");
+		if (currentOpenWarningTooltipObject != undefined) {
+			if (currentOpenWarningTooltipObject.attr("id") !=  objectToOpenTooltipFor.attr("id")) {
+				console.log("hiding tooltip for "+currentOpenWarningTooltipObject.attr("id"));
+				currentOpenWarningTooltipObject.tooltip("hide");
+			}
+		}
+		currentOpenWarningTooltipObject = objectToOpenTooltipFor;
+	}
+	
+	var getTheDate = function() {
+		var today = new Date();
+		var theDate = today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()+" on 2013/"+(today.getMonth()+1)+"/"+today.getDate();
+		return theDate;
+	}
+	
+	//****************
+	//Script saving...
+	//****************
+	
+	var addNextCommandChunk = function(indexToAdd) {
+		if (indexToAdd == numCommandChunkObjects) { //if you are done adding all the chunks...
+			ScriptData.createScriptData(finalCommandChunkObjects, $("#caveatsInput").val(), $("#generalInstructionsInput").val(), createOrEditScriptFromScriptData);
+		} else {
+			CommandChunk.createCommandChunk(chunks[indexToAdd].type, chunks[indexToAdd].chunk, addToFinalCommandChunkObjects);
+		}
+
+	}
+	
 	var addToFinalCommandChunkObjects = function(commandChunkObject) {
 		finalCommandChunkObjects.push(commandChunkObject);
 		console.log(numCommandChunkObjects+" "+finalCommandChunkObjects.length);
-		if (finalCommandChunkObjects.length == numCommandChunkObjects) {
-			ScriptData.createScriptData(finalCommandChunkObjects, $("#caveatsInput").val(), $("#generalInstructionsInput").val(), createOrEditScriptFromScriptData);
-		}
+		//force some sequential adding.
+		addNextCommandChunk(finalCommandChunkObjects.length);
 	}
 	
 	var getListOfChunkObjects = function() { //iterates over the chunks container.
@@ -80,46 +130,10 @@ $(function() {
 		return chunkObjectsArray;
 	}
 	
-	var updateParameter = function (parameter) {
-		console.log("update called");
-		parametersInstanceLookup[parameter.id] = parameter;
+	var saveTheScript = function() {
+		chunks = getListOfChunkObjects();
+		CommandChunk.createCommandChunk(chunks[0].type, chunks[0].chunk, addToFinalCommandChunkObjects); //the rest will be called iteratively.
 	}
-	
-	var openWarningTooltip = function(objectToOpenTooltipFor) {
-		tooltipShow = 1;
-		console.log("opening tooltip for "+objectToOpenTooltipFor.attr("id"));
-		objectToOpenTooltipFor.tooltip("show");
-		if (currentOpenWarningTooltipObject != undefined) {
-			if (currentOpenWarningTooltipObject.attr("id") !=  objectToOpenTooltipFor.attr("id")) {
-				console.log("hiding tooltip for "+currentOpenWarningTooltipObject.attr("id"));
-				currentOpenWarningTooltipObject.tooltip("hide");
-			}
-		}
-		currentOpenWarningTooltipObject = objectToOpenTooltipFor;
-	}
-	
-	
-	var getTheDate = function() {
-		var today = new Date();
-		var theDate = today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()+" on 2013/"+(today.getMonth()+1)+"/"+today.getDate();
-		return theDate;
-	}
-	
-	//***********************
-	//canned data declaration
-	//***********************
-	var availableScripts = [
-			"Script1",
-			"Script2",
-			"Script4",
-			"Script3",
-			"Script5",
-			"Script6",
-			"Script7",
-			"Script8",
-			"Script9",
-			"Script10"
-		];
 	
 	
 	//**********************************************************************************
@@ -805,14 +819,7 @@ $(function() {
 	
 	//clicking save on the main screen
 	$("#saveBtn").click(function (e) {
-		chunks = getListOfChunkObjects();
-		
-		for (var i = 0; i < chunks.length; i++) {
-			console.log(chunks[i]);
-			CommandChunk.createCommandChunk(chunks[i].type, chunks[i].chunk, addToFinalCommandChunkObjects);
-		}
-		
-		console.log(chunks);
+		saveTheScript();
 	});
 	
 	//clicking save as on the main screen
@@ -826,8 +833,8 @@ $(function() {
 	
 	//clicking share on the modal popup
 	$("#share").click(function (e) {
-		$("#saveBtn").click() 
 		shareAfterSaving = true;
+		saveTheScript();
 	});
 	
 	//*****************************************************************************
