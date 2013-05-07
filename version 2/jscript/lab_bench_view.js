@@ -190,6 +190,26 @@ function setScriptSelections() {
 
 function loadScriptSelections(userScripts) {
     var len = userScripts.length;
+    var scriptNames = [];
+    var ownerNames = [];
+    for(var i = 0; i < len; i++) {
+        scriptNames.push(userScripts[i].get("script").get("name").toLowerCase());
+	ownerNames.push(userScripts[i].get("script").get("owner").get("name"));
+    }
+    console.log(scriptNames);
+    for(var i=0;i<len;i++){
+	for(var j=0;j<len-1;j++){
+		console.log(scriptNames[j+1],scriptNames[j]);
+		if(scriptNames[j] > scriptNames[j+1]){
+			tmp = userScripts[j+1];
+			userScripts[j+1] = userScripts[j];
+			userScripts[j] = tmp;
+			tmp = scriptNames[j+1];
+			scriptNames[j+1] = scriptNames[j];
+			scriptNames[j] = tmp;		
+		}	
+	}
+    }
     for(var i = 0; i < len; i++) {
         var script = userScripts[i].get("script");
         setScriptToSelect(script.get("name"), script.get("owner").get("name"), script.id);

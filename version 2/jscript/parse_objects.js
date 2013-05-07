@@ -201,16 +201,17 @@ var UserScript = Parse.Object.extend("UserScript", {
         var query = new Parse.Query(UserScript);
         query.equalTo("user", user);
         query.include("script");
-        query.include("script.owner");
+	query.include("script.owner");
         query.include("script.id");
-        query.find({
+	query.find({
             success: function(userScripts) {
-                callback(userScripts);
+		callback(userScripts);
             },
             error: function(error) {
                 alert("Error: " + error.code + " " + error.message);
             }
         });
+	
     },
     
     // Get a UserScript for a given user and script if it exists
