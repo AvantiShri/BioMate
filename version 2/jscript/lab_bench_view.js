@@ -19,11 +19,6 @@ $(function() {
     // list the user's scripts in the dropdown
     setScriptSelections();
     
-    $("#loadParamsTable tr").click( function () {
-		$(this).addClass('highlight').siblings().removeClass('highlight');
-		$("#btnLoad").removeClass("disabled");
-	});
-	
     $("#saveParameters").click( function () {
         $("#paramsName").val("");
     });
@@ -162,15 +157,7 @@ $(function() {
     else {
         $(".scriptSpecific").hide();
     }
-	
-	var input = document.getElementById("inputfile");
-	var iter = document.getElementById("iterations");
-	$("#btnLoad").click(function(){
-        $(input).val("home/X/input.txt");
-		$(iterations).val("1000");
-	});
-	
-	
+		
 });
 }
 
