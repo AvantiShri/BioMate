@@ -363,7 +363,7 @@ var Note = Parse.Object.extend("Note", {
         var query = new Parse.Query(Note);
         query.equalTo("user", user);
         query.include("script.owner");
-	query.descending("updatedAt");
+        query.descending("updatedAt");
         query.find({
             success: function(notes) {
                 callback(notes);
@@ -815,6 +815,7 @@ var SavedScriptParams = Parse.Object.extend("SavedScriptParams", {
         var query = new Parse.Query(SavedScriptParams);
         query.equalTo("user", user);
         query.equalTo("script", script);
+        query.descending("createdAt");
         query.find({
             success: function(savedScriptParams) {
                 callback(savedScriptParams);
