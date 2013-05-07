@@ -21,7 +21,9 @@
 	float: left;
 }
 
-
+#lastSavedAt{
+	color: green;
+}
 .truncate {
 	/*width: 250px;*/
 	white-space: nowrap;

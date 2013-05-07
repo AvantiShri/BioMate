@@ -132,7 +132,7 @@ $(function() {
 	
 	var getTheDate = function() {
 		var today = new Date();
-		var theDate = today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()+" on 2013/"+(today.getMonth()+1)+"/"+today.getDate();
+		var theDate = today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()+" on "+today.getFullYear()+"/"+(today.getMonth()+1)+"/"+today.getDate();
 		return theDate;
 	}
 	
