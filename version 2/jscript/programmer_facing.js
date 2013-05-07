@@ -69,7 +69,14 @@ $(function() {
 		//iterate over the command chunks and add them in.
 		scriptParseObject = script;
 		scriptName = script.get("name");
-		$("#pageHeaderContents").html("<input id='theScriptName' class='input-block-level' type='text' value='"+scriptName+"'</input>");
+		$("#pageHeaderContents").html("<input id='theScriptName' class='input-block-level' type='text' value='"+scriptName+"'></input>");
+		$("#theScriptName").keypress(function (e) {
+			console.log("keypress");
+			if (e.which == 13) {
+				console.log("script name change");
+				$("#theScriptName").blur();
+			}
+		});
 		console.log(scriptName+" loaded");
 		var scriptData = script.get("privateScriptData");
 		chunks = scriptData.get("chunks");
@@ -220,7 +227,14 @@ $(function() {
 		} else {
 			$("#scriptSelection").remove();
 			$("#programmer-layout").show();
-			$("#pageHeaderContents").html("<input id='theScriptName' class='input-block-level' type='text' value='"+scriptName+"'</input>");
+			$("#pageHeaderContents").html("<input id='theScriptName' class='input-block-level' type='text' value='"+scriptName+"'></input>");
+			$("#theScriptName").keypress(function (e) {
+				console.log("keypress");
+				if (e.which == 13) {
+					console.log("script name change");
+					$("#theScriptName").blur();
+				}
+			});
 		}
 	}
 	
@@ -259,11 +273,6 @@ $(function() {
 	//Functions pertaining to changing the script name using the entry field at the top
 	//*********************************************************************************
 	
-	$("#theScriptName").keypress(function (e) {
-		if (e.which == 13) {
-			$("#theScriptName").blur();
-		}
-	});
 	
 	//********************
 	//Add/Edit static text
