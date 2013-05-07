@@ -104,9 +104,6 @@ $(function() {
         });
     });
     
-    $("#copyToClipboardBtn").click( function () {
-    });
-    
     // load the list of saved parameters
     $("#loadParamsBtn").click( function(){ 
         $("#loadParamsTableBody").empty();
