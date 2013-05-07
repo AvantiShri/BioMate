@@ -48,8 +48,8 @@ $(function() {
             SavedScriptParams.createSavedScriptParams(
                 currentUser, currentScript, savedParams, $("#paramsName").val(), 
                 function (savedScriptParams) {
-		    today = new Date();
-                    $("#savedMsg").html("Saved Parameters at " + dateToString(today) + " on " + today.getFullYear()+"/"+(today.getMonth()+1)+"/"+today.getDate());
+                    today = new Date();
+                    $("#savedMsg").html("Saved Parameters at " + timeToString(today) + " on " + dateToString(today));
                     $("#savedMsg").show();
                 });            
         }		

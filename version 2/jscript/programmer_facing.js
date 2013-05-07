@@ -132,8 +132,8 @@ $(function() {
 	
 	var getTheDate = function() {
 		var today = new Date();
-		var theDate = today.getHours()+":"+today.getMinutes()+":"+today.getSeconds()+" on "+today.getFullYear()+"/"+(today.getMonth()+1)+"/"+today.getDate();
-		return theDate;
+		var theDate = timeToString(today) +" on "+ dateToString(today);
+        return theDate;
 	}
 	
 	//****************

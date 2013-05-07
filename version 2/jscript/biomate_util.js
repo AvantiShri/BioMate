@@ -48,21 +48,24 @@ var dateToStringForHistory = function(date) {
     return dateStr;
 }
 
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
+var timeToString = function(date) {
+    var dateStr = date.getHours() + ":" + 
+        pad(date.getMinutes(),2) + ":" + 
+        pad(date.getSeconds(),2);
+    
+    return dateStr;
+}
+
 var dateToString = function(date) {
-    var today = new Date();
-    var dateStr = "";
-    if(date.getFullYear() === today.getFullYear() &&
-       date.getMonth() === today.getMonth() &&
-       date.getDate() === today.getDate()) {
-	dateStr = date.getHours() + ":" + 
-            date.getMinutes() + ":" + 
-            date.getSeconds();
-    }
-    else {
-        dateStr = (date.getMonth()+1) + "/" + 
-            date.getDate() + "/" + 
-            date.getFullYear();
-    }
+    var dateStr = (date.getMonth()+1) + "/" + 
+        date.getDate() + "/" + 
+        date.getFullYear();
 
     return dateStr;
 }
