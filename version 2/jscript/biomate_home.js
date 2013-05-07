@@ -93,7 +93,7 @@ $(document).ready(function(){
 	
 	$("#btnNotes").click(function(e){
 		$("#notesTableBody").empty();
-        Note.getUserNotes(currentUser, loadNotes);
+        	Note.getUserNotes(currentUser, loadNotes);
 	});
 	
 	$("#btnCreateScript").click(function(e){
