@@ -89,7 +89,8 @@ $(function() {
 		console.log(scriptData.get("instructions"));
 		$("#caveatsInput").val(scriptData.get("caveats"));
 		$("#generalInstructionsInput").val(scriptData.get("instructions"));
-		
+        var lastSavedAt = scriptData.updatedAt;
+		$("#lastSavedAt").html(timeToString(lastSavedAt) +" on "+ dateToString(lastSavedAt));
 	}
 	
 	
