@@ -277,7 +277,10 @@ $(function() {
 		$("#chunksContainer").append(
 		"<li href='#' class='chunk btn staticTextChunk' id='"+theId+"' rel='popover' data-content=\"<a class='btn popoverButton popoverEditButton staticTextChunkPopover' targetid='"+theId+"'>Edit</a> <div class='btn popoverButton popoverDeleteButton staticTextChunkPopover' targetid='"+theId+"'>Delete</div>\">"+text+"</li>");
 		$( ".chunk" ).disableSelection();
-		$(".chunk").popover({delay: { show: 500, hide: 0}, html: true});
+		$(".chunk").popover({html: true, trigger: 'none'});
+		$(".chunk").mousedown(function(e) {$(this).attr('showpopover','yes')});
+		$(".chunk").mousemove(function(e) {$(this).attr('showpopover','no')});
+		$(".chunk").mouseup(function(e) {if($(this).attr('showpopover')=='yes') {$(this).popover('show')}});
 		$("#staticTextInput").val("");
 		dragsort.makeListSortable(document.getElementById("chunksContainer"), saveOrder)
 	}
