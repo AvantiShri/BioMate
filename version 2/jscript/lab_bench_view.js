@@ -141,7 +141,6 @@ $(function() {
         }
     });
 	
-	$('.info').tooltip();
 	$('#selectScriptLbl').tooltip();
 	
 	$("#inputScript").change( function () {
@@ -277,6 +276,8 @@ function loadScript(script) {
             }
         }
     }
+    
+    $('.info').tooltip();
 }
 
 // callback to show the note for this script
