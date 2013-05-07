@@ -165,10 +165,9 @@ textarea{
 	-webkit-font-smoothing: antialiased;
 }
 
-.popupLabel {
+.paramLabel {
 	margin-top: 5px;
 	color: rgb(14,14,126);
-	font-weight: bold;
 }
 
 .programmerLabel {
@@ -193,6 +192,7 @@ textarea{
 
 .icon-question-sign {
 	margin-top: 0px;
+	paddix-left: 0px;
 }
 
 .paramBtn {

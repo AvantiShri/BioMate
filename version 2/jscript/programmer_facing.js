@@ -724,7 +724,7 @@ $(function() {
 	//tooltips for add/edit parameter
 	$("#aliasInput").tooltip({trigger: 'manual', placement: 'bottom'});
 	$(".warningTooltip").tooltip({trigger: 'manual'});
-	$(".popupLabel").tooltip();
+	$(".info").tooltip();
 	$("#addParamMainBtn").tooltip();
 	$("#caveatsLabel").tooltip();
 	$("#generalInstructionsLabel").tooltip();
@@ -756,7 +756,7 @@ $(function() {
 			$("#requiredInputRow").hide();
 			$("#requiredInput").prop("checked", 0);
 			$("#requiredInput").attr("disabled", true);
-			$("#defaultValLabel").html("On by default?");
+			$("#defaultValLabelSpan").html("On by default?");
 			$("#defaultValInput").attr("type", "checkbox");
 			$("#defaultValInput").attr("class", "");
 		} else {
@@ -768,10 +768,10 @@ $(function() {
 			$("#defaultValInput").attr("type", "text");
 			$("#defaultValInput").attr("class", "input-block-level aFormInput exitAddParamOnEnter");
 			if ($("#requiredInput").prop("checked") == 1) {
-				$("#defaultValLabel").html("Suggested Value");
+				$("#defaultValLabelSpan").html("Suggested Value");
 				$("#defaultValInput").attr("placeholder", "Eg: '/put/path/to/input/here'");
 			} else {
-				$("#defaultValLabel").html("Default Value");
+				$("#defaultValLabelSpan").html("Default Value");
 				$("#defaultValInput").attr("placeholder", "Eg: '100'");
 			}
 		}
@@ -780,10 +780,10 @@ $(function() {
 	$("#requiredInput").change( function (e) {
 		if ($("#typeInput :selected").val() != InputType.BOOLEAN) { //this change event may have been fired as a result of changing the parameter type to flag, so don't respond to that...
 			if ($("#requiredInput").prop("checked") == 1) {
-				$("#defaultValLabel").html("Suggested Value");
+				$("#defaultValLabelSpan").html("Suggested Value");
 				$("#defaultValInput").attr("placeholder", "Eg: '/put/path/to/input/here'");
 			} else {
-				$("#defaultValLabel").html("Default Value");
+				$("#defaultValLabelSpan").html("Default Value");
 				$("#defaultValInput").attr("placeholder", "Eg: '100'");
 			}
 		}
