@@ -104,3 +104,16 @@ textarea{
 #notesTableBody td:hover {
     cursor: pointer;
 }
+
+#bioMateBrand {
+    font-size: 6em;
+    font-family: 'Tulpen One', cursive;
+/*    font-family: 'Economica', sans-serif;*/
+}
+
+body { padding-top: 10em; }
+
+.btnHome {
+    padding-bottom: 20px;
+}
+
