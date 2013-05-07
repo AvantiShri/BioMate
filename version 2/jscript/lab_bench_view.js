@@ -192,7 +192,7 @@ function loadScriptSelections(userScripts) {
     var len = userScripts.length;
     for(var i = 0; i < len; i++) {
         var script = userScripts[i].get("script");
-        setScriptToSelect(script.get("name"), script.id);
+        setScriptToSelect(script.get("name"), script.get("owner").get("name"), script.id);
     }
     
     // if a particular script needs to be loaded, select it in the dropdown and 

@@ -1,5 +1,5 @@
-var setScriptToSelect = function(scriptName, scriptId) {
-	$("#inputScript").append("<option value='" + scriptId + "'>" + scriptName + "</option>");
+var setScriptToSelect = function(scriptName, owner, scriptId) {
+	$("#inputScript").append("<option value='" + scriptId + "'>"+scriptName + " (" + owner +")</option>");
 }
 
 var setSelectedScript = function(scriptId) {
