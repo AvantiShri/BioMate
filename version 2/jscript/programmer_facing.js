@@ -1,6 +1,6 @@
 
 //function to send email, for save and share.
-var sendEmail = function(scriptId){
+var sendEmail = function(scriptId, sname, owner){
 	var ems = $("#emails").val();
 	ems = ems.replace(/\s/g, '');
 	//alert(ems);
@@ -9,7 +9,7 @@ var sendEmail = function(scriptId){
 	console.log("clicked share");
 	
 	for(var i=0;i<emList.length;i++){
-		var dataString = "\'{\"scriptId\":\""+scriptId+"\",\"toAddress\":\""+emList[i]+"\"}'";
+		var dataString = "\'{\"scriptId\":\""+scriptId+"\",\"sName\":\""+sname+"\",\"owner\":\""+owner+"\",\"toAddress\":\""+emList[i]+"\"}'";
 		var jsonObj = eval(dataString);
 		//alert(dataString);
 		$.ajax({
@@ -878,7 +878,10 @@ $(function() {
 		finalCommandChunkObjects = [];
 		$("#lastSavedAt").html(getTheDate());
 		if (shareAfterSaving == true) {
-			scriptParseObject.shareScript({callback: function() {sendEmail(scriptParseObject.id)}});
+			curScName = scriptParseObject.get("name");
+			collName = scriptParseObject.get("owner").get("name");
+			console.log(curScName,collName);
+			scriptParseObject.shareScript({callback: function() {sendEmail(scriptParseObject.id, curScName,collName)}});
 			shareAfterSaving = false;
 		}
 		if (exitAfterSaving == true) {

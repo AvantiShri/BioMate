@@ -116,7 +116,7 @@ $(document).ready(function(){
 			$("#notify").modal("show");
 			UserScript.getUserScriptByUserScript(currentUser, script, function(userScript){
 				if(!userScript)
-					UserScript.createUserScript(currentUser, script, function(){alert(sid + " created!!");});
+					UserScript.createUserScript(currentUser, script, function(){console.log(sid + " created!!");});
 			});
 		});
 		
