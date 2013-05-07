@@ -1,5 +1,9 @@
 var setScriptToSelect = function(scriptName, owner, scriptId) {
-	$("#inputScript").append("<option value='" + scriptId + "'>"+scriptName + " (" + owner +")</option>");
+	var currentUserName = Parse.User.current().get("name");
+	if(currentUserName == owner)
+		$("#inputScript").append("<option value='" + scriptId + "'>"+scriptName+"</option>");
+	else
+		$("#inputScript").append("<option value='" + scriptId + "'>"+scriptName + " (shared by " + owner +")</option>");
 }
 
 var setSelectedScript = function(scriptId) {
