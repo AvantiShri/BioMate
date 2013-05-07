@@ -52,3 +52,10 @@ textarea{
 #loadParamsTableBody td:hover {
     cursor: pointer;
 }
+
+#bioMateBrand {
+    font-size: 6em;
+    font-family: 'Tulpen One', cursive;
+}
+
+body { padding-top: 10em; }

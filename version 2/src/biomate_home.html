@@ -8,11 +8,13 @@
     <meta name="author" content="Sumaiya Nazeen">
 
     <!-- styles -->
+    <link href='http://fonts.googleapis.com/css?family=Economica:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Tulpen+One' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Roboto:400,900,700,400italic,500' rel='stylesheet' type='text/css'>
     <link href="../external/bootstrap/css/bootstrap.css" rel="stylesheet">
-	<link href="../css/biomate_home.css" rel="stylesheet">
-    <link href="../external/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="../external/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 	<link rel="stylesheet" href="../external/bootstrap/css/bootstrap.min.css">
+    <link href="../css/biomate_home.css" rel="stylesheet">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="../assets/js/html5shiv.js"></script>
@@ -47,7 +49,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="biomate_home.html">BioMate</a>
+          <a class="brand" id="bioMateBrand" href="biomate_home.html">BioMate</a>
           <div class="nav-collapse collapse">
             <ul class="nav pull-right">
 		<li><p class="navbar-text" id="userName"></p></li>
@@ -71,19 +73,19 @@
 			<a data-toggle="modal" href="#historyTable" class="history"><img src="../images/history-off.png" id="history" data-bubble1="<br />History"></a>
 			<a data-toggle="modal" href="#noteTable" class='notes'><img src="../images/notes-off.png" id="notes" data-bubble1="My<br />Notes"></a>
 			<a href="programmer_facing.html"><img src="../images/createScript-off.png" id="createScript" data-bubble1="Create or Edit<br />a Script" class="homepageGridDefault"></a-->
-			<button class="btn" id="btnUseScript">
+			<button class="btn btnHome" id="btnUseScript">
 				<span ><img id="runScript" src="../images/runScript-off.png"></img><br/></span>
 				Use a<br />Script
 			</button>
-			<button class="btn" id="btnHistory">
+			<button class="btn btnHome" id="btnHistory">
 				<span ><img id="history" src="../images/history-off.png"></img><br/></span>
 				History<br/>
 			</button>
-			<button class="btn" id="btnNotes">
+			<button class="btn btnHome" id="btnNotes">
 				<span ><img id="notes" src="../images/notes-off.png"></img><br/></span>
 				Notes<br/>
 			</button>
-			<button class="btn" id="btnCreateScript">
+			<button class="btn btnHome" id="btnCreateScript">
 				<span ><img id="createScript" src="../images/createScript-off.png"></img><br/></span>
 				Create or Edit<br />a Script
 			</button>

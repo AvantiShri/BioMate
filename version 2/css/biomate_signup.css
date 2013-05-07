@@ -44,3 +44,10 @@ body .modal {
 	color: red;
 	font-size: 12px;
 }
+
+#bioMateBrand {
+    font-size: 6em;
+    font-family: 'Tulpen One', cursive;
+}
+
+body { padding-top: 10em; }
